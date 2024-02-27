@@ -27,17 +27,20 @@ final class AppCoordinator: BaseCoordinator {
         /// recipes
         let recipesModuleView = builder.makeRecipesModule()
         let recipesCoordinator = RecipesCoordinator(rootController: recipesModuleView)
-        /// см. комм. к RecipesPresenter
         recipesModuleView.recipesPresenter?.coordinator = recipesCoordinator
 
         /// profile
         let profileModuleView = builder.makeProfileModule()
         let profileCoordinator = ProfileCoordinator(rootController: profileModuleView)
-        /// аналогично - через протокол не получается, интерфейсы не допускают слабые ссылки
         profileModuleView.presenter?.coordinator = profileCoordinator
 
+        /// favorites
+        let favoritesModuleView = builder.makeFavoritesModule()
+        let favoritesCoordinator = FavoritesCoordinator(rootController: favoritesModuleView)
+        favoritesModuleView.favoritesPresenter?.favoritesCoordinator = favoritesCoordinator
+
         tabBarViewController.setViewControllers(
-            [recipesCoordinator.rootController, profileCoordinator.rootController],
+            [recipesCoordinator.rootController, favoritesCoordinator.rootController, profileCoordinator.rootController],
             animated: false
         )
         setAsRoot​(​_​: tabBarViewController)

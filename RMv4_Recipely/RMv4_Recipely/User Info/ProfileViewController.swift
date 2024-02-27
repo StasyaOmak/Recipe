@@ -24,7 +24,7 @@ final class ProfileViewController: UIViewController {
 
     // MARK: - Public Properties
 
-    var presenter: ProfilePresenter?
+    var presenter: ProfilePresenterProtocol?
 
     // MARK: - Private Properties
 

@@ -5,6 +5,7 @@ import UIKit
 
 protocol ProfilePresenterProtocol {
     /// абстрактный интерфейс
+    var coordinator: ProfileCoordinator? { get set }
 }
 
 /// Презентер модуля "Профиль пользователя"

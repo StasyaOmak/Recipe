@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F9AB0462B8E1821000544DD /* FavoritesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9AB0452B8E1821000544DD /* FavoritesPresenter.swift */; };
+		4F9AB0482B8E184C000544DD /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9AB0472B8E184C000544DD /* FavoritesViewController.swift */; };
+		4F9AB04A2B8E18CE000544DD /* FavoritesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9AB0492B8E18CE000544DD /* FavoritesCoordinator.swift */; };
+		4F9AB04D2B8E199E000544DD /* FavoritesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9AB04C2B8E199E000544DD /* FavoritesModel.swift */; };
 		4FE755912B8D036100C67B8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE755902B8D036100C67B8A /* AppDelegate.swift */; };
 		4FE755932B8D036100C67B8A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE755922B8D036100C67B8A /* SceneDelegate.swift */; };
 		4FE755952B8D036100C67B8A /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE755942B8D036100C67B8A /* AuthViewController.swift */; };
@@ -30,6 +34,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F9AB0452B8E1821000544DD /* FavoritesPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesPresenter.swift; sourceTree = "<group>"; };
+		4F9AB0472B8E184C000544DD /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
+		4F9AB0492B8E18CE000544DD /* FavoritesCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCoordinator.swift; sourceTree = "<group>"; };
+		4F9AB04C2B8E199E000544DD /* FavoritesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesModel.swift; sourceTree = "<group>"; };
 		4FE7558D2B8D036100C67B8A /* RMv4_Recipely.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RMv4_Recipely.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FE755902B8D036100C67B8A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4FE755922B8D036100C67B8A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -65,6 +73,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F9AB04B2B8E1968000544DD /* Favorites */ = {
+			isa = PBXGroup;
+			children = (
+				4F9AB0472B8E184C000544DD /* FavoritesViewController.swift */,
+				4F9AB0452B8E1821000544DD /* FavoritesPresenter.swift */,
+				4F9AB04C2B8E199E000544DD /* FavoritesModel.swift */,
+			);
+			path = Favorites;
+			sourceTree = "<group>";
+		};
 		4FE755842B8D036100C67B8A = {
 			isa = PBXGroup;
 			children = (
@@ -89,6 +107,7 @@
 				4FE755A82B8D07DE00C67B8A /* TabBarController.swift */,
 				4FE755AA2B8D088C00C67B8A /* Authorization */,
 				4FE755EB2B8D610300C67B8A /* Recipes */,
+				4F9AB04B2B8E1968000544DD /* Favorites */,
 				4FE755B12B8D091B00C67B8A /* User Info */,
 				4FE755DD2B8D440800C67B8A /* Coordinators */,
 				4FE755992B8D036300C67B8A /* Assets.xcassets */,
@@ -126,6 +145,7 @@
 				4FE755EC2B8D63EF00C67B8A /* AuthCoordinator.swift */,
 				4FE755F02B8D733100C67B8A /* RecipesCoordinator.swift */,
 				4FE755EE2B8D6D6E00C67B8A /* ProfileCoordinator.swift */,
+				4F9AB0492B8E18CE000544DD /* FavoritesCoordinator.swift */,
 				4FE755E02B8D5EFB00C67B8A /* AppBuilder.swift */,
 			);
 			path = Coordinators;
@@ -257,8 +277,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				4FE755DF2B8D5B4700C67B8A /* AppCoordinator.swift in Sources */,
+				4F9AB04A2B8E18CE000544DD /* FavoritesCoordinator.swift in Sources */,
 				4FE755AE2B8D08AC00C67B8A /* AuthPresenter.swift in Sources */,
 				4FE755DC2B8D43F900C67B8A /* BaseCoordinator.swift in Sources */,
+				4F9AB0462B8E1821000544DD /* FavoritesPresenter.swift in Sources */,
+				4F9AB04D2B8E199E000544DD /* FavoritesModel.swift in Sources */,
 				4FE755E12B8D5EFB00C67B8A /* AppBuilder.swift in Sources */,
 				4FE755F12B8D733100C67B8A /* RecipesCoordinator.swift in Sources */,
 				4FE755EF2B8D6D6E00C67B8A /* ProfileCoordinator.swift in Sources */,
@@ -273,6 +296,7 @@
 				4FE755912B8D036100C67B8A /* AppDelegate.swift in Sources */,
 				4FE755932B8D036100C67B8A /* SceneDelegate.swift in Sources */,
 				4FE755E62B8D60E800C67B8A /* RecipesViewController.swift in Sources */,
+				4F9AB0482B8E184C000544DD /* FavoritesViewController.swift in Sources */,
 				4FE755B52B8D09CD00C67B8A /* ProfilePresenter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

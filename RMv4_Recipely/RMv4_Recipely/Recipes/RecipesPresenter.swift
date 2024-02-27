@@ -3,13 +3,13 @@
 
 import Foundation
 
-protocol RecipesPresenterProtocol {}
+protocol RecipesPresenterProtocol {
+    var coordinator: RecipesCoordinator? { get set }
+}
 
 final class RecipesPresenter {
     weak var view: RecipesViewControllerProtocol?
     weak var coordinator: RecipesCoordinator?
 }
 
-// extension RecipesPresenter: RecipesPresenterProtocol {
-//
-// }
+extension RecipesPresenter: RecipesPresenterProtocol {}

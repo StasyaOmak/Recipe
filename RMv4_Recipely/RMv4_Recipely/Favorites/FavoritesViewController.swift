@@ -1,12 +1,12 @@
-// RecipesViewController.swift
+// FavoritesViewController.swift
 // Copyright © RoadMap. All rights reserved.
 
 import UIKit
 
-protocol RecipesViewControllerProtocol: AnyObject {}
+/// Экран отображения избранных рецептов
+final class FavoritesViewController: UIViewController {
+    // MARK: - Types
 
-/// Экран с рецептами
-final class RecipesViewController: UIViewController {
     // MARK: - Constants
 
     private enum Constants {
@@ -22,7 +22,7 @@ final class RecipesViewController: UIViewController {
 
     // MARK: - Public Properties
 
-    var recipesPresenter: RecipesPresenterProtocol?
+    var favoritesPresenter: FavoritesPresenterProtocol?
 
     // MARK: - Private Properties
 
@@ -32,7 +32,7 @@ final class RecipesViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .yellow.withAlphaComponent(0.1)
     }
 
     // MARK: - Public Methods
@@ -41,5 +41,3 @@ final class RecipesViewController: UIViewController {
 
     // MARK: - Private Methods
 }
-
-extension RecipesViewController: RecipesViewControllerProtocol {}

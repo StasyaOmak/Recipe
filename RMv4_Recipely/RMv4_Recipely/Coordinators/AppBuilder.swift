@@ -62,6 +62,23 @@ final class AppBuilder {
         return recipesView
     }
 
+    func makeFavoritesModule() -> FavoritesViewController {
+        let favoritesView = FavoritesViewController()
+        let favoritesPresenter = FavoritesPresenter()
+        favoritesView.favoritesPresenter = favoritesPresenter
+        favoritesPresenter.favoritesView = favoritesView
+        favoritesView.tabBarItem = UITabBarItem(
+            title: "Favorites",
+            image: UIImage.bookmark,
+            selectedImage: UIImage.bookmarkFill.withRenderingMode(.alwaysOriginal)
+        )
+        favoritesView.tabBarItem.setTitleTextAttributes(
+            [NSAttributedString.Key.foregroundColor: UIColor.basicGreen],
+            for: .selected
+        )
+        return favoritesView
+    }
+
     // MARK: - IBAction
 
     // MARK: - Private Methods
