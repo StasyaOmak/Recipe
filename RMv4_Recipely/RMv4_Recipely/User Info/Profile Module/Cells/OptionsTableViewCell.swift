@@ -5,7 +5,6 @@ import UIKit
 
 /// Ячейка таблицы для размещения опций профиля
 final class OptionsTableViewCell: UITableViewCell {
-
     // MARK: - Constants
 
     private enum Constants {

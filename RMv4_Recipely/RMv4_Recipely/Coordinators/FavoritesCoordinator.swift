@@ -5,11 +5,10 @@ import UIKit
 
 /// Координатор модуля "избранное"
 final class FavoritesCoordinator: BaseCoordinator {
-    
     // MARK: - Public Properties
 
     let rootController: UINavigationController
-    
+
     // MARK: - Initializers
 
     init(rootController: UIViewController) {

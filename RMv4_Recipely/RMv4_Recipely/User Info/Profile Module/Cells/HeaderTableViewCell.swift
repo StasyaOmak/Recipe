@@ -30,6 +30,7 @@ final class HeaderTableViewCell: UITableViewCell {
         label.textColor = .darkGreenText
         label.font = UIFont(name: Constants.verdanaBoldFontName, size: 25)
         label.textAlignment = .center
+        label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -72,14 +73,17 @@ final class HeaderTableViewCell: UITableViewCell {
     // MARK: - Private Methods
 
     private func setupCell() {
+        selectionStyle = .none
+        contentView.heightAnchor.constraint(equalToConstant: 250).isActive = true
+
         addSubview(avatarImageView)
         addSubview(usernameLabel)
         contentView.addSubview(editNameButton)
 
-        selectionStyle = .none
+        setConstraints()
+    }
 
-        contentView.heightAnchor.constraint(equalToConstant: 250).isActive = true
-
+    private func setConstraints() {
         setAvatarImageViewConstraints()
         setUsernameLabelConstraints()
         setEditNameButtonConstraints()
@@ -96,14 +100,14 @@ final class HeaderTableViewCell: UITableViewCell {
         usernameLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 30).isActive = true
         usernameLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         usernameLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        usernameLabel.widthAnchor.constraint(equalToConstant: 175).isActive = true
     }
 
     private func setEditNameButtonConstraints() {
         editNameButton.centerYAnchor.constraint(equalTo: usernameLabel.centerYAnchor).isActive = true
-        editNameButton.leadingAnchor.constraint(equalTo: usernameLabel.trailingAnchor, constant: 10).isActive = true
+        editNameButton.leadingAnchor.constraint(equalTo: usernameLabel.trailingAnchor, constant: 16).isActive = true
         editNameButton.heightAnchor.constraint(equalToConstant: 18).isActive = true
         editNameButton.widthAnchor.constraint(equalTo: editNameButton.heightAnchor).isActive = true
+        editNameButton.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -10).isActive = true
     }
 
     @objc private func editName() {

@@ -7,10 +7,10 @@ import Foundation
 protocol BonusesPresenterProtocol {
     /// свойство типа вью
     var bonusesView: BonusesViewControllerProtocol? { get }
-    ///свойство, хранящее данные пользователя
+    /// свойство, хранящее данные пользователя
     var user: User? { get }
 
-    ///функция-флаг нажатия на кнопку "закрыть экран"
+    /// функция-флаг нажатия на кнопку "закрыть экран"
     func closeButtonTapped()
 }
 

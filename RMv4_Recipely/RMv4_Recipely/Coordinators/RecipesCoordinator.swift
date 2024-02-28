@@ -5,7 +5,6 @@ import UIKit
 
 /// Координатор модуля "Рецепты"
 final class RecipesCoordinator: BaseCoordinator {
-    
     // MARK: - Public Properties
 
     var rootController: UINavigationController
