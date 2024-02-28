@@ -5,7 +5,7 @@ import Foundation
 
 /// Интерфейс презентера модуля "Профиль"
 protocol ProfilePresenterProtocol: AnyObject {
-    /// свойство типа вью
+    /// свойство типа вью этого модуля
     var view: ProfileViewControllerProtocol? { get set }
     /// свойство-координатор
     var coordinator: ProfileCoordinator? { get set }

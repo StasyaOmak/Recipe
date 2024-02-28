@@ -6,7 +6,9 @@ import Foundation
 /// Интерфейс презентера модуля "Бонусы"
 protocol BonusesPresenterProtocol {
     /// свойство типа вью
-    var bonusesView: BonusesViewControllerProtocol? { get }
+    var bonusesView: BonusesViewControllerProtocol? { get set }
+    /// свойство-координатор
+    var coordinator: ProfileCoordinator? { get set }
     /// свойство, хранящее данные пользователя
     var user: User? { get }
 
@@ -17,6 +19,7 @@ protocol BonusesPresenterProtocol {
 final class BonusesPresenter {
     weak var bonusesView: BonusesViewControllerProtocol?
     weak var coordinator: ProfileCoordinator?
+
     var user: User?
 }
 
@@ -24,6 +27,7 @@ final class BonusesPresenter {
 extension BonusesPresenter: BonusesPresenterProtocol {
     /// имплементация метода протокола
     func closeButtonTapped() {
-        bonusesView?.dismissScreen()
+        print(coordinator == nil)
+        coordinator?.dismissBonusesScreen()
     }
 }

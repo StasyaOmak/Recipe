@@ -1,7 +1,7 @@
 // AuthPresenter.swift
 // Copyright © RoadMap. All rights reserved.
 
-import UIKit
+import Foundation
 
 protocol AuthPresenterProtocol {
     /// здесь будет абстрактный интерфейс презентера этого модуля

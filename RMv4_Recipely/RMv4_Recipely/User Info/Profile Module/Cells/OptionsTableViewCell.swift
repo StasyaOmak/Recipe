@@ -77,6 +77,10 @@ final class OptionsTableViewCell: UITableViewCell {
 
         contentView.heightAnchor.constraint(equalToConstant: 80).isActive = true
 
+        setConstraints()
+    }
+
+    private func setConstraints() {
         setIconViewConstraints()
         setIconImageViewConstraints()
         setOptionLabelConstraints()

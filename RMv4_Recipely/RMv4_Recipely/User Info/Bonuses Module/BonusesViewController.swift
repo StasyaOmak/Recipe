@@ -7,8 +7,6 @@ import UIKit
 protocol BonusesViewControllerProtocol: AnyObject {
     /// Свойство-презентер
     var bonusesPresenter: BonusesPresenterProtocol? { get set }
-    /// Метод скрытия экрана
-    func dismissScreen()
 }
 
 /// Экран бонусов пользователя
@@ -22,6 +20,7 @@ final class BonusesViewController: UIViewController {
         static let bonusesTitleText = "Your bonuses"
         static let starImageName = "star 2"
         static let verdanaBoldFontName = "Verdana-Bold"
+        static let bonusesCount = "100"
     }
 
     // MARK: - Visual Components
@@ -61,7 +60,7 @@ final class BonusesViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont(name: Constants.verdanaBoldFontName, size: 30)
         label.textColor = .darkGreenText
-        label.text = "100"
+        label.text = Constants.bonusesCount
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -83,6 +82,10 @@ final class BonusesViewController: UIViewController {
         view.addSubview(starImageView)
         view.addSubview(bonusesAmountLabel)
 
+        setConstraints()
+    }
+
+    private func setConstraints() {
         setCloseButtonConstraints()
         setBonusesTitleLabelConstraints()
         setBonusesImageViewConstraints()
@@ -131,10 +134,4 @@ final class BonusesViewController: UIViewController {
     }
 }
 
-/// Расширение вью модуля "Бонусы" методами протокола
-extension BonusesViewController: BonusesViewControllerProtocol {
-    /// Реализация метода
-    func dismissScreen() {
-        dismiss(animated: true)
-    }
-}
+extension BonusesViewController: BonusesViewControllerProtocol {}

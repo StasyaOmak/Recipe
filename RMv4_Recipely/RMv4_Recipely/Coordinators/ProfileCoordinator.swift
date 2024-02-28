@@ -29,6 +29,7 @@ final class ProfileCoordinator: BaseCoordinator {
 
     func moveToBonusesScreen() {
         let bonusesModule = appBuilder.makeBonusesModule()
+        bonusesModule.bonusesPresenter?.coordinator = self
         rootController.present(bonusesModule, animated: true)
     }
 
