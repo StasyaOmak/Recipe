@@ -3,15 +3,26 @@
 
 import UIKit
 
+/// Координатор модуля "Профиль"
 final class ProfileCoordinator: BaseCoordinator {
-    private var appBuilder = AppBuilder()
+    
+    // MARK: - Public Properties
+    
     var rootController: UINavigationController
     
     var onFinishFlow: (() -> ())?
+    
+    // MARK: - Private Properties
+
+    private var appBuilder = AppBuilder()
+    
+    // MARK: - Initializers
 
     init(rootController: UIViewController) {
         self.rootController = UINavigationController(rootViewController: rootController)
     }
+    
+    // MARK: - Public Methods
     
     func logOut() {
         onFinishFlow?()

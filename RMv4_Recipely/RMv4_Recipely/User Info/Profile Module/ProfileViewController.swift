@@ -3,9 +3,11 @@
 
 import UIKit
 
-/// Протокол
+/// Протокол-интерфейс вью модуля "Профиль"
 protocol ProfileViewControllerProtocol: AnyObject {
+    /// метод обновления таблицы
     func reloadTableView()
+    /// метод вызова алерта на смену имени
     func showNameEditorAlert()
 }
 
@@ -73,8 +75,6 @@ final class ProfileViewController: UIViewController {
 
         view.addSubview(tableView)
         tableView.dataSource = self
-
-        // TODO: выяснить, сюда это или в контроллер?
         tableView.delegate = self
 
         setTableViewConstraints()
@@ -88,6 +88,7 @@ final class ProfileViewController: UIViewController {
     }
 }
 
+/// Расширение вью методами протокола-интерфейса ProfileViewControllerProtocol
 extension ProfileViewController: ProfileViewControllerProtocol {
     func reloadTableView() {
         tableView.reloadData()
@@ -114,6 +115,7 @@ extension ProfileViewController: ProfileViewControllerProtocol {
     }
 }
 
+/// Расширение вью методами UITableViewDataSource
 extension ProfileViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         tableViewSections.count
@@ -155,6 +157,7 @@ extension ProfileViewController: UITableViewDataSource {
     }
 }
 
+/// Расширение вью методами UITableViewDelegate
 extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch tableViewSections[indexPath.section] {

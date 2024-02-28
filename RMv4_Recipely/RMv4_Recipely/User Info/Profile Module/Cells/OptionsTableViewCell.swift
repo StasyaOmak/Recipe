@@ -5,18 +5,12 @@ import UIKit
 
 /// Ячейка таблицы для размещения опций профиля
 final class OptionsTableViewCell: UITableViewCell {
-    // MARK: - Types
 
     // MARK: - Constants
 
     private enum Constants {
         static let verdanaFontName = "Verdana"
-        //    static let
-        //    static let
-        //    static let
     }
-
-    // MARK: - IBOutlets
 
     // MARK: - Visual Components
 
@@ -65,8 +59,6 @@ final class OptionsTableViewCell: UITableViewCell {
         setupCell()
     }
 
-    // MARK: - Life Cycle
-
     // MARK: - Public Methods
 
     func configure(option: OptionCell) {
@@ -74,8 +66,6 @@ final class OptionsTableViewCell: UITableViewCell {
         optionLabel.text = option.title
         accessoryType = .disclosureIndicator
     }
-
-    // MARK: - IBAction
 
     // MARK: - Private Methods
 

@@ -3,13 +3,20 @@
 
 import Foundation
 
+/// Интерфейс презентера модуля "Профиль"
 protocol ProfilePresenterProtocol: AnyObject {
+    /// свойство типа вью
     var view: ProfileViewControllerProtocol? { get set }
+    /// свойство-координатор
     var coordinator: ProfileCoordinator? { get set }
+    /// свойство с данными пользователя
     var user: User { get set }
 
+    /// метод смены имени
     func changeUserName(name: String)
+    /// метод-флаг нажатия на кнопку "редактировать"
     func editButtonTapped()
+    /// метод-флаг нажатия на ячейку "бонусы"
     func bonusesCellTapped()
 }
 
@@ -23,20 +30,9 @@ final class ProfilePresenter {
     // MARK: - Mocks
 
     var user: User = .init(name: "Name", avatarImageName: "user", bonusesCount: 100)
-
-    // MARK: - Private Properties
-
-    // MARK: - Initializers
-
-    // MARK: - Life Cycle
-
-    // MARK: - Public Methods
-
-    // MARK: - IBAction
-
-    // MARK: - Private Methods
 }
 
+/// Расширение презентера методами протокола
 extension ProfilePresenter: ProfilePresenterProtocol {
     func editButtonTapped() {
         view?.showNameEditorAlert()

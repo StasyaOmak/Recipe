@@ -3,10 +3,14 @@
 
 import Foundation
 
+/// Интерфейс презентера модуля "Бонусы"
 protocol BonusesPresenterProtocol {
+    /// свойство типа вью
     var bonusesView: BonusesViewControllerProtocol? { get }
+    ///свойство, хранящее данные пользователя
     var user: User? { get }
 
+    ///функция-флаг нажатия на кнопку "закрыть экран"
     func closeButtonTapped()
 }
 
@@ -16,7 +20,9 @@ final class BonusesPresenter {
     var user: User?
 }
 
+/// Расширение презентера методами протокола
 extension BonusesPresenter: BonusesPresenterProtocol {
+    /// имплементация метода протокола
     func closeButtonTapped() {
         bonusesView?.dismissScreen()
     }

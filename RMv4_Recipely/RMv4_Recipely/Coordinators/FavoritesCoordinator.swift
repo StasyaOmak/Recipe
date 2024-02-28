@@ -3,9 +3,14 @@
 
 import UIKit
 
-/// координатор модуля избранное
+/// Координатор модуля "избранное"
 final class FavoritesCoordinator: BaseCoordinator {
+    
+    // MARK: - Public Properties
+
     let rootController: UINavigationController
+    
+    // MARK: - Initializers
 
     init(rootController: UIViewController) {
         self.rootController = UINavigationController(rootViewController: rootController)

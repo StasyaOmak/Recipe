@@ -3,13 +3,15 @@
 
 import UIKit
 
-/// Экран бонусов пользователя
+/// Интерфейс вью модуля "Бонусы"
 protocol BonusesViewControllerProtocol: AnyObject {
+    /// Свойство-презентер
     var bonusesPresenter: BonusesPresenterProtocol? { get set }
-
+    /// Метод скрытия экрана
     func dismissScreen()
 }
 
+/// Экран бонусов пользователя
 final class BonusesViewController: UIViewController {
     var bonusesPresenter: BonusesPresenterProtocol?
 
@@ -64,22 +66,12 @@ final class BonusesViewController: UIViewController {
         return label
     }()
 
-    // MARK: - Public Properties
-
-    // MARK: - Private Properties
-
-    // MARK: - Initializers
-
     // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
     }
-
-    // MARK: - Public Methods
-
-    // MARK: - IBAction
 
     // MARK: - Private Methods
 
@@ -139,7 +131,9 @@ final class BonusesViewController: UIViewController {
     }
 }
 
+/// Расширение вью модуля "Бонусы" методами протокола
 extension BonusesViewController: BonusesViewControllerProtocol {
+    /// Реализация метода
     func dismissScreen() {
         dismiss(animated: true)
     }
