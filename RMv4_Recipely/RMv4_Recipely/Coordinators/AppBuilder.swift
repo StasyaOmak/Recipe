@@ -79,7 +79,19 @@ final class AppBuilder {
         return favoritesView
     }
 
-    // MARK: - IBAction
+    func makeBonusesModule() -> BonusesViewController {
+        let bonusesView = BonusesViewController()
+        let bonusesPresenter = BonusesPresenter()
+        bonusesView.bonusesPresenter = bonusesPresenter
+        bonusesPresenter.bonusesView = bonusesView
 
-    // MARK: - Private Methods
+        let sheet = bonusesView.sheetPresentationController
+        sheet?.detents = [.custom(resolver: { _ in
+            355
+        })]
+
+        sheet?.prefersGrabberVisible = true
+        sheet?.preferredCornerRadius = 30
+        return bonusesView
+    }
 }

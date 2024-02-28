@@ -3,6 +3,7 @@
 
 import Foundation
 
+/// Интерфейс презентера модуля "Избранные рецепты"
 protocol FavoritesPresenterProtocol {
     var favoritesCoordinator: FavoritesCoordinator? { get set }
 }
@@ -13,4 +14,5 @@ class FavoritesPresenter {
     weak var favoritesCoordinator: FavoritesCoordinator?
 }
 
+/// Расширение презентера  методами протокола
 extension FavoritesPresenter: FavoritesPresenterProtocol {}
