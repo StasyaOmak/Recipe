@@ -3,17 +3,19 @@
 
 import UIKit
 
+/// Протокол презентера модуля "Авторизация"
 protocol AuthPresenterProtocol {
     func checkLogin(login: String?)
     func checkPassword(password: String?)
 }
 
+/// Протокол вью модуля "Авторизация"
 protocol AuthViewControllerProtocol: AnyObject {
     func setLoginColor(color: UIColor, isValidate: Bool, borderColor: UIColor)
     func setPasswordColor(color: UIColor, isValidate: Bool, borderColor: UIColor)
 }
 
-/// Презентер модуля входа в приложение
+/// Презентер модуля "Авторизация"
 final class AuthPresenter {
     enum Constants {
         static let emptyText = ""
