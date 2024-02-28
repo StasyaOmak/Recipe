@@ -142,6 +142,7 @@
 				4FE755902B8D036100C67B8A /* AppDelegate.swift */,
 				4FE755922B8D036100C67B8A /* SceneDelegate.swift */,
 				4FE755A82B8D07DE00C67B8A /* TabBarController.swift */,
+				4FE755E02B8D5EFB00C67B8A /* AppBuilder.swift */,
 				4FE755AA2B8D088C00C67B8A /* Authorization */,
 				4FE755EB2B8D610300C67B8A /* Recipes */,
 				4F9AB04B2B8E1968000544DD /* Favorites */,
@@ -182,7 +183,6 @@
 				4FE755F02B8D733100C67B8A /* RecipesCoordinator.swift */,
 				4FE755EE2B8D6D6E00C67B8A /* ProfileCoordinator.swift */,
 				4F9AB0492B8E18CE000544DD /* FavoritesCoordinator.swift */,
-				4FE755E02B8D5EFB00C67B8A /* AppBuilder.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";

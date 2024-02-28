@@ -7,21 +7,21 @@ import UIKit
 final class AppCoordinator: BaseCoordinator {
     // MARK: - Private Properties
 
-    private var tabBarViewController: TabBarController?
+    private var tabBarController: TabBarController?
     let builder = AppBuilder()
 
     /// переопределяем старт. отсюда у нас две точки входа в приложение, либо авторизация пройдена, либо нет
     /// пока нужно вручную откомментировать нужную для входа
     override func start() {
-//        toMain()
-        toAuth() // на красный экран авторизации
+        toMain()
+//        toAuth()  //на красный экран авторизации
     }
 
     // MARK: - Private Methods
 
     private func toMain() {
-        tabBarViewController = TabBarController()
-        guard let tabBarViewController = tabBarViewController else { return }
+        tabBarController = TabBarController()
+        guard let tabBarViewController = tabBarController else { return }
 
         let recipesModuleView = builder.makeRecipesModule()
         let recipesCoordinator = RecipesCoordinator(rootController: recipesModuleView)

@@ -5,26 +5,6 @@ import UIKit
 
 /// Создание модулей для приложения
 final class AppBuilder {
-    // MARK: - Constants
-
-    private enum Constants {
-        //    static let
-        //    static let
-        //    static let
-        //    static let
-    }
-
-    // MARK: - IBOutlets
-
-    // MARK: - Visual Components
-
-    // MARK: - Public Properties
-
-    // MARK: - Private Properties
-
-    // MARK: - Initializers
-
-    // MARK: - Life Cycle
 
     // MARK: - Public Methods
 
