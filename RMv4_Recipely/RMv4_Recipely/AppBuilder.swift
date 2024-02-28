@@ -5,7 +5,6 @@ import UIKit
 
 /// Создание модулей для приложения
 final class AppBuilder {
-
     // MARK: - Public Methods
 
     func makeProfileModule() -> ProfileViewController {

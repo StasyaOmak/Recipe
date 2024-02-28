@@ -10,7 +10,7 @@ protocol ProfilePresenterProtocol: AnyObject {
     /// свойство-координатор
     var coordinator: ProfileCoordinator? { get set }
     /// свойство с данными пользователя
-    var user: User { get set }
+    var user: User? { get set }
 
     /// метод смены имени
     func changeUserName(name: String)
@@ -18,6 +18,8 @@ protocol ProfilePresenterProtocol: AnyObject {
     func editButtonTapped()
     /// метод-флаг нажатия на ячейку "бонусы"
     func bonusesCellTapped()
+    /// метод для получения данных пользователя
+    func mockUserData() -> User
 }
 
 /// Презентер модуля "Профиль пользователя"
@@ -26,13 +28,10 @@ final class ProfilePresenter {
 
     weak var view: ProfileViewControllerProtocol?
     weak var coordinator: ProfileCoordinator?
-
-    // MARK: - Mocks
-
-    var user: User = .init(name: "Name", avatarImageName: "user", bonusesCount: 100)
+    var user: User?
 }
 
-/// Расширение презентера методами протокола
+// - MARK: ProfilePresenter + ProfilePresenterProtocol
 extension ProfilePresenter: ProfilePresenterProtocol {
     func editButtonTapped() {
         view?.showNameEditorAlert()
@@ -43,7 +42,12 @@ extension ProfilePresenter: ProfilePresenterProtocol {
     }
 
     func changeUserName(name: String) {
-        user.name = name
+        User.user.name = name
         view?.reloadTableView()
+    }
+
+    func mockUserData() -> User {
+        let user = User.mockData()
+        return user
     }
 }

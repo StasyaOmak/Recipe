@@ -5,7 +5,6 @@ import UIKit
 
 /// Таб-бар
 final class TabBarController: UITabBarController {
-
     // MARK: - Life Cycle
 
     override func viewDidLoad() {

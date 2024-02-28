@@ -5,11 +5,17 @@ import UIKit
 
 /// Координатор модуля "Профиль"
 final class ProfileCoordinator: BaseCoordinator {
+    // MARK: - Types
+
+    // swiftlint:disable custom_custom_void_handler
+    typealias VoidHandler = () -> ()
+    // swiftlint:enable custom_custom_void_handler
+
     // MARK: - Public Properties
 
     var rootController: UINavigationController
 
-    var onFinishFlow: (() -> ())?
+    var onFinishFlow: VoidHandler?
 
     // MARK: - Private Properties
 

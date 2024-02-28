@@ -25,13 +25,6 @@ final class BonusesViewController: UIViewController {
 
     // MARK: - Visual Components
 
-    private lazy var closeButton: UIButton = {
-        let button = UIButton(type: .close)
-        button.addTarget(self, action: #selector(closeScreen), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-
     private let bonusesTitleLabel: UILabel = {
         let label = UILabel()
         label.text = Constants.bonusesTitleText
@@ -63,6 +56,13 @@ final class BonusesViewController: UIViewController {
         label.text = Constants.bonusesCount
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+
+    private lazy var closeButton: UIButton = {
+        let button = UIButton(type: .close)
+        button.addTarget(self, action: #selector(closeScreen), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
 
     // MARK: - Life Cycle
@@ -134,4 +134,5 @@ final class BonusesViewController: UIViewController {
     }
 }
 
+// - MARK: Extension BonusesViewController + BonusesViewControllerProtocol
 extension BonusesViewController: BonusesViewControllerProtocol {}

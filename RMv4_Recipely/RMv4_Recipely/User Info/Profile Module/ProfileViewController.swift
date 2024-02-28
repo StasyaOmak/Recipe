@@ -20,6 +20,10 @@ final class ProfileViewController: UIViewController {
         static let verdanaBoldFontName = "Verdana-Bold"
         static let headerTableViewCellIdentifier = "HeaderTableViewCell"
         static let optionsTableViewCellIdentifier = "OptionsTableViewCell"
+        static let alertTitleText = "Change your name and surname"
+        static let alertTextFieldPlaceholder = "Name Surname"
+        static let okActionText = "Ok"
+        static let cancelActionText = "Cancel"
     }
 
     // MARK: - Visual Components
@@ -40,15 +44,11 @@ final class ProfileViewController: UIViewController {
 
     // MARK: - Private Properties
 
-    private let optionCells: [OptionCell] = [
-        OptionCell(type: .bonuses, title: "Bonuses", imageName: "star.fill"),
-        OptionCell(type: .terms, title: "Terms & Privacy Policy", imageName: "doc.fill"),
-        OptionCell(type: .logOut, title: "Log Out", imageName: "rectangle.portrait.and.arrow.right.fill")
-    ]
+    private let optionCells: [Profile] = Profile.mockData()
 
-    private let tableViewSections: [ProfileTableViewCell] = [
-        .headerCell,
-        .cells
+    private let tableViewSections: [ProfileFieldType] = [
+        .header,
+        .common
     ]
 
     // MARK: - Life Cycle
@@ -95,17 +95,17 @@ extension ProfileViewController: ProfileViewControllerProtocol {
     }
 
     func showNameEditorAlert() {
-        let alert = UIAlertController(title: "Change your name and surname", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: Constants.alertTitleText, message: nil, preferredStyle: .alert)
 
         alert.addTextField()
-        alert.textFields?.first?.placeholder = "Name Surname"
+        alert.textFields?.first?.placeholder = Constants.alertTextFieldPlaceholder
 
-        let okAction = UIAlertAction(title: "Ok", style: .default) { [weak self] _ in
+        let okAction = UIAlertAction(title: Constants.okActionText, style: .default) { [weak self] _ in
             guard let text = alert.textFields?.first?.text else { return }
             self?.presenter?.changeUserName(name: text)
         }
 
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let cancelAction = UIAlertAction(title: Constants.cancelActionText, style: .cancel)
 
         alert.addAction(okAction)
         alert.addAction(cancelAction)
@@ -115,7 +115,8 @@ extension ProfileViewController: ProfileViewControllerProtocol {
     }
 }
 
-/// Расширение вью методами UITableViewDataSource
+// MARK: - ProfileViewController + UITableViewDataSource
+
 extension ProfileViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         tableViewSections.count
@@ -123,28 +124,28 @@ extension ProfileViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch tableViewSections[section] {
-        case .headerCell:
+        case .header:
             return 1
-        case .cells:
+        case .common:
             return optionCells.count
         }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch tableViewSections[indexPath.section] {
-        case .headerCell:
+        case .header:
             guard let cell = tableView
                 .dequeueReusableCell(
                     withIdentifier: Constants.headerTableViewCellIdentifier,
                     for: indexPath
-                ) as? HeaderTableViewCell, let user = presenter?.user
+                ) as? HeaderTableViewCell, let user = presenter?.mockUserData()
             else { return UITableViewCell() }
             cell.configure(user: user)
             cell.editNameHandler = { [weak self] in
                 self?.presenter?.editButtonTapped()
             }
             return cell
-        case .cells:
+        case .common:
             guard let cell = tableView
                 .dequeueReusableCell(
                     withIdentifier: Constants.optionsTableViewCellIdentifier,
@@ -161,9 +162,9 @@ extension ProfileViewController: UITableViewDataSource {
 extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch tableViewSections[indexPath.section] {
-        case .headerCell:
+        case .header:
             break
-        case .cells:
+        case .common:
             switch optionCells[indexPath.row].type {
             case .bonuses:
                 presenter?.bonusesCellTapped()

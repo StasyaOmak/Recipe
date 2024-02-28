@@ -13,8 +13,8 @@ final class AppCoordinator: BaseCoordinator {
     /// переопределяем старт. отсюда у нас две точки входа в приложение, либо авторизация пройдена, либо нет
     /// пока нужно вручную откомментировать нужную для входа
     override func start() {
+//        toAuth()
         toMain()
-//        toAuth()  //на красный экран авторизации
     }
 
     // MARK: - Private Methods

@@ -7,7 +7,6 @@ protocol RecipesViewControllerProtocol: AnyObject {}
 
 /// Экран с рецептами
 final class RecipesViewController: UIViewController {
-
     // MARK: - Public Properties
 
     var recipesPresenter: RecipesPresenterProtocol?

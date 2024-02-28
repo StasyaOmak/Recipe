@@ -60,7 +60,7 @@ final class OptionsTableViewCell: UITableViewCell {
 
     // MARK: - Public Methods
 
-    func configure(option: OptionCell) {
+    func configure(option: Profile) {
         iconImageView.image = UIImage(systemName: option.imageName)
         optionLabel.text = option.title
         accessoryType = .disclosureIndicator

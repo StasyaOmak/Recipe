@@ -27,7 +27,6 @@ final class BonusesPresenter {
 extension BonusesPresenter: BonusesPresenterProtocol {
     /// имплементация метода протокола
     func closeButtonTapped() {
-        print(coordinator == nil)
         coordinator?.dismissBonusesScreen()
     }
 }

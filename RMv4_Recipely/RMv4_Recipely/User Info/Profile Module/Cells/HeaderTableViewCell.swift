@@ -5,6 +5,12 @@ import UIKit
 
 /// Первая ячейка профиля пользователя, содержит аватар, имя и кнопку редактирования имени.
 final class HeaderTableViewCell: UITableViewCell {
+    // MARK: - Types
+
+    // swiftlint:disable custom_custom_void_handler
+    typealias VoidHandler = () -> ()
+    // swiftlint:enable custom_custom_void_handler
+
     // MARK: - Constants
 
     private enum Constants {
@@ -49,7 +55,7 @@ final class HeaderTableViewCell: UITableViewCell {
 
     // MARK: - Public Properties
 
-    var editNameHandler: (() -> ())?
+    var editNameHandler: VoidHandler?
 
     // MARK: - Initializers
 
