@@ -15,7 +15,6 @@ final class AuthCoordinator: BaseCoordinator {
 
     override func start() {
         showAuth()
-        // здесь что-то происходит при переходе на экран
     }
 
     func onFinish() {
@@ -23,15 +22,12 @@ final class AuthCoordinator: BaseCoordinator {
     }
 
     func showAuth() {
-        // injection
-        // для тренировки можно написать билдер и вынести инъекции туда
         let authViewController = AuthViewController()
         let authPresenter = AuthPresenter()
         authViewController.presenter = authPresenter
         authPresenter.view = authViewController
         authPresenter.authCoordinator = self
 
-        // making root controller
         let rootViewController = UINavigationController(rootViewController: authViewController)
         setAsRoot​(​_​: rootViewController)
         self.rootViewController = rootViewController

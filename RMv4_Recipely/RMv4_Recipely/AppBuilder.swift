@@ -5,27 +5,6 @@ import UIKit
 
 /// Создание модулей для приложения
 final class AppBuilder {
-    // MARK: - Constants
-
-    private enum Constants {
-        //    static let
-        //    static let
-        //    static let
-        //    static let
-    }
-
-    // MARK: - IBOutlets
-
-    // MARK: - Visual Components
-
-    // MARK: - Public Properties
-
-    // MARK: - Private Properties
-
-    // MARK: - Initializers
-
-    // MARK: - Life Cycle
-
     // MARK: - Public Methods
 
     func makeProfileModule() -> ProfileViewController {
@@ -79,7 +58,19 @@ final class AppBuilder {
         return favoritesView
     }
 
-    // MARK: - IBAction
+    func makeBonusesModule() -> BonusesViewController {
+        let bonusesView = BonusesViewController()
+        let bonusesPresenter = BonusesPresenter()
+        bonusesView.bonusesPresenter = bonusesPresenter
+        bonusesPresenter.bonusesView = bonusesView
 
-    // MARK: - Private Methods
+        let sheet = bonusesView.sheetPresentationController
+        sheet?.detents = [.custom(resolver: { _ in
+            355
+        })]
+
+        sheet?.prefersGrabberVisible = true
+        sheet?.preferredCornerRadius = 30
+        return bonusesView
+    }
 }

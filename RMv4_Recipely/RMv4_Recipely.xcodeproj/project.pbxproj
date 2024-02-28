@@ -11,6 +11,10 @@
 		4F9AB0482B8E184C000544DD /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9AB0472B8E184C000544DD /* FavoritesViewController.swift */; };
 		4F9AB04A2B8E18CE000544DD /* FavoritesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9AB0492B8E18CE000544DD /* FavoritesCoordinator.swift */; };
 		4F9AB04D2B8E199E000544DD /* FavoritesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9AB04C2B8E199E000544DD /* FavoritesModel.swift */; };
+		4F9AB0502B8E641A000544DD /* HeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9AB04F2B8E641A000544DD /* HeaderTableViewCell.swift */; };
+		4F9AB0532B8E809C000544DD /* OptionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9AB0522B8E809C000544DD /* OptionsTableViewCell.swift */; };
+		4F9AB0552B8EB9C5000544DD /* BonusesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9AB0542B8EB9C5000544DD /* BonusesViewController.swift */; };
+		4FB15BE82B8EC23400FA2EFA /* BonusesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB15BE72B8EC23400FA2EFA /* BonusesPresenter.swift */; };
 		4FE755912B8D036100C67B8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE755902B8D036100C67B8A /* AppDelegate.swift */; };
 		4FE755932B8D036100C67B8A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE755922B8D036100C67B8A /* SceneDelegate.swift */; };
 		4FE755952B8D036100C67B8A /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE755942B8D036100C67B8A /* AuthViewController.swift */; };
@@ -38,6 +42,10 @@
 		4F9AB0472B8E184C000544DD /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		4F9AB0492B8E18CE000544DD /* FavoritesCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCoordinator.swift; sourceTree = "<group>"; };
 		4F9AB04C2B8E199E000544DD /* FavoritesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesModel.swift; sourceTree = "<group>"; };
+		4F9AB04F2B8E641A000544DD /* HeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderTableViewCell.swift; sourceTree = "<group>"; };
+		4F9AB0522B8E809C000544DD /* OptionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsTableViewCell.swift; sourceTree = "<group>"; };
+		4F9AB0542B8EB9C5000544DD /* BonusesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonusesViewController.swift; sourceTree = "<group>"; };
+		4FB15BE72B8EC23400FA2EFA /* BonusesPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonusesPresenter.swift; sourceTree = "<group>"; };
 		4FE7558D2B8D036100C67B8A /* RMv4_Recipely.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RMv4_Recipely.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FE755902B8D036100C67B8A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4FE755922B8D036100C67B8A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -83,6 +91,35 @@
 			path = Favorites;
 			sourceTree = "<group>";
 		};
+		4F9AB04E2B8E63D5000544DD /* Profile Module */ = {
+			isa = PBXGroup;
+			children = (
+				4FE755AF2B8D091400C67B8A /* ProfileViewController.swift */,
+				4FE755B42B8D09CC00C67B8A /* ProfilePresenter.swift */,
+				4FE755B22B8D09BD00C67B8A /* ProfileModel.swift */,
+				4F9AB0512B8E642E000544DD /* Cells */,
+			);
+			path = "Profile Module";
+			sourceTree = "<group>";
+		};
+		4F9AB0512B8E642E000544DD /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				4F9AB04F2B8E641A000544DD /* HeaderTableViewCell.swift */,
+				4F9AB0522B8E809C000544DD /* OptionsTableViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		4FB15BE62B8EC1D700FA2EFA /* Bonuses Module */ = {
+			isa = PBXGroup;
+			children = (
+				4F9AB0542B8EB9C5000544DD /* BonusesViewController.swift */,
+				4FB15BE72B8EC23400FA2EFA /* BonusesPresenter.swift */,
+			);
+			path = "Bonuses Module";
+			sourceTree = "<group>";
+		};
 		4FE755842B8D036100C67B8A = {
 			isa = PBXGroup;
 			children = (
@@ -105,6 +142,7 @@
 				4FE755902B8D036100C67B8A /* AppDelegate.swift */,
 				4FE755922B8D036100C67B8A /* SceneDelegate.swift */,
 				4FE755A82B8D07DE00C67B8A /* TabBarController.swift */,
+				4FE755E02B8D5EFB00C67B8A /* AppBuilder.swift */,
 				4FE755AA2B8D088C00C67B8A /* Authorization */,
 				4FE755EB2B8D610300C67B8A /* Recipes */,
 				4F9AB04B2B8E1968000544DD /* Favorites */,
@@ -130,9 +168,8 @@
 		4FE755B12B8D091B00C67B8A /* User Info */ = {
 			isa = PBXGroup;
 			children = (
-				4FE755AF2B8D091400C67B8A /* ProfileViewController.swift */,
-				4FE755B42B8D09CC00C67B8A /* ProfilePresenter.swift */,
-				4FE755B22B8D09BD00C67B8A /* ProfileModel.swift */,
+				4F9AB04E2B8E63D5000544DD /* Profile Module */,
+				4FB15BE62B8EC1D700FA2EFA /* Bonuses Module */,
 			);
 			path = "User Info";
 			sourceTree = "<group>";
@@ -146,7 +183,6 @@
 				4FE755F02B8D733100C67B8A /* RecipesCoordinator.swift */,
 				4FE755EE2B8D6D6E00C67B8A /* ProfileCoordinator.swift */,
 				4F9AB0492B8E18CE000544DD /* FavoritesCoordinator.swift */,
-				4FE755E02B8D5EFB00C67B8A /* AppBuilder.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -294,9 +330,13 @@
 				4FE755AC2B8D089F00C67B8A /* AuthModel.swift in Sources */,
 				4FE755A92B8D07DE00C67B8A /* TabBarController.swift in Sources */,
 				4FE755912B8D036100C67B8A /* AppDelegate.swift in Sources */,
+				4FB15BE82B8EC23400FA2EFA /* BonusesPresenter.swift in Sources */,
 				4FE755932B8D036100C67B8A /* SceneDelegate.swift in Sources */,
 				4FE755E62B8D60E800C67B8A /* RecipesViewController.swift in Sources */,
+				4F9AB0532B8E809C000544DD /* OptionsTableViewCell.swift in Sources */,
+				4F9AB0552B8EB9C5000544DD /* BonusesViewController.swift in Sources */,
 				4F9AB0482B8E184C000544DD /* FavoritesViewController.swift in Sources */,
+				4F9AB0502B8E641A000544DD /* HeaderTableViewCell.swift in Sources */,
 				4FE755B52B8D09CD00C67B8A /* ProfilePresenter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

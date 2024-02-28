@@ -7,26 +7,9 @@ protocol RecipesViewControllerProtocol: AnyObject {}
 
 /// Экран с рецептами
 final class RecipesViewController: UIViewController {
-    // MARK: - Constants
-
-    private enum Constants {
-        //    static let
-        //    static let
-        //    static let
-        //    static let
-    }
-
-    // MARK: - IBOutlets
-
-    // MARK: - Visual Components
-
     // MARK: - Public Properties
 
     var recipesPresenter: RecipesPresenterProtocol?
-
-    // MARK: - Private Properties
-
-    // MARK: - Initializers
 
     // MARK: - Life Cycle
 
@@ -34,12 +17,6 @@ final class RecipesViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
     }
-
-    // MARK: - Public Methods
-
-    // MARK: - IBAction
-
-    // MARK: - Private Methods
 }
 
 extension RecipesViewController: RecipesViewControllerProtocol {}
