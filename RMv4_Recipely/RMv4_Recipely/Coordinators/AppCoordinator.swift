@@ -28,16 +28,19 @@ final class AppCoordinator: BaseCoordinator {
         let recipesModuleView = builder.makeRecipesModule()
         let recipesCoordinator = RecipesCoordinator(rootController: recipesModuleView)
         recipesModuleView.recipesPresenter?.coordinator = recipesCoordinator
+        add(coordinator: recipesCoordinator)
 
         /// profile
         let profileModuleView = builder.makeProfileModule()
         let profileCoordinator = ProfileCoordinator(rootController: profileModuleView)
         profileModuleView.presenter?.coordinator = profileCoordinator
+        add(coordinator: profileCoordinator)
 
         /// favorites
         let favoritesModuleView = builder.makeFavoritesModule()
         let favoritesCoordinator = FavoritesCoordinator(rootController: favoritesModuleView)
         favoritesModuleView.favoritesPresenter?.favoritesCoordinator = favoritesCoordinator
+        add(coordinator: favoritesCoordinator)
 
         tabBarViewController.setViewControllers(
             [recipesCoordinator.rootController, favoritesCoordinator.rootController, profileCoordinator.rootController],

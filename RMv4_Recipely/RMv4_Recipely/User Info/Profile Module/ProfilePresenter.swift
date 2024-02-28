@@ -4,30 +4,23 @@
 import Foundation
 
 protocol ProfilePresenterProtocol: AnyObject {
-    /// абстрактный интерфейс
     var view: ProfileViewControllerProtocol? { get set }
     var coordinator: ProfileCoordinator? { get set }
     var user: User { get set }
 
     func changeUserName(name: String)
     func editButtonTapped()
+    func bonusesCellTapped()
 }
 
 /// Презентер модуля "Профиль пользователя"
 final class ProfilePresenter {
-    // MARK: - Constants
-
-    private enum Constants {
-        //    static let
-        //    static let
-        //    static let
-        //    static let
-    }
-
     // MARK: - Public Properties
 
     weak var view: ProfileViewControllerProtocol?
     weak var coordinator: ProfileCoordinator?
+
+    // MARK: - Mocks
 
     var user: User = .init(name: "Name", avatarImageName: "user", bonusesCount: 100)
 
@@ -49,7 +42,10 @@ extension ProfilePresenter: ProfilePresenterProtocol {
         view?.showNameEditorAlert()
     }
 
-    /// здесь будет имплементация интерфейса в этот класс
+    func bonusesCellTapped() {
+        coordinator?.moveToBonusesScreen()
+    }
+
     func changeUserName(name: String) {
         user.name = name
         view?.reloadTableView()

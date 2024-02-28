@@ -3,6 +3,7 @@
 
 import UIKit
 
+/// Протокол
 protocol ProfileViewControllerProtocol: AnyObject {
     func reloadTableView()
     func showNameEditorAlert()
@@ -162,11 +163,9 @@ extension ProfileViewController: UITableViewDelegate {
         case .cells:
             switch optionCells[indexPath.row].type {
             case .bonuses:
-                print("bonuses")
-            case .terms:
-                print("terms")
-            case .logOut:
-                print("log out")
+                presenter?.bonusesCellTapped()
+            default:
+                break
             }
         }
     }
