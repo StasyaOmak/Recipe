@@ -25,137 +25,136 @@ final class AuthViewController: UIViewController {
 
     // MARK: - Visual Components
 
-    private lazy var loginLabel: UILabel = {
-        let element = UILabel()
-        element.text = Constants.loginText
-        element.textColor = .darkGray
-        element.font = UIFont(name: Constants.verdanaBold, size: 28)
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
+    private let loginLabel: UILabel = {
+        let label = UILabel()
+        label.text = Constants.loginText
+        label.textColor = .darkGray
+        label.font = UIFont(name: Constants.verdanaBold, size: 28)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
 
-    private lazy var emailAdressLabel: UILabel = {
-        let element = UILabel()
-        element.text = Constants.emailAddressText
-        element.textColor = .darkGray
-        element.font = UIFont(name: Constants.verdanaBold, size: 18)
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
+    private let emailAdressLabel: UILabel = {
+        let label = UILabel()
+        label.text = Constants.emailAddressText
+        label.textColor = .darkGray
+        label.font = UIFont(name: Constants.verdanaBold, size: 18)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
 
-    private lazy var passwordLabel: UILabel = {
-        let element = UILabel()
-        element.text = Constants.passwordText
-        element.textColor = .darkGray
-        element.font = UIFont(name: Constants.verdanaBold, size: 18)
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
+    private let passwordLabel: UILabel = {
+        let label = UILabel()
+        label.text = Constants.passwordText
+        label.textColor = .darkGray
+        label.font = UIFont(name: Constants.verdanaBold, size: 18)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
 
-    private lazy var incorrectFormatLabel: UILabel = {
-        let element = UILabel()
-        element.text = Constants.incorrectFormatText
-        element.textColor = .red
-        element.isHidden = true
-        element.font = UIFont(name: Constants.verdana, size: 12)
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
+    private let incorrectFormatLabel: UILabel = {
+        let label = UILabel()
+        label.text = Constants.incorrectFormatText
+        label.textColor = .red
+        label.isHidden = true
+        label.font = UIFont(name: Constants.verdana, size: 12)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
 
-    private lazy var wrongPasswordLabel: UILabel = {
-        let element = UILabel()
-        element.text = Constants.wrongPasswordText
-        element.textColor = .red
-        element.isHidden = true
-        element.font = UIFont(name: Constants.verdana, size: 12)
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
+    private let wrongPasswordLabel: UILabel = {
+        let label = UILabel()
+        label.text = Constants.wrongPasswordText
+        label.textColor = .red
+        label.isHidden = true
+        label.font = UIFont(name: Constants.verdana, size: 12)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
 
     lazy var emailAddressTextField: UITextField = {
-        let element = UITextField()
-        element.placeholder = Constants.emailAddressPlaceholderText
-        element.font = UIFont(name: Constants.verdana, size: 18)
-        element.borderStyle = .roundedRect
-        element.delegate = self
+        let textField = UITextField()
+        textField.placeholder = Constants.emailAddressPlaceholderText
+        textField.font = UIFont(name: Constants.verdana, size: 18)
+        textField.borderStyle = .roundedRect
+        textField.delegate = self
 
         let leftView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         let imageView = UIImageView(frame: CGRect(x: 6, y: 6, width: 20, height: 18))
         imageView.image = UIImage(named: "envelope")
         leftView.addSubview(imageView)
 
-        element.leftView = leftView
-        element.leftViewMode = .always
-        element.translatesAutoresizingMaskIntoConstraints = false
-        return element
+        textField.leftView = leftView
+        textField.leftViewMode = .always
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
     }()
 
     lazy var passwordTextField: UITextField = {
-        let element = UITextField()
-        element.placeholder = Constants.passwordPlaceholderText
-        element.font = UIFont(name: Constants.verdana, size: 18)
-        element.borderStyle = .roundedRect
-        element.delegate = self
+        let textField = UITextField()
+        textField.placeholder = Constants.passwordPlaceholderText
+        textField.font = UIFont(name: Constants.verdana, size: 18)
+        textField.borderStyle = .roundedRect
+        textField.delegate = self
 
         let leftView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         let imageView = UIImageView(frame: CGRect(x: 6, y: 6, width: 20, height: 18))
         imageView.image = UIImage(named: "lock")
         leftView.addSubview(imageView)
 
-        element.leftView = leftView
-        element.leftViewMode = .always
+        textField.leftView = leftView
+        textField.leftViewMode = .always
 
         let rightView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         let button = UIButton(frame: CGRect(x: 6, y: 6, width: 20, height: 20))
         button.setImage(.vector, for: .normal)
         rightView.addSubview(button)
-        element.rightView = rightView
-        element.rightViewMode = .always
-        //        element.addTarget(self, action: #selector(hideButtonPressed), for: .touchUpInside)
-        element.translatesAutoresizingMaskIntoConstraints = false
+        textField.rightView = rightView
+        textField.rightViewMode = .always
+        textField.translatesAutoresizingMaskIntoConstraints = false
 
-        return element
+        return textField
     }()
 
     private lazy var loginButton: UIButton = {
-        let element = UIButton()
-        element.setTitle(Constants.loginButtonText, for: .normal)
-        element.backgroundColor = .buttonMain
-        element.titleLabel?.font = UIFont(name: Constants.verdana, size: 16)
-        element.setTitleColor(.white, for: .normal)
-        element.layer.cornerRadius = 12
-        element.translatesAutoresizingMaskIntoConstraints = false
-        element.addTarget(
+        let button = UIButton()
+        button.setTitle(Constants.loginButtonText, for: .normal)
+        button.backgroundColor = .buttonMain
+        button.titleLabel?.font = UIFont(name: Constants.verdana, size: 16)
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 12
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(
             self,
             action: #selector(loginButtonTapped(_:)),
             for: .touchUpInside
         )
-        return element
+        return button
     }()
 
-    private lazy var errorMessageLabel: UILabel = {
-        let element = UILabel()
-        element.text = Constants.errorMessageText
-        element.textColor = .white
-        element.textAlignment = .center
-        element.numberOfLines = 0
-        element.backgroundColor = .warningLabel
-        element.layer.masksToBounds = true
-        element.isHidden = true
-        element.translatesAutoresizingMaskIntoConstraints = false
-        element.layer.cornerRadius = 12
+    private let errorMessageLabel: UILabel = {
+        let label = UILabel()
+        label.text = Constants.errorMessageText
+        label.textColor = .white
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.backgroundColor = .warningLabel
+        label.layer.masksToBounds = true
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.cornerRadius = 12
 
-        return element
+        return label
     }()
 
     private lazy var gradientLayer: CAGradientLayer = {
-        let element = CAGradientLayer()
-        element.frame = view.bounds
-        element.colors = [
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = view.bounds
+        gradientLayer.colors = [
             UIColor.white.cgColor,
             UIColor.gradientLayer.cgColor,
         ]
-        return element
+        return gradientLayer
     }()
 
     // MARK: - Public Properties
@@ -169,21 +168,7 @@ final class AuthViewController: UIViewController {
         view.backgroundColor = .white
         setupViews()
         setupAllConstraints()
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
-
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
+        setKeyboard()
     }
 
     // MARK: - Private Methods
@@ -202,7 +187,7 @@ final class AuthViewController: UIViewController {
     }
 
     @objc private func handleTap() {
-        view.endEditing(true) // Скрыть клавиатуру
+        view.endEditing(true)
         loginButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
             .isActive = true
     }
@@ -231,6 +216,23 @@ final class AuthViewController: UIViewController {
                 self.errorMessageLabel.isHidden = false
             }
         }
+    }
+
+    private func setKeyboard() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
 
     private func setupLoginLabelConstraints() {
@@ -301,39 +303,43 @@ final class AuthViewController: UIViewController {
         setLoginButtonConstraints()
         setupWarningLabelPassConstraints()
     }
-}
 
-extension AuthViewController: AuthViewControllerProtocol {
-    func setPasswordColor(color: UIColor, isValidate: Bool, borderColor: UIColor) {
-        passwordLabel.textColor = color
-        passwordTextField.layer.borderColor = borderColor.cgColor
-        wrongPasswordLabel.isHidden = isValidate
-    }
+    // MARK: - Public Methods
 
-    func setLoginColor(color: UIColor, isValidate: Bool, borderColor: UIColor) {
-        emailAdressLabel.textColor = color
-        emailAddressTextField.layer.borderColor = borderColor.cgColor
-        incorrectFormatLabel.isHidden = isValidate
-    }
-}
-
-extension AuthViewController: UITextFieldDelegate {
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        presenter?.checkLogin(login: emailAddressTextField.text)
-        presenter?.checkPassword(password: passwordTextField.text)
-    }
-}
-
-extension AuthViewController {
-    func upView(_ keyboardHeight: CGFloat) {
+    public func upView(_ keyboardHeight: CGFloat) {
         UIView.animate(withDuration: 0.3) {
             self.view.frame.origin.y -= keyboardHeight
         }
     }
 
-    func downView(_ keyboardHeight: CGFloat) {
+    public func downView(_ keyboardHeight: CGFloat) {
         UIView.animate(withDuration: 0.3) {
             self.view.frame.origin.y += keyboardHeight
         }
+    }
+}
+
+// MARK: - AuthViewProtocol
+
+extension AuthViewController: AuthViewProtocol {
+    func setPasswordColor(color: String, isValidate: Bool, borderColor: String) {
+        passwordLabel.textColor = UIColor(named: color)
+        passwordTextField.layer.borderColor = UIColor(named: borderColor)?.cgColor
+        wrongPasswordLabel.isHidden = isValidate
+    }
+
+    func setLoginColor(color: String, isValidate: Bool, borderColor: String) {
+        emailAdressLabel.textColor = UIColor(named: color)
+        emailAddressTextField.layer.borderColor = UIColor(named: borderColor)?.cgColor
+        incorrectFormatLabel.isHidden = isValidate
+    }
+}
+
+// MARK: - UITextFieldDelegate
+
+extension AuthViewController: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        presenter?.checkLogin(login: emailAddressTextField.text)
+        presenter?.checkPassword(password: passwordTextField.text)
     }
 }
