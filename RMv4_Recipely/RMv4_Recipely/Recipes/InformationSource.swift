@@ -5,7 +5,7 @@ import Foundation
 
 /// Наполнение ячеек с рецептами
 struct InformationSource {
-    let categories: [DishCategory] = [
+    static let categories: [DishCategory] = [
         DishCategory(imageName: "salad", type: .salad),
         DishCategory(imageName: "soup", type: .soup),
         DishCategory(imageName: "chicken", type: .chicken),

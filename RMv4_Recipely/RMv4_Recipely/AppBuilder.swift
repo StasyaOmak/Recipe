@@ -73,4 +73,13 @@ final class AppBuilder {
         sheet?.preferredCornerRadius = 30
         return bonusesView
     }
+
+    func makeRecipeListModule() -> RecipeListViewController {
+        let recipeListView = RecipeListViewController()
+        let recipeListPresenter = RecipeListPresenter()
+        recipeListView.presenter = recipeListPresenter
+        recipeListPresenter.view = recipeListView
+
+        return recipeListView
+    }
 }

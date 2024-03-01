@@ -16,6 +16,7 @@ final class RecipesCustomCell: UICollectionViewCell {
         button.clipsToBounds = true
         button.layer.cornerRadius = 18
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.isUserInteractionEnabled = false
         return button
     }()
 
@@ -23,6 +24,7 @@ final class RecipesCustomCell: UICollectionViewCell {
         let view = UIView()
         view.backgroundColor = .grayTitle
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.isUserInteractionEnabled = false
         return view
     }()
 
@@ -32,8 +34,20 @@ final class RecipesCustomCell: UICollectionViewCell {
         label.textAlignment = .center
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isUserInteractionEnabled = false
         return label
     }()
+
+    override var isSelected: Bool {
+        didSet {
+            super.isSelected = isSelected
+            recipesLabel.backgroundColor = isSelected ? .blueForChoose : .grayTitle
+            recipesButton.layer.borderWidth = isSelected ? 2 : 0
+            recipesButton.layer
+                .borderColor = isSelected ? .init(red: 0.58, green: 0.76, blue: 0.79, alpha: 1.00) : UIColor.clear
+                .cgColor
+        }
+    }
 
     // MARK: - Life Cycle
 
@@ -43,12 +57,11 @@ final class RecipesCustomCell: UICollectionViewCell {
         setupViews()
         setupConstraints()
 
-        addActionRecipeButtonTapped()
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
     }
 
     // MARK: - Private Methods
@@ -69,10 +82,6 @@ final class RecipesCustomCell: UICollectionViewCell {
         setRecipesButtonConstraints()
         setRecipesViewConstraints()
         setRecipesTitleConstraints()
-    }
-
-    private func addActionRecipeButtonTapped() {
-        recipesButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
 
     private func setRecipesButtonConstraints() {
@@ -102,11 +111,5 @@ final class RecipesCustomCell: UICollectionViewCell {
     func setInfo(info: DishCategory) {
         recipesButton.setImage(UIImage(named: info.imageName), for: .normal)
         recipesLabel.text = info.type.rawValue
-    }
-
-    @objc func buttonTapped(sender: UIButton) {
-        recipesLabel.backgroundColor = .blueForChoose
-        recipesButton.layer.borderWidth = 2
-        recipesButton.layer.borderColor = .init(red: 0.58, green: 0.76, blue: 0.79, alpha: 1.00)
     }
 }
