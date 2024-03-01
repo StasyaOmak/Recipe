@@ -31,7 +31,7 @@ final class ProfilePresenter {
     var user: User?
 }
 
-// - MARK: ProfilePresenter + ProfilePresenterProtocol
+// - MARK: Extension ProfilePresenter + ProfilePresenterProtocol
 extension ProfilePresenter: ProfilePresenterProtocol {
     func editButtonTapped() {
         view?.showNameEditorAlert()

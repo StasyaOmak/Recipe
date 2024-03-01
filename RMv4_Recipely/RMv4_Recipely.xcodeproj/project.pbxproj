@@ -15,6 +15,11 @@
 		4F9AB0532B8E809C000544DD /* OptionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9AB0522B8E809C000544DD /* OptionsTableViewCell.swift */; };
 		4F9AB0552B8EB9C5000544DD /* BonusesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9AB0542B8EB9C5000544DD /* BonusesViewController.swift */; };
 		4FB15BE82B8EC23400FA2EFA /* BonusesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB15BE72B8EC23400FA2EFA /* BonusesPresenter.swift */; };
+		4FB15BF02B90C5F500FA2EFA /* RecipeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB15BEF2B90C5F500FA2EFA /* RecipeListView.swift */; };
+		4FB15BF52B90C7F700FA2EFA /* RecipeListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB15BF42B90C7F700FA2EFA /* RecipeListPresenter.swift */; };
+		4FB15BF72B90C80300FA2EFA /* RecipeListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB15BF62B90C80300FA2EFA /* RecipeListModel.swift */; };
+		4FB15BF92B90D7DE00FA2EFA /* RecipeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB15BF82B90D7DE00FA2EFA /* RecipeTableViewCell.swift */; };
+		4FB15BFB2B911D4400FA2EFA /* UIControl FilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB15BFA2B911D4400FA2EFA /* UIControl FilterButton.swift */; };
 		4FE755912B8D036100C67B8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE755902B8D036100C67B8A /* AppDelegate.swift */; };
 		4FE755932B8D036100C67B8A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE755922B8D036100C67B8A /* SceneDelegate.swift */; };
 		4FE755952B8D036100C67B8A /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE755942B8D036100C67B8A /* AuthViewController.swift */; };
@@ -46,6 +51,11 @@
 		4F9AB0522B8E809C000544DD /* OptionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsTableViewCell.swift; sourceTree = "<group>"; };
 		4F9AB0542B8EB9C5000544DD /* BonusesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonusesViewController.swift; sourceTree = "<group>"; };
 		4FB15BE72B8EC23400FA2EFA /* BonusesPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonusesPresenter.swift; sourceTree = "<group>"; };
+		4FB15BEF2B90C5F500FA2EFA /* RecipeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListView.swift; sourceTree = "<group>"; };
+		4FB15BF42B90C7F700FA2EFA /* RecipeListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListPresenter.swift; sourceTree = "<group>"; };
+		4FB15BF62B90C80300FA2EFA /* RecipeListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListModel.swift; sourceTree = "<group>"; };
+		4FB15BF82B90D7DE00FA2EFA /* RecipeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTableViewCell.swift; sourceTree = "<group>"; };
+		4FB15BFA2B911D4400FA2EFA /* UIControl FilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl FilterButton.swift"; sourceTree = "<group>"; };
 		4FE7558D2B8D036100C67B8A /* RMv4_Recipely.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RMv4_Recipely.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FE755902B8D036100C67B8A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4FE755922B8D036100C67B8A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -120,6 +130,28 @@
 			path = "Bonuses Module";
 			sourceTree = "<group>";
 		};
+		4FB15BF22B90C6EA00FA2EFA /* All Recipes Module */ = {
+			isa = PBXGroup;
+			children = (
+				4FE755E52B8D60E800C67B8A /* RecipesViewController.swift */,
+				4FE755E72B8D60F300C67B8A /* RecipesPresenter.swift */,
+				4FE755E92B8D60FC00C67B8A /* RecipesModel.swift */,
+			);
+			path = "All Recipes Module";
+			sourceTree = "<group>";
+		};
+		4FB15BF32B90C70200FA2EFA /* Recipe List Module */ = {
+			isa = PBXGroup;
+			children = (
+				4FB15BEF2B90C5F500FA2EFA /* RecipeListView.swift */,
+				4FB15BF42B90C7F700FA2EFA /* RecipeListPresenter.swift */,
+				4FB15BF62B90C80300FA2EFA /* RecipeListModel.swift */,
+				4FB15BF82B90D7DE00FA2EFA /* RecipeTableViewCell.swift */,
+				4FB15BFA2B911D4400FA2EFA /* UIControl FilterButton.swift */,
+			);
+			path = "Recipe List Module";
+			sourceTree = "<group>";
+		};
 		4FE755842B8D036100C67B8A = {
 			isa = PBXGroup;
 			children = (
@@ -190,9 +222,8 @@
 		4FE755EB2B8D610300C67B8A /* Recipes */ = {
 			isa = PBXGroup;
 			children = (
-				4FE755E52B8D60E800C67B8A /* RecipesViewController.swift */,
-				4FE755E72B8D60F300C67B8A /* RecipesPresenter.swift */,
-				4FE755E92B8D60FC00C67B8A /* RecipesModel.swift */,
+				4FB15BF22B90C6EA00FA2EFA /* All Recipes Module */,
+				4FB15BF32B90C70200FA2EFA /* Recipe List Module */,
 			);
 			path = Recipes;
 			sourceTree = "<group>";
@@ -323,6 +354,7 @@
 				4FE755EF2B8D6D6E00C67B8A /* ProfileCoordinator.swift in Sources */,
 				4FE755E82B8D60F300C67B8A /* RecipesPresenter.swift in Sources */,
 				4FE755B02B8D091400C67B8A /* ProfileViewController.swift in Sources */,
+				4FB15BF02B90C5F500FA2EFA /* RecipeListView.swift in Sources */,
 				4FE755ED2B8D63EF00C67B8A /* AuthCoordinator.swift in Sources */,
 				4FE755B32B8D09BD00C67B8A /* ProfileModel.swift in Sources */,
 				4FE755EA2B8D60FC00C67B8A /* RecipesModel.swift in Sources */,
@@ -332,11 +364,15 @@
 				4FE755912B8D036100C67B8A /* AppDelegate.swift in Sources */,
 				4FB15BE82B8EC23400FA2EFA /* BonusesPresenter.swift in Sources */,
 				4FE755932B8D036100C67B8A /* SceneDelegate.swift in Sources */,
+				4FB15BF92B90D7DE00FA2EFA /* RecipeTableViewCell.swift in Sources */,
 				4FE755E62B8D60E800C67B8A /* RecipesViewController.swift in Sources */,
+				4FB15BF52B90C7F700FA2EFA /* RecipeListPresenter.swift in Sources */,
 				4F9AB0532B8E809C000544DD /* OptionsTableViewCell.swift in Sources */,
+				4FB15BFB2B911D4400FA2EFA /* UIControl FilterButton.swift in Sources */,
 				4F9AB0552B8EB9C5000544DD /* BonusesViewController.swift in Sources */,
 				4F9AB0482B8E184C000544DD /* FavoritesViewController.swift in Sources */,
 				4F9AB0502B8E641A000544DD /* HeaderTableViewCell.swift in Sources */,
+				4FB15BF72B90C80300FA2EFA /* RecipeListModel.swift in Sources */,
 				4FE755B52B8D09CD00C67B8A /* ProfilePresenter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

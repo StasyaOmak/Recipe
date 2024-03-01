@@ -23,7 +23,8 @@ final class BonusesPresenter {
     var user: User?
 }
 
-/// Расширение презентера методами протокола
+// MARK: - Extension BonusesPresenter + BonusesPresenterProtocol
+
 extension BonusesPresenter: BonusesPresenterProtocol {
     /// имплементация метода протокола
     func closeButtonTapped() {

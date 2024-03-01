@@ -158,7 +158,8 @@ extension ProfileViewController: UITableViewDataSource {
     }
 }
 
-/// Расширение вью методами UITableViewDelegate
+// MARK: - ProfileViewController + UITableViewDelegate
+
 extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch tableViewSections[indexPath.section] {

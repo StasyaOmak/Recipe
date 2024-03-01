@@ -5,7 +5,7 @@ import UIKit
 
 protocol RecipesViewControllerProtocol: AnyObject {}
 
-/// Экран с рецептами
+/// Экран с категориями рецептов
 final class RecipesViewController: UIViewController {
     // MARK: - Public Properties
 
@@ -16,6 +16,9 @@ final class RecipesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.recipesPresenter?.coordinator?.moveToRecipeListScreen(category: .fish)
+        }
     }
 }
 
