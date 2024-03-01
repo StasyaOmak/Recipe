@@ -42,6 +42,7 @@ final class RecipesViewController: UIViewController {
         collectionView.backgroundColor = .white
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.allowsSelection = true
         collectionView.register(RecipesCustomCell.self, forCellWithReuseIdentifier: "cell")
     }
 
@@ -142,7 +143,10 @@ extension RecipesViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        recipesPresenter?.goToCategory(.chicken)
+        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
+        cell.isSelected = !cell.isSelected
+        print(indexPath)
+        recipesPresenter?.goToCategory(InformationSource.categories[indexPath.item])
     }
 
     func collectionView(

@@ -104,7 +104,7 @@ final class RecipeListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        presenter?.getRecipes()
+//        presenter?.getRecipes()
         setupUI()
     }
 

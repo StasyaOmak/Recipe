@@ -11,9 +11,7 @@ protocol RecipeListPresenterProtocol: AnyObject {
     var coordinator: RecipesCoordinator? { get set }
 
     /// Метод установки категории на экран
-    func setCategory(category: RecipeCategories)
-    /// Метод получения массива рецептов
-    func getRecipes()
+    func setCategory(category: DishCategory)
     /// Метод-флаг возврата на прдыдущий экран
     func popToAllRecipes()
     /// метод-флаг нажатия на кнопку фильтра
@@ -29,15 +27,10 @@ final class RecipeListPresenter {
 // MARK: - Extension RecipeListPresenter + RecipeListPresenterProtocol
 
 extension RecipeListPresenter: RecipeListPresenterProtocol {
-    func setCategory(category: RecipeCategories) {
-        let title = category.rawValue.capitalized
+    func setCategory(category: DishCategory) {
+        let title = category.type.rawValue.capitalized
         view?.setTitle(title)
-        let recipes = RecipeDescription.getMockData()
-        view?.setRecipes(recipes)
-    }
-
-    func getRecipes() {
-        let recipes = RecipeDescription.getMockData()
+        let recipes = RecipeDescription.getMockData(category: category)
         view?.setRecipes(recipes)
     }
 

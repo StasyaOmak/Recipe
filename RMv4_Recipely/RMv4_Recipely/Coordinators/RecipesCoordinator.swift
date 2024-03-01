@@ -16,7 +16,7 @@ final class RecipesCoordinator: BaseCoordinator {
         self.rootController = UINavigationController(rootViewController: rootController)
     }
 
-    func moveToRecipeListScreen(category: RecipeCategories) {
+    func moveToRecipeListScreen(category: DishCategory) {
         let recipeListModule = appBuilder.makeRecipeListModule()
         recipeListModule.presenter?.coordinator = self
         recipeListModule.presenter?.setCategory(category: category)

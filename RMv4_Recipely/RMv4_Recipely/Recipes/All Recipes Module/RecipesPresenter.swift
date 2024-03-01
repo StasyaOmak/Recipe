@@ -10,7 +10,7 @@ protocol RecipesPresenterProtocol {
     init(view: RecipesViewControllerProtocol)
     func getInfo(categoryNumber: Int) -> DishCategory
     func getCategoryCount() -> Int
-    func goToCategory(_ category: RecipeCategories)
+    func goToCategory(_ category: DishCategory)
 }
 
 /// Презентер модуля "рецепты"
@@ -31,12 +31,14 @@ final class RecipesPresenter: RecipesPresenterProtocol {
     // MARK: - Public Methods
 
     func getInfo(categoryNumber: Int) -> DishCategory {
-        informationSource.categories[categoryNumber]
+        InformationSource.categories[categoryNumber]
     }
 
     func getCategoryCount() -> Int {
-        informationSource.categories.count
+        InformationSource.categories.count
     }
 
-    func goToCategory(_ category: RecipeCategories) {}
+    func goToCategory(_ category: DishCategory) {
+        coordinator?.moveToRecipeListScreen(category: category)
+    }
 }
