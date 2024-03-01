@@ -26,7 +26,7 @@ final class AppBuilder {
 
     func makeRecipesModule() -> RecipesViewController {
         let recipesView = RecipesViewController()
-        let recipesPresenter = RecipesPresenter()
+        let recipesPresenter = RecipesPresenter(view: recipesView)
         recipesView.recipesPresenter = recipesPresenter
         recipesPresenter.view = recipesView
         recipesView.tabBarItem = UITabBarItem(
