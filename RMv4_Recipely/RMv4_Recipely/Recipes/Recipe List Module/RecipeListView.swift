@@ -104,7 +104,6 @@ final class RecipeListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-//        presenter?.getRecipes()
         setupUI()
     }
 
@@ -114,7 +113,6 @@ final class RecipeListViewController: UIViewController {
         view.addSubview(searchBar)
         view.addSubview(filtersScrollView)
         view.addSubview(tableView)
-//        setupTableView()
         setupConstraints()
         setupFilterButtons()
 
@@ -192,7 +190,7 @@ final class RecipeListViewController: UIViewController {
     }
 }
 
-// MARK: - Extension RecipeListViewController + RecipeListViewControllerProtocol
+// MARK: - RecipeListViewController + RecipeListViewControllerProtocol
 
 extension RecipeListViewController: RecipeListViewControllerProtocol {
     func setRecipes(_ recipes: [RecipeDescription]) {
@@ -208,7 +206,7 @@ extension RecipeListViewController: RecipeListViewControllerProtocol {
     }
 }
 
-// MARK: - Extension RecipeListViewController: UITableViewDataSource
+// MARK: - RecipeListViewController: UITableViewDataSource
 
 extension RecipeListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -229,7 +227,7 @@ extension RecipeListViewController: UITableViewDataSource {
     }
 }
 
-// MARK: - Extension RecipeListViewController: UITableViewDelegate
+// MARK: - RecipeListViewController: UITableViewDelegate
 
 extension RecipeListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

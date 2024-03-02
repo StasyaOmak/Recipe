@@ -7,6 +7,8 @@ import UIKit
 protocol BonusesViewControllerProtocol: AnyObject {
     /// Свойство-презентер
     var bonusesPresenter: BonusesPresenterProtocol? { get set }
+    /// метод вывода информации о пользователе во вью
+    func showUserInfo(user: User)
 }
 
 /// Экран бонусов пользователя
@@ -20,7 +22,6 @@ final class BonusesViewController: UIViewController {
         static let bonusesTitleText = "Your bonuses"
         static let starImageName = "star 2"
         static let verdanaBoldFontName = "Verdana-Bold"
-        static let bonusesCount = "100"
     }
 
     // MARK: - Visual Components
@@ -53,7 +54,6 @@ final class BonusesViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont(name: Constants.verdanaBoldFontName, size: 30)
         label.textColor = .darkGreenText
-        label.text = Constants.bonusesCount
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -135,4 +135,8 @@ final class BonusesViewController: UIViewController {
 }
 
 // - MARK: Extension BonusesViewController + BonusesViewControllerProtocol
-extension BonusesViewController: BonusesViewControllerProtocol {}
+extension BonusesViewController: BonusesViewControllerProtocol {
+    func showUserInfo(user: User) {
+        bonusesAmountLabel.text = "\(user.bonusesCount)"
+    }
+}

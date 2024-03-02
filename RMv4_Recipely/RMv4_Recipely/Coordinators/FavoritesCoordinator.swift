@@ -7,11 +7,11 @@ import UIKit
 final class FavoritesCoordinator: BaseCoordinator {
     // MARK: - Public Properties
 
-    let rootController: UINavigationController
+    var rootController: UINavigationController?
 
-    // MARK: - Initializers
+    // MARK: - Public Functions
 
-    init(rootController: UIViewController) {
-        self.rootController = UINavigationController(rootViewController: rootController)
+    func setRootViewController(view: UIViewController) {
+        rootController = UINavigationController(rootViewController: view)
     }
 }

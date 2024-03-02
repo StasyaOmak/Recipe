@@ -15,7 +15,7 @@ struct RecipeDescription {
     let value: Int
 
     /// свойство типа с мок-данными
-    static let fishMockData: [RecipeDescription] = [
+    static let fishRecipes: [RecipeDescription] = [
         RecipeDescription(title: "Fish", imageName: "recipe", time: 60, value: 245),
         RecipeDescription(title: "Some fish", imageName: "recipe", time: 60, value: 245),
         RecipeDescription(title: "Another Fish", imageName: "recipe", time: 60, value: 245),
@@ -23,17 +23,17 @@ struct RecipeDescription {
         RecipeDescription(title: "MORE FIIIIISHHH", imageName: "recipe", time: 60, value: 245)
     ]
 
-    static let otherMockData: [RecipeDescription] = [
+    static let otherRecipes: [RecipeDescription] = [
         RecipeDescription(title: "Some meal", imageName: "recipe", time: 45, value: 300)
     ]
 
     /// метод типа для получения данных
-    static func getMockData(category: DishCategory) -> [RecipeDescription] {
+    static func getRecipes(category: DishCategory) -> [RecipeDescription] {
         switch category.type {
         case .fish:
-            return RecipeDescription.fishMockData
+            return RecipeDescription.fishRecipes
         default:
-            return RecipeDescription.otherMockData
+            return RecipeDescription.otherRecipes
         }
     }
 }

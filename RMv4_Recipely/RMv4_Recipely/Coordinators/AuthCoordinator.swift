@@ -29,10 +29,11 @@ final class AuthCoordinator: BaseCoordinator {
 
     func showAuth() {
         let authViewController = AuthViewController()
-        let authPresenter = AuthPresenter()
+        let authPresenter = AuthPresenter(
+            view: authViewController,
+            authCoordinator: self
+        )
         authViewController.presenter = authPresenter
-        authPresenter.view = authViewController
-        authPresenter.authCoordinator = self
 
         let rootViewController = UINavigationController(rootViewController: authViewController)
         setAsRoot​(​_​: rootViewController)

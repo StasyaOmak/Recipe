@@ -5,11 +5,6 @@ import Foundation
 
 /// Интерфейс презентера модуля "Рецепты выбранной категории"
 protocol RecipeListPresenterProtocol: AnyObject {
-    /// свойство типа вью этого модуля
-    var view: RecipeListViewController? { get set }
-    /// свойство-координатор
-    var coordinator: RecipesCoordinator? { get set }
-
     /// Метод установки категории на экран
     func setCategory(category: DishCategory)
     /// Метод-флаг возврата на прдыдущий экран
@@ -20,17 +15,26 @@ protocol RecipeListPresenterProtocol: AnyObject {
 
 /// Презентер модуля "Рецепты выбранной категории"
 final class RecipeListPresenter {
-    weak var view: RecipeListViewController?
-    weak var coordinator: RecipesCoordinator?
+    // MARK: - Private Properties
+
+    private weak var view: RecipeListViewControllerProtocol?
+    private weak var coordinator: RecipesCoordinator?
+
+    // MARK: - Initializers
+
+    init(view: RecipeListViewControllerProtocol, coordinator: RecipesCoordinator) {
+        self.view = view
+        self.coordinator = coordinator
+    }
 }
 
-// MARK: - Extension RecipeListPresenter + RecipeListPresenterProtocol
+// MARK: - RecipeListPresenter + RecipeListPresenterProtocol
 
 extension RecipeListPresenter: RecipeListPresenterProtocol {
     func setCategory(category: DishCategory) {
         let title = category.type.rawValue.capitalized
         view?.setTitle(title)
-        let recipes = RecipeDescription.getMockData(category: category)
+        let recipes = RecipeDescription.getRecipes(category: category)
         view?.setRecipes(recipes)
     }
 

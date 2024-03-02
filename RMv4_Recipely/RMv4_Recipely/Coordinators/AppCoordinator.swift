@@ -23,23 +23,26 @@ final class AppCoordinator: BaseCoordinator {
         tabBarController = TabBarController()
         guard let tabBarViewController = tabBarController else { return }
 
-        let recipesModuleView = builder.makeRecipesModule()
-        let recipesCoordinator = RecipesCoordinator(rootController: recipesModuleView)
-        recipesModuleView.recipesPresenter?.coordinator = recipesCoordinator
+        let recipesCoordinator = RecipesCoordinator()
+        let recipesModuleView = builder.makeRecipesModule(coordinator: recipesCoordinator)
+        recipesCoordinator.setRootViewController(view: recipesModuleView)
         add(coordinator: recipesCoordinator)
+        guard let recipesView = recipesCoordinator.rootController else { return }
 
-        let profileModuleView = builder.makeProfileModule()
-        let profileCoordinator = ProfileCoordinator(rootController: profileModuleView)
-        profileModuleView.presenter?.coordinator = profileCoordinator
+        let profileCoordinator = ProfileCoordinator()
+        let profileModuleView = builder.makeProfileModule(coordinator: profileCoordinator)
+        profileCoordinator.setRootViewController(view: profileModuleView)
         add(coordinator: profileCoordinator)
+        guard let profileView = profileCoordinator.rootController else { return }
 
-        let favoritesModuleView = builder.makeFavoritesModule()
-        let favoritesCoordinator = FavoritesCoordinator(rootController: favoritesModuleView)
-        favoritesModuleView.favoritesPresenter?.favoritesCoordinator = favoritesCoordinator
+        let favoritesCoordinator = FavoritesCoordinator()
+        let favoritesModuleView = builder.makeFavoritesModule(coordinator: favoritesCoordinator)
+        favoritesCoordinator.setRootViewController(view: favoritesModuleView)
         add(coordinator: favoritesCoordinator)
+        guard let favoritesView = favoritesCoordinator.rootController else { return }
 
         tabBarViewController.setViewControllers(
-            [recipesCoordinator.rootController, favoritesCoordinator.rootController, profileCoordinator.rootController],
+            [recipesView, favoritesView, profileView],
             animated: false
         )
         setAsRoot​(​_​: tabBarViewController)

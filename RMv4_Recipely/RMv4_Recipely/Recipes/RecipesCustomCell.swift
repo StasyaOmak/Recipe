@@ -56,7 +56,6 @@ final class RecipesCustomCell: UICollectionViewCell {
 
         setupViews()
         setupConstraints()
-
     }
 
     @available(*, unavailable)

@@ -5,13 +5,6 @@ import Foundation
 
 /// Интерфейс презентера модуля "Профиль"
 protocol ProfilePresenterProtocol: AnyObject {
-    /// свойство типа вью этого модуля
-    var view: ProfileViewControllerProtocol? { get set }
-    /// свойство-координатор
-    var coordinator: ProfileCoordinator? { get set }
-    /// свойство с данными пользователя
-    var user: User? { get set }
-
     /// метод смены имени
     func changeUserName(name: String)
     /// метод-флаг нажатия на кнопку "редактировать"
@@ -19,16 +12,22 @@ protocol ProfilePresenterProtocol: AnyObject {
     /// метод-флаг нажатия на ячейку "бонусы"
     func bonusesCellTapped()
     /// метод для получения данных пользователя
-    func mockUserData() -> User
+    func getUserInfo() -> User
 }
 
 /// Презентер модуля "Профиль пользователя"
 final class ProfilePresenter {
     // MARK: - Public Properties
 
-    weak var view: ProfileViewControllerProtocol?
-    weak var coordinator: ProfileCoordinator?
-    var user: User?
+    private weak var view: ProfileViewControllerProtocol?
+    private weak var coordinator: ProfileCoordinator?
+
+    // MARK: - Initializers
+
+    init(view: ProfileViewControllerProtocol, coordinator: ProfileCoordinator) {
+        self.view = view
+        self.coordinator = coordinator
+    }
 }
 
 // - MARK: Extension ProfilePresenter + ProfilePresenterProtocol
@@ -38,7 +37,8 @@ extension ProfilePresenter: ProfilePresenterProtocol {
     }
 
     func bonusesCellTapped() {
-        coordinator?.moveToBonusesScreen()
+        let user = User.sendMock()
+        coordinator?.moveToBonusesScreen(user: user)
     }
 
     func changeUserName(name: String) {
@@ -46,8 +46,8 @@ extension ProfilePresenter: ProfilePresenterProtocol {
         view?.reloadTableView()
     }
 
-    func mockUserData() -> User {
-        let user = User.mockData()
+    func getUserInfo() -> User {
+        let user = User.sendMock()
         return user
     }
 }

@@ -13,7 +13,7 @@ final class ProfileCoordinator: BaseCoordinator {
 
     // MARK: - Public Properties
 
-    var rootController: UINavigationController
+    var rootController: UINavigationController?
 
     var onFinishFlow: VoidHandler?
 
@@ -21,25 +21,23 @@ final class ProfileCoordinator: BaseCoordinator {
 
     private var appBuilder = AppBuilder()
 
-    // MARK: - Initializers
-
-    init(rootController: UIViewController) {
-        self.rootController = UINavigationController(rootViewController: rootController)
-    }
-
     // MARK: - Public Methods
+
+    func setRootViewController(view: UIViewController) {
+        rootController = UINavigationController(rootViewController: view)
+    }
 
     func logOut() {
         onFinishFlow?()
     }
 
-    func moveToBonusesScreen() {
-        let bonusesModule = appBuilder.makeBonusesModule()
-        bonusesModule.bonusesPresenter?.coordinator = self
-        rootController.present(bonusesModule, animated: true)
+    func moveToBonusesScreen(user: User) {
+        let bonusesModule = appBuilder.makeBonusesModule(coordinator: self)
+        bonusesModule.bonusesPresenter?.setUserInfo(user: user)
+        rootController?.present(bonusesModule, animated: true)
     }
 
     func dismissBonusesScreen() {
-        rootController.dismiss(animated: true)
+        rootController?.dismiss(animated: true)
     }
 }

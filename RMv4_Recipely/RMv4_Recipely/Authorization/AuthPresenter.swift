@@ -17,6 +17,8 @@ protocol AuthViewProtocol: AnyObject {
 
 /// Презентер модуля "Авторизация"
 final class AuthPresenter {
+    // MARK: - Constants
+
     enum Constants {
         static let emptyText = ""
         static let emailText = "@"
@@ -25,13 +27,22 @@ final class AuthPresenter {
         static let darkGrayColor = "dark"
     }
 
-    /// связывает с вьюхой
-    weak var view: AuthViewProtocol?
-    /// связывает с координатором этого модуля
-    weak var authCoordinator: AuthCoordinator?
+    // MARK: - Private Properties
+
+    private weak var view: AuthViewProtocol?
+    private weak var authCoordinator: AuthCoordinator?
 
     private var authModel = AuthInformation(login: Constants.emptyText, password: Constants.emptyText)
+
+    // MARK: - Initializers
+
+    init(view: AuthViewProtocol, authCoordinator: AuthCoordinator) {
+        self.view = view
+        self.authCoordinator = authCoordinator
+    }
 }
+
+// MARK: - AuthPresenter + AuthPresenterProtocol
 
 extension AuthPresenter: AuthPresenterProtocol {
     func checkLogin(login: String?) {

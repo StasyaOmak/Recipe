@@ -7,11 +7,12 @@ import UIKit
 final class AppBuilder {
     // MARK: - Public Methods
 
-    func makeProfileModule() -> ProfileViewController {
+    // TODO: - баг, при возврате из рецептов в таб бар тайтлы таббара игнорируют кастомный цвет (кроме "recipes")
+
+    func makeProfileModule(coordinator: ProfileCoordinator) -> ProfileViewController {
         let profileView = ProfileViewController()
-        let profilePresenter = ProfilePresenter()
+        let profilePresenter = ProfilePresenter(view: profileView, coordinator: coordinator)
         profileView.presenter = profilePresenter
-        profilePresenter.view = profileView
         profileView.tabBarItem = UITabBarItem(
             title: "Profile",
             image: UIImage.profile,
@@ -24,11 +25,10 @@ final class AppBuilder {
         return profileView
     }
 
-    func makeRecipesModule() -> RecipesViewController {
+    func makeRecipesModule(coordinator: RecipesCoordinator) -> RecipesViewController {
         let recipesView = RecipesViewController()
-        let recipesPresenter = RecipesPresenter(view: recipesView)
+        let recipesPresenter = RecipesPresenter(view: recipesView, coordinator: coordinator)
         recipesView.recipesPresenter = recipesPresenter
-        recipesPresenter.view = recipesView
         recipesView.tabBarItem = UITabBarItem(
             title: "Recipes",
             image: UIImage.cake,
@@ -41,16 +41,16 @@ final class AppBuilder {
         return recipesView
     }
 
-    func makeFavoritesModule() -> FavoritesViewController {
+    func makeFavoritesModule(coordinator: FavoritesCoordinator) -> FavoritesViewController {
         let favoritesView = FavoritesViewController()
-        let favoritesPresenter = FavoritesPresenter()
+        let favoritesPresenter = FavoritesPresenter(favoritesView: favoritesView, favoritesCoordinator: coordinator)
         favoritesView.favoritesPresenter = favoritesPresenter
-        favoritesPresenter.favoritesView = favoritesView
         favoritesView.tabBarItem = UITabBarItem(
             title: "Favorites",
             image: UIImage.bookmark,
             selectedImage: UIImage.bookmarkFill.withRenderingMode(.alwaysOriginal)
         )
+
         favoritesView.tabBarItem.setTitleTextAttributes(
             [NSAttributedString.Key.foregroundColor: UIColor.basicGreen],
             for: .selected
@@ -58,11 +58,10 @@ final class AppBuilder {
         return favoritesView
     }
 
-    func makeBonusesModule() -> BonusesViewController {
+    func makeBonusesModule(coordinator: ProfileCoordinator) -> BonusesViewController {
         let bonusesView = BonusesViewController()
-        let bonusesPresenter = BonusesPresenter()
+        let bonusesPresenter = BonusesPresenter(bonusesView: bonusesView, coordinator: coordinator)
         bonusesView.bonusesPresenter = bonusesPresenter
-        bonusesPresenter.bonusesView = bonusesView
 
         let sheet = bonusesView.sheetPresentationController
         sheet?.detents = [.custom(resolver: { _ in
@@ -74,12 +73,10 @@ final class AppBuilder {
         return bonusesView
     }
 
-    func makeRecipeListModule() -> RecipeListViewController {
+    func makeRecipeListModule(coordinator: RecipesCoordinator) -> RecipeListViewController {
         let recipeListView = RecipeListViewController()
-        let recipeListPresenter = RecipeListPresenter()
+        let recipeListPresenter = RecipeListPresenter(view: recipeListView, coordinator: coordinator)
         recipeListView.presenter = recipeListPresenter
-        recipeListPresenter.view = recipeListView
-
         return recipeListView
     }
 }
