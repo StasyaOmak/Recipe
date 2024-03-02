@@ -3,6 +3,12 @@
 
 import UIKit
 
+/// Интерфейс вью модуля "избранные рецепты"
+protocol FavoritesViewControllerProtocol: AnyObject {
+    /// свойство типа интерфейса вью
+    var favoritesPresenter: FavoritesPresenterProtocol? { get set }
+}
+
 /// Экран отображения избранных рецептов
 final class FavoritesViewController: UIViewController {
     private enum Constants {}
@@ -18,3 +24,7 @@ final class FavoritesViewController: UIViewController {
         view.backgroundColor = .yellow.withAlphaComponent(0.1)
     }
 }
+
+// MARK: - FavoritesViewController + FavoritesViewControllerProtocol
+
+extension FavoritesViewController: FavoritesViewControllerProtocol {}

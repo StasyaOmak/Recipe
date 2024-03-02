@@ -44,7 +44,9 @@ final class ProfileViewController: UIViewController {
 
     // MARK: - Private Properties
 
-    private let optionCells: [Profile] = Profile.mockData()
+    private var user: User?
+
+    private let optionCells: [Profile] = Profile.sendMock()
 
     private let tableViewSections: [ProfileFieldType] = [
         .header,
@@ -138,7 +140,7 @@ extension ProfileViewController: UITableViewDataSource {
                 .dequeueReusableCell(
                     withIdentifier: Constants.headerTableViewCellIdentifier,
                     for: indexPath
-                ) as? HeaderTableViewCell, let user = presenter?.mockUserData()
+                ) as? HeaderTableViewCell, let user = presenter?.getUserInfo()
             else { return UITableViewCell() }
             cell.configure(user: user)
             cell.editNameHandler = { [weak self] in
@@ -158,7 +160,8 @@ extension ProfileViewController: UITableViewDataSource {
     }
 }
 
-/// Расширение вью методами UITableViewDelegate
+// MARK: - ProfileViewController + UITableViewDelegate
+
 extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch tableViewSections[indexPath.section] {

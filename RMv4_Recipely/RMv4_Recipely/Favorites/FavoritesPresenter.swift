@@ -4,14 +4,21 @@
 import Foundation
 
 /// Интерфейс презентера модуля "Избранные рецепты"
-protocol FavoritesPresenterProtocol {
-    var favoritesCoordinator: FavoritesCoordinator? { get set }
-}
+protocol FavoritesPresenterProtocol: AnyObject {}
 
 /// Презентер модуля "Избранные рецепты"
-class FavoritesPresenter {
-    weak var favoritesView: FavoritesViewController?
-    weak var favoritesCoordinator: FavoritesCoordinator?
+final class FavoritesPresenter {
+    // MARK: - Private Properties
+
+    private weak var favoritesView: FavoritesViewControllerProtocol?
+    private weak var favoritesCoordinator: FavoritesCoordinator?
+
+    // MARK: - Initializers
+
+    init(favoritesView: FavoritesViewController, favoritesCoordinator: FavoritesCoordinator) {
+        self.favoritesView = favoritesView
+        self.favoritesCoordinator = favoritesCoordinator
+    }
 }
 
 /// Расширение презентера  методами протокола

@@ -5,11 +5,17 @@ import UIKit
 
 /// Координатор экрана авторизации
 final class AuthCoordinator: BaseCoordinator {
+    // MARK: - Types
+
+    // swiftlint:disable custom_custom_void_handler
+    typealias VoidHandler = () -> ()
+    // swiftlint:enable custom_custom_void_handler
+
     // MARK: - Public Properties
 
     var rootViewController: UINavigationController?
 
-    var onFinishFlow: (() -> ())?
+    var onFinishFlow: VoidHandler?
 
     // MARK: - Public Methods
 
@@ -23,10 +29,11 @@ final class AuthCoordinator: BaseCoordinator {
 
     func showAuth() {
         let authViewController = AuthViewController()
-        let authPresenter = AuthPresenter()
+        let authPresenter = AuthPresenter(
+            view: authViewController,
+            authCoordinator: self
+        )
         authViewController.presenter = authPresenter
-        authPresenter.view = authViewController
-        authPresenter.authCoordinator = self
 
         let rootViewController = UINavigationController(rootViewController: authViewController)
         setAsRoot​(​_​: rootViewController)

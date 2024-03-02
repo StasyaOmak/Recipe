@@ -10,11 +10,11 @@ struct User {
     /// аватар пользователя
     var avatarImageName: String
     /// Число бонусов
-    var bonusesCount: Int?
+    var bonusesCount: Int
     /// Экземпляр "Пользователь"
-    static var user = User(name: "Maria", avatarImageName: "user", bonusesCount: 100)
+    static var user = User(name: "Maria", avatarImageName: "user", bonusesCount: 350)
     /// Метод получения мока
-    static func mockData() -> User {
+    static func sendMock() -> User {
         user
     }
 }
@@ -46,7 +46,7 @@ struct Profile {
     /// картинка с иконкой ячейки
     let imageName: String
 
-    static func mockData() -> [Profile] {
+    static func sendMock() -> [Profile] {
         let profileCells = [
             Profile(type: .bonuses, title: "Bonuses", imageName: "star.fill"),
             Profile(type: .terms, title: "Terms & Privacy Policy", imageName: "doc.fill"),

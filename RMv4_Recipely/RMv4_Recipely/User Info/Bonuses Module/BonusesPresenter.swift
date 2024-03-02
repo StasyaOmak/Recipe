@@ -5,28 +5,35 @@ import Foundation
 
 /// Интерфейс презентера модуля "Бонусы"
 protocol BonusesPresenterProtocol {
-    /// свойство типа вью
-    var bonusesView: BonusesViewControllerProtocol? { get set }
-    /// свойство-координатор
-    var coordinator: ProfileCoordinator? { get set }
-    /// свойство, хранящее данные пользователя
-    var user: User? { get }
-
     /// функция-флаг нажатия на кнопку "закрыть экран"
     func closeButtonTapped()
+    /// функция установки данных пользователя в модуль
+    func setUserInfo(user: User)
 }
 
 final class BonusesPresenter {
-    weak var bonusesView: BonusesViewControllerProtocol?
-    weak var coordinator: ProfileCoordinator?
+    // MARK: - Private Properties
 
-    var user: User?
+    private weak var bonusesView: BonusesViewControllerProtocol?
+    private weak var coordinator: ProfileCoordinator?
+
+    // MARK: - Initializers
+
+    init(bonusesView: BonusesViewControllerProtocol, coordinator: ProfileCoordinator) {
+        self.bonusesView = bonusesView
+        self.coordinator = coordinator
+    }
 }
 
-/// Расширение презентера методами протокола
+// MARK: - Extension BonusesPresenter + BonusesPresenterProtocol
+
 extension BonusesPresenter: BonusesPresenterProtocol {
     /// имплементация метода протокола
     func closeButtonTapped() {
         coordinator?.dismissBonusesScreen()
+    }
+
+    func setUserInfo(user: User) {
+        bonusesView?.showUserInfo(user: user)
     }
 }

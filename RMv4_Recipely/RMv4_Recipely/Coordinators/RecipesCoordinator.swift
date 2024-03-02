@@ -7,11 +7,23 @@ import UIKit
 final class RecipesCoordinator: BaseCoordinator {
     // MARK: - Public Properties
 
-    var rootController: UINavigationController
+    var rootController: UINavigationController?
+    let appBuilder = AppBuilder()
 
-    // MARK: - Initializers
+    // MARK: - Public Functions
 
-    init(rootController: UIViewController) {
-        self.rootController = UINavigationController(rootViewController: rootController)
+    func setRootViewController(view: UIViewController) {
+        rootController = UINavigationController(rootViewController: view)
+    }
+
+    func moveToRecipeListScreen(category: DishCategory) {
+        let recipeListModule = appBuilder.makeRecipeListModule(coordinator: self)
+        recipeListModule.presenter?.setCategory(category: category)
+        recipeListModule.hidesBottomBarWhenPushed = true
+        rootController?.pushViewController(recipeListModule, animated: true)
+    }
+
+    func popToAllRecipes() {
+        rootController?.popViewController(animated: true)
     }
 }
