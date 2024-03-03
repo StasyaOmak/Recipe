@@ -70,7 +70,7 @@ final class RecipeDetailView: UIViewController {
     }
 
     private func setupNavigationBar() {
-        navigationItem.rightBarButtonItems = [addBarButtonItem, actionBarButtonItem]
+        navigationItem.rightBarButtonItems = [actionBarButtonItem, addBarButtonItem]
         navigationItem.leftBarButtonItems = [UIBarButtonItem(customView: arrowButton)]
         actionBarButtonItem.tintColor = .black
         addBarButtonItem.tintColor = .black
