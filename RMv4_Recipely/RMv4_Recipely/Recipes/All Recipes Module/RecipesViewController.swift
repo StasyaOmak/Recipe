@@ -145,7 +145,6 @@ extension RecipesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) else { return }
         cell.isSelected = !cell.isSelected
-        print(indexPath)
         recipesPresenter?.goToCategory(InformationSource.categories[indexPath.item])
     }
 
