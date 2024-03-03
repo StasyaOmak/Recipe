@@ -26,8 +26,7 @@ final class FavoritesPresenter {
     }
 }
 
-
-/// Расширение презентера  методами протокола
+// MARK: - FavoritesPresenter + FavoritesPresenterProtocol
 extension FavoritesPresenter: FavoritesPresenterProtocol {
     func removeFromFavourites(recipeIndex: Int) {
         let recipe = RecipeDescription.favoritesRecipes.remove(at: recipeIndex)

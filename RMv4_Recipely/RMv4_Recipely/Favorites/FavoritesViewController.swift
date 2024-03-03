@@ -5,7 +5,9 @@ import UIKit
 
 /// Интерфейс вью модуля "избранные рецепты"
 protocol FavoritesViewControllerProtocol: AnyObject {
+    /// метод установки вью в состояние - нет избранных рецептов
     func setEmptyState()
+    /// метод установки вью в сщстояние - есть избранные рецепты
     func setNonEmptyState()
 }
 
@@ -85,7 +87,7 @@ final class FavoritesViewController: UIViewController {
         return tableView
     }()
 
-    // MARK: - Private Properties
+    // MARK: - Public Properties
 
     var presenter: FavoritesPresenterProtocol?
 
