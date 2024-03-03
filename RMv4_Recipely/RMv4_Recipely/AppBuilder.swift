@@ -25,6 +25,13 @@ final class AppBuilder {
         return profileView
     }
 
+    func makeRecipeDetailModule(coordinator: RecipesCoordinator, recipe: RecipeDescription) -> RecipeDetailView {
+        let view = RecipeDetailView()
+        let presenter = RecipeDetailPresenter(coordinator: coordinator, view: view, recipe: recipe)
+        view.presenter = presenter
+        return view
+    }
+
     func makeRecipesModule(coordinator: RecipesCoordinator) -> RecipesViewController {
         let recipesView = RecipesViewController()
         let recipesPresenter = RecipesPresenter(view: recipesView, coordinator: coordinator)

@@ -11,6 +11,8 @@ protocol RecipeListPresenterProtocol: AnyObject {
     func popToAllRecipes()
     /// метод-флаг нажатия на кнопку фильтра
     func filterButtonPressed(sender: FilterButton)
+
+    func pushToDetail(recipe: RecipeDescription)
 }
 
 /// Презентер модуля "Рецепты выбранной категории"
@@ -51,5 +53,9 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
             sender.isInIncreaseOrder = !sender.isInIncreaseOrder
             sender.isInDecreaseOrder = !sender.isInDecreaseOrder
         }
+    }
+
+    func pushToDetail(recipe: RecipeDescription) {
+        coordinator?.pushToDetail(recipe: recipe)
     }
 }
