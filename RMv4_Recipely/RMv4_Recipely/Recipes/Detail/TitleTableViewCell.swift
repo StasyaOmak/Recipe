@@ -15,7 +15,7 @@ final class TitleTableViewCell: UITableViewCell {
 
     // MARK: - Public Properties
 
-    static let identifier = "TitleTableViewCell"
+    static let identifier = TitleTableViewCell.description()
 
     // MARK: - Visual Components
 
@@ -87,7 +87,7 @@ final class TitleTableViewCell: UITableViewCell {
         return label
     }()
 
-    // MARK: - Life Cycle
+    // MARK: - Initializers
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -99,6 +99,15 @@ final class TitleTableViewCell: UITableViewCell {
         super.init(coder: coder)
         setupView()
         setConstraints()
+    }
+
+    // MARK: - Public Methods
+
+    func configure(recipe: RecipeDescription?) {
+        nameRecipeLabel.text = recipe?.title
+        recipeImageView.image = UIImage(named: recipe?.imageName ?? "")
+        gramsLabel.text = "\(recipe?.weight ?? 0) g"
+        cookingTimeLabel.text = "\(recipe?.time ?? 0) min"
     }
 
     // MARK: - Private Methods
@@ -200,14 +209,5 @@ final class TitleTableViewCell: UITableViewCell {
         nameRecipeLabel.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         nameRecipeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
         nameRecipeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
-    }
-
-    // MARK: - Public Methods
-
-    func configure(recipe: RecipeDescription?) {
-        nameRecipeLabel.text = recipe?.title
-        recipeImageView.image = UIImage(named: recipe?.imageName ?? "")
-        gramsLabel.text = "\(recipe?.weight ?? 0) g"
-        cookingTimeLabel.text = "\(recipe?.time ?? 0) min"
     }
 }

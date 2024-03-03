@@ -18,7 +18,7 @@ final class CharacteristicsTableViewCell: UITableViewCell {
 
     // MARK: - Public Properties
 
-    static let identifier = "CharacteristicsTableViewCell"
+    static let identifier = CharacteristicsTableViewCell.description()
 
     // MARK: - Visual Components
 

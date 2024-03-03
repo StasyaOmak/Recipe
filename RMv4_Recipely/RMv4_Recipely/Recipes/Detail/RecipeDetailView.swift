@@ -70,13 +70,13 @@ final class RecipeDetailView: UIViewController {
     }
 
     private func setupNavigationBar() {
-        navigationItem.rightBarButtonItems = [actionBarButtonItem, addBarButtonItem]
+        navigationItem.rightBarButtonItems = [addToFavouritesBarButtonItem, shareBarButtonItem]
         navigationItem.leftBarButtonItems = [UIBarButtonItem(customView: arrowButton)]
-        actionBarButtonItem.tintColor = .black
-        addBarButtonItem.tintColor = .black
+        addToFavouritesBarButtonItem.tintColor = .black
+        shareBarButtonItem.tintColor = .black
 
-        actionBarButtonItem.isEnabled = true
-        addBarButtonItem.isEnabled = true
+        addToFavouritesBarButtonItem.isEnabled = true
+        shareBarButtonItem.isEnabled = true
     }
 
     private lazy var arrowButton: UIButton = {
@@ -91,25 +91,23 @@ final class RecipeDetailView: UIViewController {
         return button
     }()
 
-    private lazy var addBarButtonItem: UIBarButtonItem = .init(
+    private lazy var shareBarButtonItem: UIBarButtonItem = .init(
         image: UIImage(systemName: "paperplane"),
         style: .plain,
         target: self,
-        action: #selector(addBarButtonTapped)
+        action: #selector(shareBarButtonItemTapped)
     )
 
-    private lazy var actionBarButtonItem: UIBarButtonItem = .init(
+    private lazy var addToFavouritesBarButtonItem: UIBarButtonItem = .init(
         image: UIImage(systemName: "bookmark"),
         style: .plain,
         target: self,
-        action: #selector(actionBarButtonTapped)
+        action: #selector(addToFavouritesBarButtonItemTapped)
     )
 
-    @objc private func addBarButtonTapped() {}
+    @objc private func shareBarButtonItemTapped() {}
 
-    @objc private func actionBarButtonTapped() {
-        print("You can share an image")
-    }
+    @objc private func addToFavouritesBarButtonItemTapped() {}
 
     @objc private func backButtonTapped() {
         presenter?.popToAllRecipes()

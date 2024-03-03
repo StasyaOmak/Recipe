@@ -43,7 +43,7 @@ final class FullDescriptionTableViewCell: UITableViewCell {
 
     // MARK: - Public Properties
 
-    static let identifier = "FullDescriptionTableViewCell"
+    static let identifier = FullDescriptionTableViewCell.description()
 
     // MARK: - Life Cycle
 
