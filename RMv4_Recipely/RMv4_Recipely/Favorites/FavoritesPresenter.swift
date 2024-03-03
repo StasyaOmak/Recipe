@@ -4,7 +4,12 @@
 import Foundation
 
 /// Интерфейс презентера модуля "Избранные рецепты"
-protocol FavoritesPresenterProtocol: AnyObject {}
+protocol FavoritesPresenterProtocol: AnyObject {
+    func checkIfFavouritesEmpty()
+    func getFavouritesCount() -> Int
+    func getFavourites() -> [RecipeDescription]
+    func removeFromFavourites(recipeIndex: Int)
+}
 
 /// Презентер модуля "Избранные рецепты"
 final class FavoritesPresenter {
@@ -21,5 +26,28 @@ final class FavoritesPresenter {
     }
 }
 
-/// Расширение презентера  методами протокола
-extension FavoritesPresenter: FavoritesPresenterProtocol {}
+// MARK: - FavoritesPresenter + FavoritesPresenterProtocol
+extension FavoritesPresenter: FavoritesPresenterProtocol {
+    func removeFromFavourites(recipeIndex: Int) {
+        let recipe = RecipeDescription.favoritesRecipes.remove(at: recipeIndex)
+        for var item in RecipeDescription.otherRecipes where item == recipe {
+            item.isFavorite = false
+        }
+    }
+
+    func getFavourites() -> [RecipeDescription] {
+        RecipeDescription.favoritesRecipes
+    }
+
+    func checkIfFavouritesEmpty() {
+        if RecipeDescription.favoritesRecipes.isEmpty {
+            favoritesView?.setEmptyState()
+        } else {
+            favoritesView?.setNonEmptyState()
+        }
+    }
+
+    func getFavouritesCount() -> Int {
+        RecipeDescription.favoritesRecipes.count
+    }
+}

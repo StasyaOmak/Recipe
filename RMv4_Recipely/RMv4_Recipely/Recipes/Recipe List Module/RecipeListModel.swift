@@ -41,7 +41,7 @@ private enum Constants {
 }
 
 /// Содержание рецепта для таблицы
-struct RecipeDescription {
+struct RecipeDescription: Equatable {
     /// название
     let title: String
     /// название картинки
@@ -50,6 +50,8 @@ struct RecipeDescription {
     let time: Int
     /// калорийность
     let value: Int
+    /// находится ли в избранном
+    var isFavorite: Bool = false
     /// Вес
     let weight: Int
     /// Углеводы
@@ -120,6 +122,7 @@ struct RecipeDescription {
         ),
     ]
 
+    /// свойство типа с мок-данными
     static let otherRecipes: [RecipeDescription] = [
         RecipeDescription(
             title: "Some meal",

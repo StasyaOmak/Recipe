@@ -51,7 +51,7 @@ final class AppBuilder {
     func makeFavoritesModule(coordinator: FavoritesCoordinator) -> FavoritesViewController {
         let favoritesView = FavoritesViewController()
         let favoritesPresenter = FavoritesPresenter(favoritesView: favoritesView, favoritesCoordinator: coordinator)
-        favoritesView.favoritesPresenter = favoritesPresenter
+        favoritesView.presenter = favoritesPresenter
         favoritesView.tabBarItem = UITabBarItem(
             title: "Favorites",
             image: UIImage.bookmark,
