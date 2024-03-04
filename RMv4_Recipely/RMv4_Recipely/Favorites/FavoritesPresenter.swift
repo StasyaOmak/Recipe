@@ -5,9 +5,13 @@ import Foundation
 
 /// Интерфейс презентера модуля "Избранные рецепты"
 protocol FavoritesPresenterProtocol: AnyObject {
+    /// метод проверки, пуст ли массив с избранными рецептами
     func checkIfFavouritesEmpty()
+    /// метод возвращает число элементов в избранном
     func getFavouritesCount() -> Int
+    /// метод возвращает массив избранных рецептов
     func getFavourites() -> [RecipeDescription]
+    /// метод удаляет элемент из избранного
     func removeFromFavourites(recipeIndex: Int)
 }
 
