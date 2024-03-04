@@ -7,7 +7,7 @@ import UIKit
 protocol FavoritesViewControllerProtocol: AnyObject {
     /// метод установки вью в состояние - нет избранных рецептов
     func setEmptyState()
-    /// метод установки вью в сщстояние - есть избранные рецепты
+    /// метод установки вью в состояние - есть избранные рецепты
     func setNonEmptyState()
 }
 
@@ -185,7 +185,7 @@ extension FavoritesViewController: FavoritesViewControllerProtocol {
     }
 }
 
-// MARK: - UITableViewDataSource
+// MARK: - FavoritesViewController + UITableViewDataSource
 
 extension FavoritesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

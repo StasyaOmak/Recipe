@@ -43,6 +43,11 @@ final class RecipeDetailPresenter: RecipeDetailPresenterProtocol {
         if RecipeDescription.favoritesRecipes.filter({ $0 == recipe }).isEmpty {
             RecipeDescription.favoritesRecipes.append(recipe)
             view?.setRedAddToFavoritesButtonColor()
+        } else {
+            for (index, element) in RecipeDescription.favoritesRecipes.enumerated() where element == recipe {
+                RecipeDescription.favoritesRecipes.remove(at: index)
+            }
+            view?.setBlackAddToFavoritesButtonColor()
         }
     }
 
