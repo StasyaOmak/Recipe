@@ -25,6 +25,13 @@ final class AppBuilder {
         return profileView
     }
 
+    func makeRecipeDetailModule(coordinator: RecipesCoordinator, recipe: RecipeDescription) -> RecipeDetailView {
+        let view = RecipeDetailView()
+        let presenter = RecipeDetailPresenter(coordinator: coordinator, view: view, recipe: recipe)
+        view.presenter = presenter
+        return view
+    }
+
     func makeRecipesModule(coordinator: RecipesCoordinator) -> RecipesViewController {
         let recipesView = RecipesViewController()
         let recipesPresenter = RecipesPresenter(view: recipesView, coordinator: coordinator)
@@ -44,7 +51,7 @@ final class AppBuilder {
     func makeFavoritesModule(coordinator: FavoritesCoordinator) -> FavoritesViewController {
         let favoritesView = FavoritesViewController()
         let favoritesPresenter = FavoritesPresenter(favoritesView: favoritesView, favoritesCoordinator: coordinator)
-        favoritesView.favoritesPresenter = favoritesPresenter
+        favoritesView.presenter = favoritesPresenter
         favoritesView.tabBarItem = UITabBarItem(
             title: "Favorites",
             image: UIImage.bookmark,

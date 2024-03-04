@@ -26,4 +26,9 @@ final class RecipesCoordinator: BaseCoordinator {
     func popToAllRecipes() {
         rootController?.popViewController(animated: true)
     }
+
+    func pushToDetail(recipe: RecipeDescription) {
+        let recipeDetailModule = appBuilder.makeRecipeDetailModule(coordinator: self, recipe: recipe)
+        rootController?.pushViewController(recipeDetailModule, animated: true)
+    }
 }

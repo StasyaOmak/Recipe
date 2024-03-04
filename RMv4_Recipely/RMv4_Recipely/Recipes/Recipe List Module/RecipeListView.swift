@@ -233,6 +233,8 @@ extension RecipeListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
         cell.isSelected = !cell.isSelected
+        guard let recipes = recipes else { return }
+        presenter?.pushToDetail(recipe: recipes[indexPath.row])
     }
 
     func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
