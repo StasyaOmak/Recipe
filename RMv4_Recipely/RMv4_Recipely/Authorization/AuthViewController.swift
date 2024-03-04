@@ -214,6 +214,7 @@ final class AuthViewController: UIViewController {
     }
 
     @objc private func loginButtonTapped(_ sender: UIButton) {
+        passwordTextField.resignFirstResponder()
         loginButton.setTitle(nil, for: .normal)
         loginButton.setImage(UIImage(systemName: "slowmo"), for: .normal)
         loginButton.tintColor = .white
@@ -370,16 +371,9 @@ extension AuthViewController: UITextFieldDelegate {
         switch textField {
         case emailAddressTextField:
             passwordTextField.becomeFirstResponder()
-        case passwordTextField:
-            passwordTextField.resignFirstResponder()
-            view.endEditing(true)
         default:
             break
         }
         return true
-    }
-
-    override func touchesBegan(_ touchesSet: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
     }
 }
