@@ -8,13 +8,12 @@ final class AppCoordinator: BaseCoordinator {
     // MARK: - Private Properties
 
     private var tabBarController: TabBarController?
-    let builder = AppBuilder()
+    private let builder = AppBuilder()
 
-    /// переопределяем старт. отсюда у нас две точки входа в приложение, либо авторизация пройдена, либо нет
-    /// пока нужно вручную откомментировать нужную для входа
+    // MARK: - Public Methods
+
     override func start() {
-//        toAuth()
-        toMain()
+        toAuth()
     }
 
     // MARK: - Private Methods
