@@ -7,6 +7,10 @@ import UIKit
 protocol RecipeDetailViewProtocol: AnyObject {
     /// Презентер экрана
     var presenter: RecipeDetailPresenterProtocol? { get set }
+    /// метод смены цвета кнопки "добавить в избранное"
+    func setRedAddToFavoritesButtonColor()
+    /// метод смены цвета кнопки "добавить в избранное"
+    func setBlackAddToFavoritesButtonColor()
 }
 
 /// Экран деталей рецепта
@@ -46,6 +50,11 @@ final class RecipeDetailView: UIViewController {
         configureTableView()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter?.checkIfFavorite()
+    }
+
     // MARK: - Private Methods
 
     private func configureTableView() {
@@ -74,7 +83,6 @@ final class RecipeDetailView: UIViewController {
         navigationItem.leftBarButtonItems = [UIBarButtonItem(customView: arrowButton)]
         addToFavouritesBarButtonItem.tintColor = .black
         shareBarButtonItem.tintColor = .black
-
         addToFavouritesBarButtonItem.isEnabled = true
         shareBarButtonItem.isEnabled = true
     }
@@ -99,7 +107,7 @@ final class RecipeDetailView: UIViewController {
     )
 
     private lazy var addToFavouritesBarButtonItem: UIBarButtonItem = .init(
-        image: UIImage(systemName: "bookmark"),
+        image: UIImage.favBookmarkPlain,
         style: .plain,
         target: self,
         action: #selector(addToFavouritesBarButtonItemTapped)
@@ -107,14 +115,26 @@ final class RecipeDetailView: UIViewController {
 
     @objc private func shareBarButtonItemTapped() {}
 
-    @objc private func addToFavouritesBarButtonItemTapped() {}
+    @objc private func addToFavouritesBarButtonItemTapped() {
+        presenter?.addToFavorites()
+    }
 
     @objc private func backButtonTapped() {
         presenter?.popToAllRecipes()
     }
 }
 
-extension RecipeDetailView: RecipeDetailViewProtocol {}
+extension RecipeDetailView: RecipeDetailViewProtocol {
+    func setRedAddToFavoritesButtonColor() {
+        addToFavouritesBarButtonItem.image = UIImage.bookmarkRedFilled.withRenderingMode(.alwaysOriginal)
+        view.layoutIfNeeded()
+    }
+
+    func setBlackAddToFavoritesButtonColor() {
+        addToFavouritesBarButtonItem.image = UIImage.favBookmarkPlain
+        view.layoutIfNeeded()
+    }
+}
 
 // MARK: - RecipeDetailView + UITableViewDataSource
 

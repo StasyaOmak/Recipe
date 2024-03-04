@@ -27,10 +27,11 @@ final class FavoritesPresenter {
 }
 
 // MARK: - FavoritesPresenter + FavoritesPresenterProtocol
+
 extension FavoritesPresenter: FavoritesPresenterProtocol {
     func removeFromFavourites(recipeIndex: Int) {
         let recipe = RecipeDescription.favoritesRecipes.remove(at: recipeIndex)
-        for var item in RecipeDescription.otherRecipes where item == recipe {
+        for var item in RecipeDescription.allRecipes where item == recipe {
             item.isFavorite = false
         }
     }

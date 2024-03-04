@@ -100,6 +100,7 @@ final class FavoritesViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         presenter?.checkIfFavouritesEmpty()
+        tableView.reloadData()
     }
 
     // MARK: - Private Methods
@@ -207,5 +208,6 @@ extension FavoritesViewController: UITableViewDataSource {
     ) {
         presenter?.removeFromFavourites(recipeIndex: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .left)
+        presenter?.checkIfFavouritesEmpty()
     }
 }

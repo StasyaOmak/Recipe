@@ -42,6 +42,8 @@ private enum Constants {
 
 /// Содержание рецепта для таблицы
 struct RecipeDescription: Equatable {
+    /// тип рецепта
+    let type: RecipeCategories
     /// название
     let title: String
     /// название картинки
@@ -66,7 +68,7 @@ struct RecipeDescription: Equatable {
     /// свойство типа с мок-данными
     static let fishRecipes: [RecipeDescription] = [
         RecipeDescription(
-            title: "Simple Fish And Corn",
+            type: .fish, title: "Simple Fish And Corn",
             imageName: "recipe",
             time: 60,
             value: 1322,
@@ -77,7 +79,7 @@ struct RecipeDescription: Equatable {
             descriptions: Constants.descriptions
         ),
         RecipeDescription(
-            title: "Some fish",
+            type: .fish, title: "Some fish",
             imageName: "recipe",
             time: 60,
             value: 1322,
@@ -88,7 +90,7 @@ struct RecipeDescription: Equatable {
             descriptions: Constants.descriptions
         ),
         RecipeDescription(
-            title: "Another Fish",
+            type: .fish, title: "Another Fish",
             imageName: "recipe",
             time: 60,
             value: 1322,
@@ -99,7 +101,7 @@ struct RecipeDescription: Equatable {
             descriptions: Constants.descriptions
         ),
         RecipeDescription(
-            title: "More fish",
+            type: .fish, title: "More fish",
             imageName: "recipe",
             time: 60,
             value: 1322,
@@ -110,7 +112,7 @@ struct RecipeDescription: Equatable {
             descriptions: Constants.descriptions
         ),
         RecipeDescription(
-            title: "MORE FIIIIISHHH",
+            type: .fish, title: "MORE FIIIIISHHH",
             imageName: "recipe",
             time: 60,
             value: 1322,
@@ -123,10 +125,10 @@ struct RecipeDescription: Equatable {
     ]
 
     /// свойство типа с мок-данными
-    static let otherRecipes: [RecipeDescription] = [
+    static let soupRecipes: [RecipeDescription] = [
         RecipeDescription(
-            title: "Some meal",
-            imageName: "recipe",
+            type: .soup, title: "Tomato soup",
+            imageName: "soup",
             time: 60,
             value: 1322,
             weight: 793,
@@ -135,15 +137,75 @@ struct RecipeDescription: Equatable {
             proteins: 97.30,
             descriptions: Constants.descriptions
         ),
+        RecipeDescription(
+            type: .soup, title: "Tom yum",
+            imageName: "soup",
+            time: 60,
+            value: 1322,
+            weight: 793,
+            carbohydrates: 10.78,
+            fats: 10.00,
+            proteins: 97.30,
+            descriptions: Constants.descriptions
+        ),
+        RecipeDescription(
+            type: .soup, title: "Cheese soup",
+            imageName: "soup",
+            time: 60,
+            value: 1322,
+            weight: 793,
+            carbohydrates: 10.78,
+            fats: 10.00,
+            proteins: 97.30,
+            descriptions: Constants.descriptions
+        )
     ]
+
+    static let dessertRecipes: [RecipeDescription] = [
+        RecipeDescription(
+            type: .desserts,
+            title: "Chocolate cookies",
+            imageName: "desserts",
+            time: 60,
+            value: 10,
+            weight: 100,
+            carbohydrates: 11.2,
+            fats: 11.2,
+            proteins: 11.2,
+            descriptions: Constants.descriptions
+        ),
+        RecipeDescription(
+            type: .desserts,
+            title: "Berty Botts Beans",
+            imageName: "desserts",
+            time: 60,
+            value: 10,
+            weight: 100,
+            carbohydrates: 11.2,
+            fats: 11.2,
+            proteins: 11.2,
+            descriptions: Constants.descriptions
+        ),
+        RecipeDescription(
+            type: .desserts,
+            title: "Napoleon Cake",
+            imageName: "desserts",
+            time: 60,
+            value: 10,
+            weight: 100,
+            carbohydrates: 11.2,
+            fats: 11.2,
+            proteins: 11.2,
+            descriptions: Constants.descriptions
+        )
+    ]
+
+    static let allRecipes: [RecipeDescription] = soupRecipes + fishRecipes + dessertRecipes
+    /// свойство типа с избранными рецептами
+    static var favoritesRecipes: [RecipeDescription] = []
 
     /// метод типа для получения данных
     static func getRecipes(category: DishCategory) -> [RecipeDescription] {
-        switch category.type {
-        case .fish:
-            return RecipeDescription.fishRecipes
-        default:
-            return RecipeDescription.otherRecipes
-        }
+        RecipeDescription.allRecipes.filter { $0.type == category.type }
     }
 }
