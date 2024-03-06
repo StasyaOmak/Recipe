@@ -13,10 +13,15 @@ protocol RecipeListViewControllerProtocol: AnyObject {
     func setTitle(_ title: String)
     /// Метод снятия выделения со всех кнопок фильтров
     func disableAllFilterButtons()
+    /// метод обновления таблицы
+    func reloadTableView()
 }
 
 /// Экран с рецептами для выбранной категории
 final class RecipeListViewController: UIViewController {
+//    var data = [RecipeDescription]
+//    var searching = true
+
     // MARK: - Constants
 
     private enum Constants {
@@ -50,11 +55,12 @@ final class RecipeListViewController: UIViewController {
         return label
     }()
 
-    private let searchBar: UISearchBar = {
+    private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.layer.cornerRadius = 8
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.searchBarStyle = .minimal
+        searchBar.delegate = self
         searchBar.searchTextField.backgroundColor = .lightGreenBackground
         searchBar.placeholder = Constants.searchBarPlaceholder
         return searchBar
@@ -193,6 +199,10 @@ final class RecipeListViewController: UIViewController {
 // MARK: - RecipeListViewController + RecipeListViewControllerProtocol
 
 extension RecipeListViewController: RecipeListViewControllerProtocol {
+    func reloadTableView() {
+        tableView.reloadData()
+    }
+
     func setRecipes(_ recipes: [RecipeDescription]) {
         self.recipes = recipes
     }
@@ -210,8 +220,8 @@ extension RecipeListViewController: RecipeListViewControllerProtocol {
 
 extension RecipeListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let recipes else { return 0 }
-        return recipes.count
+        guard let searchRecipes = presenter?.checkSearch() else { return 0 }
+        return searchRecipes.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -220,9 +230,9 @@ extension RecipeListViewController: UITableViewDataSource {
                 withIdentifier: Constants.recipeTableViewCellIdentifier,
                 for: indexPath
             ) as? RecipeTableViewCell,
-            let recipes
+            let searchRecipes = presenter?.checkSearch()
         else { return UITableViewCell() }
-        cell.configure(recipe: recipes[indexPath.row])
+        cell.configure(recipe: searchRecipes[indexPath.row])
         return cell
     }
 }
@@ -241,5 +251,22 @@ extension RecipeListViewController: UITableViewDelegate {
         guard let cell = tableView.cellForRow(at: indexPath) else { return indexPath }
         cell.isSelected = false
         return indexPath
+    }
+}
+
+// MARK: - RecipeListViewController: UISearchBarDelegate
+
+extension RecipeListViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.count >= 3 {
+            presenter?.searchRecipes(withText: searchText)
+        } else {
+            presenter?.searchRecipes(withText: "")
+        }
+    }
+
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        presenter?.startSearch()
+        tableView.reloadData()
     }
 }

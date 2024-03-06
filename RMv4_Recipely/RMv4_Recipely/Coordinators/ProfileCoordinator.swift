@@ -37,6 +37,8 @@ final class ProfileCoordinator: BaseCoordinator {
         rootController?.present(bonusesModule, animated: true)
     }
 
+    func moveToTermsOfUseScreen() {}
+
     func dismissBonusesScreen() {
         rootController?.dismiss(animated: true)
     }
