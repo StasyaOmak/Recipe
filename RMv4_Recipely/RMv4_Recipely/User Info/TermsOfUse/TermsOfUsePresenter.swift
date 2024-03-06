@@ -7,10 +7,9 @@ import Foundation
 protocol TermsOfUsePresenterProtocol {
     /// функция-флаг нажатия на кнопку "закрыть экран"
     func closeButtonTapped()
-//    /// функция установки данных пользователя в модуль
-//    func setUserInfo(user: User)
 }
 
+/// Презентер "правил использования приложения"
 final class TermsOfUsePresenter {
     // MARK: - Private Properties
 
@@ -24,6 +23,8 @@ final class TermsOfUsePresenter {
         self.coordinator = coordinator
     }
 }
+
+// MARK: - TermsOfUsePresenter + TermsOfUsePresenterProtocol
 
 extension TermsOfUsePresenter: TermsOfUsePresenterProtocol {
     func closeButtonTapped() {

@@ -9,6 +9,7 @@ protocol TermsOfUseViewControllerProtocol: AnyObject {
     var termOfUsePresenter: TermsOfUsePresenterProtocol? { get set }
 }
 
+/// Экран правил пользования пользователя
 final class TermsOfUseView: UIView {
     var termOfUsePresenter: TermsOfUsePresenterProtocol?
 

@@ -26,6 +26,9 @@ final class ProfileViewController: UIViewController {
         static let alertTextFieldPlaceholder = "Name Surname"
         static let okActionText = "Ok"
         static let cancelActionText = "Cancel"
+        static let termsScreenHeight: CGFloat = 750
+        static let termsScreenAreaHeight: CGFloat = 20
+        static let tabBarHeight: CGFloat = 0
     }
 
     // MARK: - Visual Components
@@ -60,20 +63,20 @@ final class ProfileViewController: UIViewController {
     private var termsView: TermsOfUseView?
     private var visualEffectView: UIVisualEffectView?
 
-    private let termsScreenHeight: CGFloat = 750
-    private let termsScreenAreaHeight: CGFloat = 20
-    private var tabBarHeight: CGFloat = 0
+    private let termsScreenHeight: CGFloat = Constants.termsScreenHeight
+    private let termsScreenAreaHeight: CGFloat = Constants.termsScreenAreaHeight
+    private var tabBarHeight: CGFloat = Constants.tabBarHeight
 
-    private var nextStateTermsView: TermsViewState {
-        termsVisible ? .collapsed : .expanded
+    private var termsViewState: TermsViewState {
+        isTermsVisible ? .collapsed : .expanded
     }
 
-    private var termsVisible = false
+    private var isTermsVisible = false
 
     private var runningAnimations: [UIViewPropertyAnimator] = []
     private var animationProgressWhenInterrupted: CGFloat = 0
 
-    let termsOfView = TermsOfUseView()
+    private let termsOfView = TermsOfUseView()
 
     // MARK: - Life Cycle
 
@@ -206,7 +209,7 @@ extension ProfileViewController: UITableViewDelegate {
     }
 }
 
-// MARK: - UIViewPropertyAnimator
+// MARK: - ProfileViewController
 
 extension ProfileViewController {
     enum TermsViewState {
@@ -222,10 +225,9 @@ extension ProfileViewController {
             height: view.bounds.height
         )
 
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTermsViewTap))
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleTermsViewPan))
 
-        termsOfView.setGesture(gestures: [tapGestureRecognizer, panGestureRecognizer])
+        termsOfView.setGesture(gestures: [panGestureRecognizer])
         let scene = UIApplication.shared.connectedScenes
         let windowScene = scene.first as? UIWindowScene
 
@@ -236,43 +238,52 @@ extension ProfileViewController {
 
     func animateTransitionOfNeeded(state: TermsViewState, duration: TimeInterval) {
         if runningAnimations.isEmpty {
-            let frameAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
-                switch state {
-                case .expanded:
-                    self.termsOfView.frame.origin.y = self.view.frame.height - self.termsScreenHeight + self
-                        .tabBarHeight
-                case .collapsed:
-                    self.termsOfView.frame.origin.y = self.view.frame.height - self.termsScreenAreaHeight
-                }
-            }
-
-            frameAnimator.addCompletion { _ in
-                self.termsVisible = !self.termsVisible
-                self.runningAnimations.removeAll()
-            }
-
-            frameAnimator.startAnimation()
-            runningAnimations.append(frameAnimator)
-
-            let cornerRadiusAnimator = UIViewPropertyAnimator(duration: duration, curve: .linear) {
-                switch state {
-                case .expanded:
-                    self.termsOfView.layer.cornerRadius = 12
-                case .collapsed:
-                    self.termsOfView.layer.cornerRadius = 0
-                }
-            }
-
-            cornerRadiusAnimator.startAnimation()
-            runningAnimations.append(cornerRadiusAnimator)
-
-            let blurAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
-                self.visualEffectView?.effect = UIBlurEffect(style: .dark)
-            }
-
-            blurAnimator.startAnimation()
-            runningAnimations.append(blurAnimator)
+            animateFrame(state: state, duration: duration)
+            animateCornerRadius(state: state, duration: duration)
+            animateBlur(state: state, duration: duration)
         }
+    }
+
+    func animateFrame(state: TermsViewState, duration: TimeInterval) {
+        let frameAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
+            switch state {
+            case .expanded:
+                self.termsOfView.frame.origin.y = self.view.frame.height - self.termsScreenHeight + self.tabBarHeight
+            case .collapsed:
+                self.termsOfView.frame.origin.y = self.view.frame.height - self.termsScreenAreaHeight
+            }
+        }
+
+        frameAnimator.addCompletion { _ in
+            self.isTermsVisible = !self.isTermsVisible
+            self.runningAnimations.removeAll()
+        }
+
+        frameAnimator.startAnimation()
+        runningAnimations.append(frameAnimator)
+    }
+
+    func animateCornerRadius(state: TermsViewState, duration: TimeInterval) {
+        let cornerRadiusAnimator = UIViewPropertyAnimator(duration: duration, curve: .linear) {
+            switch state {
+            case .expanded:
+                self.termsOfView.layer.cornerRadius = 12
+            case .collapsed:
+                self.termsOfView.layer.cornerRadius = 0
+            }
+        }
+
+        cornerRadiusAnimator.startAnimation()
+        runningAnimations.append(cornerRadiusAnimator)
+    }
+
+    func animateBlur(state: TermsViewState, duration: TimeInterval) {
+        let blurAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
+            self.visualEffectView?.effect = UIBlurEffect(style: .dark)
+        }
+
+        blurAnimator.startAnimation()
+        runningAnimations.append(blurAnimator)
     }
 
     func startInteractive(state: TermsViewState, duration: TimeInterval) {
@@ -297,16 +308,14 @@ extension ProfileViewController {
         }
     }
 
-    @objc func handleTermsViewTap(recognzier: UITapGestureRecognizer) {}
-
     @objc func handleTermsViewPan(recognizer: UIPanGestureRecognizer) {
         switch recognizer.state {
         case .began:
-            startInteractive(state: nextStateTermsView, duration: 0.9)
+            startInteractive(state: termsViewState, duration: 0.9)
         case .changed:
             let translation = recognizer.translation(in: termsOfView.handleAreaView)
             var fractionComplete = translation.y / termsScreenHeight
-            fractionComplete = termsVisible ? fractionComplete : -fractionComplete
+            fractionComplete = isTermsVisible ? fractionComplete : -fractionComplete
             updateInteractiveTransition(fractionCompleted: fractionComplete)
         case .ended:
             continueInteractiveTransition()

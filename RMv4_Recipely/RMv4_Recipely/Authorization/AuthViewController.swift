@@ -11,6 +11,8 @@ protocol AuthViewProtocol: AnyObject {
     func setPasswordColor(color: String, isValidate: Bool, borderColor: String)
     /// функция вызова уведомления об ошибке ввода данных
     func showEntryErrorMessage()
+    /// функция ухода уведомления об ошибке ввода данных
+    func hideErrorMessageLabel()
 }
 
 /// Экран авторизации
@@ -31,6 +33,8 @@ final class AuthViewController: UIViewController {
 
         static let loginButtonText = "Login"
         static let errorMessageText = "Please check the accuracy of the\n entered credentials."
+
+        static let deadline = 3.0
     }
 
     // MARK: - Visual Components
@@ -223,7 +227,7 @@ final class AuthViewController: UIViewController {
                 rotationAngle: CGFloat.pi
             )
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.deadline) { [weak self] in
             self?.presenter?.moveToMain()
         }
     }
@@ -344,17 +348,20 @@ extension AuthViewController: AuthViewProtocol {
         incorrectFormatLabel.isHidden = isValidate
     }
 
+    func hideErrorMessageLabel() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.deadline) {
+            UIView.animate(withDuration: 1.0) {
+                self.errorMessageLabel.alpha = 0
+            }
+        }
+    }
+
     func showEntryErrorMessage() {
         loginButton.setImage(nil, for: .normal)
         loginButton.setTitle("Login", for: .normal)
         UIView.animate(withDuration: 1.0) {
             self.errorMessageLabel.isHidden = false
             self.errorMessageLabel.alpha = 1
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                UIView.animate(withDuration: 1.0) {
-                    self.errorMessageLabel.alpha = 0
-                }
-            }
         }
     }
 }

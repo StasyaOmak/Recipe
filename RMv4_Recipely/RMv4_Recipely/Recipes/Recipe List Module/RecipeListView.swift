@@ -7,17 +7,17 @@ import UIKit
 protocol RecipeListViewControllerProtocol: AnyObject {
     /// свойство-презентер
     var presenter: RecipeListPresenterProtocol? { get set }
-    /// метод установки категории рецептов
+    /// Установка категории рецептов
     func setRecipes(_ recipes: [RecipeDescription])
-    /// метод установки заголовка для страницы
+    /// Установка заголовка для страницы
     func setTitle(_ title: String)
-    /// Метод снятия выделения со всех кнопок фильтров
+    /// Снятие выделения со всех кнопок фильтров
     func disableAllFilterButtons()
-    /// метод проверки состояния второго фильтра
+    /// Проверка состояния второго фильтра
     func checkAnotherFilter(sender: FilterButton) -> (isPressed: Bool, increasing: Bool, decreasing: Bool)
-    /// метод перехода к следующему состоянию экрана
+    /// Переход к следующему состоянию экрана
     func nextState(_ state: RecipeListViewController.State)
-    /// метод обновления таблицы
+    /// Обновление таблицы
     func reloadTableView()
 }
 
@@ -311,8 +311,6 @@ extension RecipeListViewController: UISearchBarDelegate {
         if searchText.count >= 3 {
             presenter?.changeState()
             presenter?.searchRecipes(withText: searchText)
-        } else {
-            presenter?.searchRecipes(withText: "")
         }
     }
 
