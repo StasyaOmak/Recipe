@@ -7,7 +7,6 @@ import UIKit
 protocol TermsOfUseViewControllerProtocol: AnyObject {
     /// Свойство-презентер
     var termOfUsePresenter: TermsOfUsePresenterProtocol? { get set }
-
 }
 
 final class TermsOfUseView: UIView {
@@ -92,6 +91,7 @@ final class TermsOfUseView: UIView {
     private lazy var closeButton: UIButton = {
         let button = UIButton(type: .close)
         button.addTarget(self, action: #selector(closeScreen), for: .touchUpInside)
+        button.isUserInteractionEnabled = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -129,6 +129,9 @@ final class TermsOfUseView: UIView {
         handleAreaView.addSubview(lineImageView)
 
         setConstraints()
+
+        layer.cornerRadius = 20
+        handleAreaView.clipsToBounds = true
     }
 
     private func setConstraints() {
@@ -142,14 +145,13 @@ final class TermsOfUseView: UIView {
     private func configureView() {
         isUserInteractionEnabled = true
         backgroundColor = .white
-        layer.cornerRadius = 30
     }
 
     private func setHandleAreaConstraints() {
         handleAreaView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         handleAreaView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         handleAreaView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        handleAreaView.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        handleAreaView.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
 
     private func setLineAreaConstraints() {
@@ -160,7 +162,7 @@ final class TermsOfUseView: UIView {
     }
 
     private func setCloseButtonConstraints() {
-        closeButton.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
+        closeButton.topAnchor.constraint(equalTo: topAnchor, constant: 40).isActive = true
         closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
         closeButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
         closeButton.widthAnchor.constraint(equalTo: closeButton.heightAnchor).isActive = true

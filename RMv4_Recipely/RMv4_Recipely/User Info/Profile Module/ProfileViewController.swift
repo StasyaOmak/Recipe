@@ -73,7 +73,7 @@ final class ProfileViewController: UIViewController {
     private var runningAnimations: [UIViewPropertyAnimator] = []
     private var animationProgressWhenInterrupted: CGFloat = 0
 
-    let view1 = TermsOfUseView()
+    let termsOfView = TermsOfUseView()
 
     // MARK: - Life Cycle
 
@@ -216,20 +216,24 @@ extension ProfileViewController {
     }
 
     private func configureTermsView() {
-        termsView = TermsOfUseView()
-        view1.frame = CGRect(x: 0, y: view.bounds.height - 200, width: view.bounds.width, height: view.bounds.height)
+//        termsView = TermsOfUseView()
+        termsOfView.frame = CGRect(
+            x: 0,
+            y: view.bounds.height - 200,
+            width: view.bounds.width,
+            height: view.bounds.height
+        )
 
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTermsViewTap))
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleTermsViewPan))
 
-        view1.setGesture(gestures: [tapGestureRecognizer, panGestureRecognizer])
+        termsOfView.setGesture(gestures: [tapGestureRecognizer, panGestureRecognizer])
         let scene = UIApplication.shared.connectedScenes
-                let windowScene = scene.first as? UIWindowScene
+        let windowScene = scene.first as? UIWindowScene
 
-                UIView.animate(withDuration: 2) {
-                    windowScene?.windows.last?.addSubview(self.view1)
-                }
-        
+        UIView.animate(withDuration: 2) {
+            windowScene?.windows.last?.addSubview(self.termsOfView)
+        }
     }
 
     func animateTransitionOfNeeded(state: TermsViewState, duration: TimeInterval) {
@@ -237,9 +241,10 @@ extension ProfileViewController {
             let frameAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
                 switch state {
                 case .expanded:
-                    self.view1.frame.origin.y = self.view.frame.height - self.termsScreenHeight + self.tabBarHeight
+                    self.termsOfView.frame.origin.y = self.view.frame.height - self.termsScreenHeight + self
+                        .tabBarHeight
                 case .collapsed:
-                    self.view1.frame.origin.y = self.view.frame.height - self.termsScreenAreaHeight
+                    self.termsOfView.frame.origin.y = self.view.frame.height - self.termsScreenAreaHeight
                 }
             }
 
@@ -254,9 +259,9 @@ extension ProfileViewController {
             let cornerRadiusAnimator = UIViewPropertyAnimator(duration: duration, curve: .linear) {
                 switch state {
                 case .expanded:
-                    self.view1.layer.cornerRadius = 12
+                    self.termsOfView.layer.cornerRadius = 12
                 case .collapsed:
-                    self.view1.layer.cornerRadius = 0
+                    self.termsOfView.layer.cornerRadius = 0
                 }
             }
 
@@ -299,7 +304,6 @@ extension ProfileViewController {
         }
     }
 
-    
     @objc func handleTermsViewTap(recognzier: UITapGestureRecognizer) {}
 
     @objc func handleTermsViewPan(recognizer: UIPanGestureRecognizer) {
@@ -307,7 +311,7 @@ extension ProfileViewController {
         case .began:
             startInteractive(state: nextStateTermsView, duration: 0.9)
         case .changed:
-            let translation = recognizer.translation(in: view1.handleAreaView)
+            let translation = recognizer.translation(in: termsOfView.handleAreaView)
             var fractionComplete = translation.y / termsScreenHeight
             fractionComplete = termsVisible ? fractionComplete : -fractionComplete
             updateInteractiveTransition(fractionCompleted: fractionComplete)
