@@ -11,6 +11,8 @@ protocol AuthViewProtocol: AnyObject {
     func setPasswordColor(color: String, isValidate: Bool, borderColor: String)
     /// функция вызова уведомления об ошибке ввода данных
     func showEntryErrorMessage()
+    /// функция скрытия уведомления об ошибке ввода данных
+    func hideEntryErrorMessage()
 }
 
 /// Экран авторизации
@@ -351,10 +353,13 @@ extension AuthViewController: AuthViewProtocol {
         UIView.animate(withDuration: 1.0) {
             self.errorMessageLabel.isHidden = false
             self.errorMessageLabel.alpha = 1
-            DispatchQueue.main.asyncAfter(deadline: Constants.errorMessageDelay) {
-                UIView.animate(withDuration: 1.0) {
-                    self.errorMessageLabel.alpha = 0
-                }
+        }
+    }
+
+    func hideEntryErrorMessage() {
+        DispatchQueue.main.asyncAfter(deadline: Constants.errorMessageDelay) {
+            UIView.animate(withDuration: 1.0) {
+                self.errorMessageLabel.alpha = 0
             }
         }
     }

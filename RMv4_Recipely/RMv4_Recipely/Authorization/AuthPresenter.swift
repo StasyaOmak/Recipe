@@ -74,6 +74,7 @@ extension AuthPresenter: AuthPresenterProtocol {
             authCoordinator?.onFinishFlow?()
         } else {
             view?.showEntryErrorMessage()
+            view?.hideEntryErrorMessage()
         }
     }
 }
