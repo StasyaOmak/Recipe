@@ -7,7 +7,7 @@ import UIKit
 protocol TermsOfUseViewControllerProtocol: AnyObject {
     /// Свойство-презентер
     var termOfUsePresenter: TermsOfUsePresenterProtocol? { get set }
-//    func showUserInfo()
+
 }
 
 final class TermsOfUseView: UIView {
@@ -18,36 +18,34 @@ final class TermsOfUseView: UIView {
     private enum Constants {
         static let termOfUseTitleText = "Terms of Use"
         static let termOfUseText = """
-        1/2 to 2 fish heads, depending on size, about 5 pounds total
-        2 tablespoons vegetable oil
-        1/4 cup red or green thai curry paste
-        3 tablespoons fish sauce or anchovy sauce
-        1 tablespoon sugar
-        1 can coconut milk, about 12 ounces
-        3 medium size asian eggplants, cut int 1 inch rounds
-        Handful of bird's eye chilies
-        1/2 cup thai basil leaves
-        Juice of 3 limes
-        1/2 to 2 fish heads, depending on size, about 5 pounds total
-        2 tablespoons vegetable oil
-        1/4 cup red or green thai curry paste
-        3 tablespoons fish sauce or anchovy sauce
-        1 tablespoon sugar
-        1 can coconut milk, about 12 ounces
-        3 medium size asian eggplants, cut int 1 inch rounds
-        Handful of bird's eye chilies
-        1/2 cup thai basil leaves
-        Juice of 3 limes
-        1/2 to 2 fish heads, depending on size, about 5 pounds total
-        2 tablespoons vegetable oil
-        1/4 cup red or green thai curry paste
-        3 tablespoons fish sauce or anchovy sauce
-        1 tablespoon sugar
-        1 can coconut milk, about 12 ounces
-        3 medium size asian eggplants, cut int 1 inch rounds
-        Handful of bird's eye chilies
-        1/2 cup thai basil leaves
-        Juice of 3 limes
+        Welcome to our recipe app! We're thrilled 
+        to have you on board. To ensure a delightful
+        experience for everyone, please take a moment
+        to familiarize yourself with our rules:
+        User Accounts:
+        - Maintain one account per user.
+        - Safeguard your login credentials; don't share them with others.
+        Content Usage:
+        - Recipes and content are for personal use only.
+        - Do not redistribute or republish recipes without proper attribution.
+        Respect Copyright:
+        - Honor the copyright of recipe authors and contributors.
+        - Credit the original source when adapting or modifying a recipe.
+        Community Guidelines:
+        - Show respect in community features.
+        -mAvoid offensive language or content that violates community standards.
+        Feedback and Reviews:
+        - Share constructive feedback and reviews.
+        - Do not submit false or misleading information.
+        Data Privacy:
+        - Review and understand our privacy policy regarding data collection and usage.
+        Compliance with Laws:
+        - Use the app in compliance with all applicable laws and regulations.
+        Updates to Terms:
+        - Stay informed about updates; we'll notify you of any changes.
+        By using our recipe app, you agree to adhere to these rules.
+        Thank you for being a part of our culinary community!
+        Enjoy exploring and cooking up a storm!
         """
         static let verdanaBoldFontName = "Verdana-Bold"
         static let verdanaName = "Verdana"
@@ -85,7 +83,8 @@ final class TermsOfUseView: UIView {
         label.text = Constants.termOfUseText
         label.textColor = .black
         label.font = UIFont(name: Constants.verdanaName, size: 14)
-        label.textAlignment = .center
+        label.textAlignment = .left
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -103,6 +102,8 @@ final class TermsOfUseView: UIView {
         super.init(frame: frame)
         setupUI()
         configureView()
+        backgroundColor = .white
+        handleAreaView.backgroundColor = .white
     }
 
     required init?(coder: NSCoder) {
@@ -116,6 +117,7 @@ final class TermsOfUseView: UIView {
             handleAreaView.addGestureRecognizer(gesture)
         }
     }
+
     // MARK: - Private Methods
 
     private func setupUI() {
@@ -136,27 +138,26 @@ final class TermsOfUseView: UIView {
         setHandleAreaConstraints()
         setLineAreaConstraints()
     }
-    
+
     private func configureView() {
         isUserInteractionEnabled = true
         backgroundColor = .white
         layer.cornerRadius = 30
     }
-    
+
     private func setHandleAreaConstraints() {
         handleAreaView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         handleAreaView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         handleAreaView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         handleAreaView.heightAnchor.constraint(equalToConstant: 20).isActive = true
     }
-    
+
     private func setLineAreaConstraints() {
         lineImageView.topAnchor.constraint(equalTo: handleAreaView.topAnchor, constant: 10).isActive = true
         lineImageView.centerXAnchor.constraint(equalTo: handleAreaView.centerXAnchor).isActive = true
         lineImageView.widthAnchor.constraint(equalToConstant: 50).isActive = true
         lineImageView.heightAnchor.constraint(equalToConstant: 5).isActive = true
     }
-    
 
     private func setCloseButtonConstraints() {
         closeButton.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
@@ -173,11 +174,11 @@ final class TermsOfUseView: UIView {
     }
 
     private func setTermsOfUseTextLabelConstraints() {
-        termsOfUseTitleLabel.topAnchor.constraint(equalTo: termsOfUseTitleLabel.bottomAnchor, constant: 20)
+        termsOfUseTextLabel.topAnchor.constraint(equalTo: termsOfUseTitleLabel.bottomAnchor, constant: 20)
             .isActive = true
-        termsOfUseTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        termsOfUseTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-        termsOfUseTitleLabel.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        termsOfUseTextLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        termsOfUseTextLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+        termsOfUseTextLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20).isActive = true
     }
 
     @objc private func closeScreen() {
@@ -186,11 +187,4 @@ final class TermsOfUseView: UIView {
 }
 
 // - MARK: Extension BonusesViewController + BonusesViewControllerProtocol
-extension TermsOfUseView: TermsOfUseViewControllerProtocol {
-//    func showUserInfo() {
-//
-//    }
-
-//    func showUserInfo(user: User) {
-//        bonusesAmountLabel.text = "\(user.bonusesCount)"
-}
+extension TermsOfUseView: TermsOfUseViewControllerProtocol {}
