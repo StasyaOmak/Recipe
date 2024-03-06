@@ -15,10 +15,7 @@ protocol RecipeListViewControllerProtocol: AnyObject {
     func disableAllFilterButtons()
     /// Проверка состояния второго фильтра
     func checkAnotherFilter(sender: FilterButton) -> (isPressed: Bool, increasing: Bool, decreasing: Bool)
-    /// Переход к следующему состоянию экрана
-    func nextState(_ state: RecipeListViewController.State)
-    /// Обновление таблицы
-    /// метод перехода к следующему состоянию экрана
+    /// переход к следующему состоянию экрана
     func setState(_ state: RecipeListViewController.State)
     /// метод обновления таблицы
     func reloadTableView()

@@ -9,10 +9,7 @@ protocol RecipesViewControllerProtocol: AnyObject {
     var recipesPresenter: RecipesPresenterProtocol? { get set }
     /// Метод для уведомления экрана о смене состояния
     /// - Parameter state: Новое состояние экрана
-    func nextState(_ state: RecipesViewController.State)
-  
     func setState(_ state: RecipesViewController.State)
-
 }
 
 /// Экран для отображения меню выбора рецептов
