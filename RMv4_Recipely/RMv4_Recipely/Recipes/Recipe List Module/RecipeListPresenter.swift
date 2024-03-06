@@ -17,8 +17,6 @@ protocol RecipeListPresenterProtocol: AnyObject {
     func changeState()
     /// Поиск рецептов по запросу
     func searchRecipes(withText text: String)
-    /// Проверка поиска
-    func checkSearch() -> [RecipeDescription]
     /// Cмена свойства на true
     func startSearch()
     /// Cмена свойства на false
@@ -48,28 +46,38 @@ final class RecipeListPresenter {
 // MARK: - RecipeListPresenter + RecipeListPresenterProtocol
 
 extension RecipeListPresenter: RecipeListPresenterProtocol {
+    func searchRecipes(withText text: String) {
+        guard !text.isEmpty else {
+            isSearching = false
+            searchedRecipes = []
+            view?.reloadTableView()
+            return
+        }
+        isSearching = true
+        searchedRecipes = sourceOfRecepies.filter { $0.title.lowercased().contains(text.lowercased()) }
+        view?.setRecipes(searchedRecipes)
+    }
+
     func stopSearch() {
         isSearching = false
     }
 
     func startSearch() {
         isSearching = true
-    }
-
-    func checkSearch() -> [RecipeDescription] {
-        if isSearching {
-            return searchedRecipes
-        } else {
-            return sourceOfRecepies
-        }
+        view?.setRecipes(searchedRecipes)
     }
 
     func setCategory(category: DishCategory) {
+        sourceOfRecepies = RecipeDescription.getRecipes(category: category)
         let title = category.type.rawValue.capitalized
         view?.setTitle(title)
         self.category = category
-        let recipes = RecipeDescription.getRecipes(category: category)
-        sourceOfRecepies = recipes
+        var recipes: [RecipeDescription] = []
+        if isSearching {
+            recipes = searchedRecipes
+        } else {
+            recipes = sourceOfRecepies
+        }
         view?.setRecipes(recipes)
     }
 
@@ -85,7 +93,6 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
 
     func filterButtonPressed(sender: FilterButton) {
         if sender.isPressed == false {
-//            view?.disableAllFilterButtons()
             sender.isPressed = !sender.isPressed
             sender.isInIncreaseOrder = true
             sender.isInDecreaseOrder = false
@@ -114,7 +121,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
     }
 
     private func caloriesButtonTriggered(sender: FilterButton) {
-        guard let category, let anotherFilterState = view?.checkAnotherFilter(sender: sender) else { return }
+        guard let anotherFilterState = view?.checkAnotherFilter(sender: sender) else { return }
         sender.isPressed = true
         if sender.isInIncreaseOrder {
             sender.isInIncreaseOrder = false
@@ -122,7 +129,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
             if anotherFilterState.isPressed {
                 switch anotherFilterState.increasing {
                 case true:
-                    let recipes = RecipeDescription.getRecipes(category: category).sorted {
+                    let recipes = sourceOfRecepies.sorted {
                         if $0.value == $1.value {
                             $0.time < $1.time
                         } else {
@@ -131,7 +138,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
                     }
                     view?.setRecipes(recipes)
                 case false:
-                    let recipes = RecipeDescription.getRecipes(category: category).sorted {
+                    let recipes = sourceOfRecepies.sorted {
                         if $0.value == $1.value {
                             $0.time > $1.time
                         } else {
@@ -141,7 +148,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
                     view?.setRecipes(recipes)
                 }
             } else {
-                let recipes = RecipeDescription.getRecipes(category: category).sorted { $0.value < $1.value }
+                let recipes = sourceOfRecepies.sorted { $0.value < $1.value }
                 view?.setRecipes(recipes)
             }
         } else {
@@ -150,7 +157,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
             if anotherFilterState.isPressed {
                 switch anotherFilterState.increasing {
                 case true:
-                    let recipes = RecipeDescription.getRecipes(category: category).sorted {
+                    let recipes = sourceOfRecepies.sorted {
                         if $0.value == $1.value {
                             $0.time < $1.time
                         } else {
@@ -159,7 +166,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
                     }
                     view?.setRecipes(recipes)
                 case false:
-                    let recipes = RecipeDescription.getRecipes(category: category).sorted {
+                    let recipes = sourceOfRecepies.sorted {
                         if $0.value == $1.value {
                             $0.time > $1.time
                         } else {
@@ -169,7 +176,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
                     view?.setRecipes(recipes)
                 }
             } else {
-                let recipes = RecipeDescription.getRecipes(category: category).sorted { $0.value > $1.value }
+                let recipes = sourceOfRecepies.sorted { $0.value > $1.value }
                 view?.setRecipes(recipes)
             }
         }
@@ -235,17 +242,5 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
                 view?.setRecipes(recipes)
             }
         }
-
-    func searchRecipes(withText text: String) {
-        guard !text.isEmpty else {
-            isSearching = false
-            searchedRecipes = []
-            view?.reloadTableView()
-            return
-        }
-        isSearching = true
-        searchedRecipes = sourceOfRecepies.filter { $0.title.lowercased().contains(text.lowercased()) }
-        view?.reloadTableView()
-
     }
 }

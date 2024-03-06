@@ -55,7 +55,7 @@ final class ProfileViewController: UIViewController {
         .common
     ]
 
-    // MARK: - АНИМАЦИЯ
+    // MARK: - Private Properties
 
     private var termsView: TermsOfUseView?
     private var visualEffectView: UIVisualEffectView?
@@ -207,7 +207,7 @@ extension ProfileViewController: UITableViewDelegate {
     }
 }
 
-// MARK: - АНИМАЦИЯ
+// MARK: - Animation
 
 extension ProfileViewController {
     enum TermsViewState {
@@ -216,7 +216,6 @@ extension ProfileViewController {
     }
 
     private func configureTermsView() {
-//        termsView = TermsOfUseView()
         termsOfView.frame = CGRect(
             x: 0,
             y: view.bounds.height - 200,

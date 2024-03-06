@@ -20,7 +20,7 @@ final class AuthPresenter {
     enum Constants {
         static let emptyText = ""
         static let emailText = "@"
-        static let passwordText = ""
+        static let passwordText = "Qwerty12345"
         static let redColor = "error"
         static let darkGrayColor = "dark"
     }

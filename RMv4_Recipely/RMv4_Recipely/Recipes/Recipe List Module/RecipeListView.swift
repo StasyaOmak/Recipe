@@ -19,7 +19,6 @@ protocol RecipeListViewControllerProtocol: AnyObject {
     func nextState()
     /// метод обновления таблицы
     func reloadTableView()
-
 }
 
 /// Экран с рецептами для выбранной категории
@@ -28,10 +27,6 @@ final class RecipeListViewController: UIViewController {
         case loading
         case success
     }
-
-//    var data = [RecipeDescription]
-//    var searching = true
-
 
     // MARK: - Constants
 
@@ -267,8 +262,8 @@ extension RecipeListViewController: RecipeListViewControllerProtocol {
 
 extension RecipeListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let searchRecipes = presenter?.checkSearch() else { return 0 }
-        return searchRecipes.count
+        guard let recipes /* searchRecipes = presenter?.checkSearch() */ else { return 0 }
+        return recipes.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -277,7 +272,8 @@ extension RecipeListViewController: UITableViewDataSource {
                 withIdentifier: RecipeTableViewCell.description(),
                 for: indexPath
             ) as? RecipeTableViewCell,
-            let searchRecipes = presenter?.checkSearch()
+            let recipes
+//            let searchRecipes = presenter?.checkSearch()
         else { return UITableViewCell() }
         regularCell.configure(recipe: recipes[indexPath.row])
         guard let skeletonCell = tableView
@@ -287,7 +283,6 @@ extension RecipeListViewController: UITableViewDataSource {
             ) as? SkeletonTableViewCell
         else { return UITableViewCell() }
         let cell = isLoaded ? regularCell : skeletonCell
-
         return cell
     }
 }
