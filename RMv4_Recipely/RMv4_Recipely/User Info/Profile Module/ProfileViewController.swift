@@ -217,7 +217,7 @@ extension ProfileViewController {
     private func configureTermsView() {
         termsOfView.frame = CGRect(
             x: 0,
-            y: view.bounds.height - 200,
+            y: view.bounds.height / 2,
             width: view.bounds.width,
             height: view.bounds.height
         )
