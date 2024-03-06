@@ -80,22 +80,6 @@ final class AppBuilder {
         return bonusesView
     }
 
-//
-//    func makeTermsOfUseModule(coordinator: ProfileCoordinator) -> TermsOfUseViewController {
-//        let termsOfUseView = TermsOfUseViewController()
-//        let termsOfUsePresenter = TermsOfUsePresenter(termsOfUseView: termsOfUseView, coordinator: coordinator)
-//        termsOfUseView.termOfUsePresenter = termsOfUsePresenter
-//
-//        let sheet = termsOfUseView.sheetPresentationController
-//        sheet?.detents = [.custom(resolver: { _ in
-//            400
-//        })]
-//
-//        sheet?.prefersGrabberVisible = true
-//        sheet?.preferredCornerRadius = 30
-//        return termsOfUseView
-//    }
-
     func makeRecipeListModule(coordinator: RecipesCoordinator) -> RecipeListViewController {
         let recipeListView = RecipeListViewController()
         let recipeListPresenter = RecipeListPresenter(view: recipeListView, coordinator: coordinator)

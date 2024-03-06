@@ -5,9 +5,14 @@ import UIKit
 
 /// Протокол экрана рецептов
 protocol RecipesViewControllerProtocol: AnyObject {
+    /// Презентер экрана рецептов
     var recipesPresenter: RecipesPresenterProtocol? { get set }
-
+    /// Метод для уведомления экрана о смене состояния
+    /// - Parameter state: Новое состояние экрана
+    func nextState(_ state: RecipesViewController.State)
+  
     func setState(_ state: RecipesViewController.State)
+
 }
 
 /// Экран для отображения меню выбора рецептов
@@ -29,7 +34,7 @@ final class RecipesViewController: UIViewController {
 
     // MARK: - Public Properties
 
-    weak var collectionView: UICollectionView!
+    private weak var collectionView: UICollectionView!
     var recipesPresenter: RecipesPresenterProtocol?
 
     // MARK: - Private Properties
@@ -55,7 +60,12 @@ final class RecipesViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupCollection()
+    }
 
+    // MARK: - Private Properties
+
+    private func setupCollection() {
         view.backgroundColor = .white
 
         collectionView.backgroundColor = .white
@@ -66,8 +76,6 @@ final class RecipesViewController: UIViewController {
         collectionView.register(RecipesSkeletonCell.self, forCellWithReuseIdentifier: RecipesSkeletonCell.description())
         recipesPresenter?.changeState()
     }
-
-    // MARK: - Private Properties
 
     private let recipesTitleBarButtonItem: UIBarButtonItem = {
         let label = UILabel()

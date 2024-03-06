@@ -11,15 +11,15 @@ protocol RecipeListPresenterProtocol: AnyObject {
     func popToAllRecipes()
     /// метод-флаг нажатия на кнопку фильтра
     func filterButtonPressed(sender: FilterButton)
-    /// метод перехода в экран с описанием рецепта
+    /// Переход в экран с описанием рецепта
     func pushToDetail(recipe: RecipeDescription)
-    /// Смена состояния экрана рецептов
+    /// смена состояния экрана рецептов
     func changeState()
     /// Поиск рецептов по запросу
     func searchRecipes(withText text: String)
-    /// Cмена свойства на true
+    /// Начать поиск
     func startSearch()
-    /// Cмена свойства на false
+    /// Остановить поиск
     func stopSearch()
 }
 
