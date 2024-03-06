@@ -6,6 +6,8 @@ import UIKit
 /// Протокол экрана рецептов
 protocol RecipesViewControllerProtocol: AnyObject {
     var recipesPresenter: RecipesPresenterProtocol? { get set }
+
+    func nextState()
 }
 
 /// Экран для отображения меню выбора рецептов
@@ -17,10 +19,28 @@ final class RecipesViewController: UIViewController {
         static let verdanaBold = "Verdana-Bold"
     }
 
+    private enum State {
+        case loading
+        case success
+    }
+
     // MARK: - Public Properties
 
     weak var collectionView: UICollectionView!
     var recipesPresenter: RecipesPresenterProtocol?
+
+    // MARK: - Private Properties
+
+    private var state: State = .loading
+
+    private var isLoaded: Bool {
+        switch state {
+        case .loading:
+            return false
+        case .success:
+            return true
+        }
+    }
 
     // MARK: - Life Cycle
 
@@ -37,6 +57,7 @@ final class RecipesViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         view.backgroundColor = .white
 
         collectionView.backgroundColor = .white
@@ -44,6 +65,8 @@ final class RecipesViewController: UIViewController {
         collectionView.delegate = self
         collectionView.allowsSelection = true
         collectionView.register(RecipesCustomCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(RecipesSkeletonCell.self, forCellWithReuseIdentifier: RecipesSkeletonCell.description())
+        recipesPresenter?.changeState()
     }
 
     // MARK: - Private Properties
@@ -79,7 +102,12 @@ extension RecipesViewController: UICollectionViewDelegate {}
 
 // MARK: - RecipesViewController + RecipesViewControllerProtocol
 
-extension RecipesViewController: RecipesViewControllerProtocol {}
+extension RecipesViewController: RecipesViewControllerProtocol {
+    func nextState() {
+        state = .success
+        collectionView.reloadData()
+    }
+}
 
 // MARK: - RecipesViewController + UICollectionViewDataSource
 
@@ -94,10 +122,16 @@ extension RecipesViewController: UICollectionViewDataSource {
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         let category = recipesPresenter?.getInfo(categoryNumber: indexPath.item)
-        guard let cell = collectionView
-            .dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? RecipesCustomCell
+        guard let regularCell = collectionView
+            .dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? RecipesCustomCell, let category
         else { return UICollectionViewCell() }
-        cell.setInfo(info: category ?? DishCategory(imageName: "", type: .chicken))
+        regularCell.setInfo(info: category)
+        guard let skeletonCell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: RecipesSkeletonCell.description(),
+            for: indexPath
+        ) as? RecipesSkeletonCell
+        else { return UICollectionViewCell() }
+        let cell = isLoaded ? regularCell : skeletonCell
         return cell
     }
 }

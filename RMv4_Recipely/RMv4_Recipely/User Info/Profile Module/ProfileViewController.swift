@@ -33,7 +33,7 @@ final class ProfileViewController: UIViewController {
     private let profileTitleBarButtonItem: UIBarButtonItem = {
         let label = UILabel()
         label.text = Constants.navigationTitleText
-        label.font = UIFont(name: Constants.verdanaBoldFontName, size: 28)
+        label.font = UIFont.createFont(name: Constants.verdanaBoldFontName, size: 28)
         let item = UIBarButtonItem(customView: label)
         return item
     }()

@@ -39,7 +39,7 @@ final class AuthViewController: UIViewController {
         let label = UILabel()
         label.text = Constants.loginText
         label.textColor = .darkGray
-        label.font = UIFont(name: Constants.verdanaBold, size: 28)
+        label.font = UIFont.createFont(name: Constants.verdanaBold, size: 28)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -48,7 +48,7 @@ final class AuthViewController: UIViewController {
         let label = UILabel()
         label.text = Constants.emailAddressText
         label.textColor = .darkGray
-        label.font = UIFont(name: Constants.verdanaBold, size: 18)
+        label.font = UIFont.createFont(name: Constants.verdanaBold, size: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -57,7 +57,7 @@ final class AuthViewController: UIViewController {
         let label = UILabel()
         label.text = Constants.passwordText
         label.textColor = .darkGray
-        label.font = UIFont(name: Constants.verdanaBold, size: 18)
+        label.font = UIFont.createFont(name: Constants.verdanaBold, size: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -67,7 +67,7 @@ final class AuthViewController: UIViewController {
         label.text = Constants.incorrectFormatText
         label.textColor = .red
         label.isHidden = true
-        label.font = UIFont(name: Constants.verdana, size: 12)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -77,7 +77,7 @@ final class AuthViewController: UIViewController {
         label.text = Constants.wrongPasswordText
         label.textColor = .red
         label.isHidden = true
-        label.font = UIFont(name: Constants.verdana, size: 12)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -85,7 +85,7 @@ final class AuthViewController: UIViewController {
     lazy var emailAddressTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = Constants.emailAddressPlaceholderText
-        textField.font = UIFont(name: Constants.verdana, size: 18)
+        textField.font = UIFont.createFont(name: Constants.verdana, size: 18)
         textField.borderStyle = .roundedRect
         textField.delegate = self
 
@@ -103,7 +103,7 @@ final class AuthViewController: UIViewController {
     lazy var passwordTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = Constants.passwordPlaceholderText
-        textField.font = UIFont(name: Constants.verdana, size: 18)
+        textField.font = UIFont.createFont(name: Constants.verdana, size: 18)
         textField.borderStyle = .roundedRect
         textField.delegate = self
 

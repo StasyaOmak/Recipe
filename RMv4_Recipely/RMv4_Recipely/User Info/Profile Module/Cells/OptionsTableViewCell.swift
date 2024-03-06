@@ -25,14 +25,14 @@ final class OptionsTableViewCell: UITableViewCell {
     private let iconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = .basicGreen
+        imageView.tintColor = UIColor.createColor(114, 186, 191, 1)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
 
     private let optionLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: Constants.verdanaFontName, size: 17)
+        label.font = UIFont.createFont(name: Constants.verdanaFontName, size: 17)
         label.textColor = .darkGreenText
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
