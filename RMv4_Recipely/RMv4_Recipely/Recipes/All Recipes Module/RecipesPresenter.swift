@@ -41,9 +41,9 @@ final class RecipesPresenter: RecipesPresenterProtocol {
     }
 
     func changeState() {
-        view?.nextState(.loading)
+        view?.setState(.loading)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.view?.nextState(.success)
+            self.view?.setState(.success)
         }
     }
 }

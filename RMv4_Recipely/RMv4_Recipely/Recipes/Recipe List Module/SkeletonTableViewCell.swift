@@ -56,7 +56,7 @@ final class SkeletonTableViewCell: UITableViewCell {
 
         let animation = makeAnimation()
         animation.beginTime = 0.0
-        skeletonLayer.add(animation, forKey: "backgroundColor")
+        skeletonLayer.add(animation, forKey: "")
     }
 
     private func setContentViewConstraints() {

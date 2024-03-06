@@ -5,8 +5,17 @@ import UIKit
 
 /// Расширение для работы с общими цветами
 extension UIColor {
+    /// словарь для хранения уже записанных цветов
     static var colorStoreMap: [String: UIColor] = [:]
 
+    /// метод для создания и переиспользования уже записанных цветов через модель RGB. Если цвет ранее не создавался,
+    /// создаст и сохранит в colorStoreMap, если создавался, вернет нужный из colorStoreMap.
+    /// - Parameters:
+    ///     - red: Значение красного канала
+    ///     - green: Значение зеленого канала
+    ///     - blue:  Значение синего канала
+    ///     - alpha:  Значение прозрачности
+    /// - returns: цвет UIcolor
     static func createColor(
         _ red: CGFloat,
         _ green: CGFloat,

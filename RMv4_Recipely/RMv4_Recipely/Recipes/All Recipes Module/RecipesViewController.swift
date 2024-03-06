@@ -10,6 +10,9 @@ protocol RecipesViewControllerProtocol: AnyObject {
     /// Метод для уведомления экрана о смене состояния
     /// - Parameter state: Новое состояние экрана
     func nextState(_ state: RecipesViewController.State)
+  
+    func setState(_ state: RecipesViewController.State)
+
 }
 
 /// Экран для отображения меню выбора рецептов
@@ -21,8 +24,11 @@ final class RecipesViewController: UIViewController {
         static let verdanaBold = "Verdana-Bold"
     }
 
+    /// Состояния экрана с коллекцией рецептов
     enum State {
+        /// идет загрузка
         case loading
+        /// загрузка успешно завершена
         case success
     }
 
@@ -103,7 +109,7 @@ extension RecipesViewController: UICollectionViewDelegate {}
 // MARK: - RecipesViewController + RecipesViewControllerProtocol
 
 extension RecipesViewController: RecipesViewControllerProtocol {
-    func nextState(_ state: RecipesViewController.State) {
+    func setState(_ state: RecipesViewController.State) {
         self.state = state
         collectionView.reloadData()
     }

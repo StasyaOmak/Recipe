@@ -18,13 +18,19 @@ protocol RecipeListViewControllerProtocol: AnyObject {
     /// Переход к следующему состоянию экрана
     func nextState(_ state: RecipeListViewController.State)
     /// Обновление таблицы
+    /// метод перехода к следующему состоянию экрана
+    func setState(_ state: RecipeListViewController.State)
+    /// метод обновления таблицы
     func reloadTableView()
 }
 
 /// Экран с рецептами для выбранной категории
 final class RecipeListViewController: UIViewController {
+    /// Состояния экрана с таблицей рецептов
     enum State {
+        /// идет загрузка
         case loading
+        /// загрузка успешно завершена
         case success
     }
 
@@ -233,7 +239,7 @@ extension RecipeListViewController: RecipeListViewControllerProtocol {
         buttons.forEach { $0.isPressed = false }
     }
 
-    func nextState(_ state: State) {
+    func setState(_ state: State) {
         self.state = state
     }
 
