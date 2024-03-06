@@ -16,15 +16,18 @@ protocol RecipeListViewControllerProtocol: AnyObject {
     /// метод проверки состояния второго фильтра
     func checkAnotherFilter(sender: FilterButton) -> (isPressed: Bool, increasing: Bool, decreasing: Bool)
     /// метод перехода к следующему состоянию экрана
-    func nextState(_ state: RecipeListViewController.State)
+    func setState(_ state: RecipeListViewController.State)
     /// метод обновления таблицы
     func reloadTableView()
 }
 
 /// Экран с рецептами для выбранной категории
 final class RecipeListViewController: UIViewController {
+    /// Состояния экрана с таблицей рецептов
     enum State {
+        /// идет загрузка
         case loading
+        /// загрузка успешно завершена
         case success
     }
 
@@ -233,7 +236,7 @@ extension RecipeListViewController: RecipeListViewControllerProtocol {
         buttons.forEach { $0.isPressed = false }
     }
 
-    func nextState(_ state: State) {
+    func setState(_ state: State) {
         self.state = state
     }
 

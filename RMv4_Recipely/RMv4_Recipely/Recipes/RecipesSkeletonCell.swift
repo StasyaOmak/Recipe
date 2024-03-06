@@ -43,7 +43,7 @@ final class RecipesSkeletonCell: UICollectionViewCell {
 
         let animationGroup = makeAnimation()
         animationGroup.beginTime = 0.0
-        skeletonLayer.add(animationGroup, forKey: "backgroundColor")
+        skeletonLayer.add(animationGroup, forKey: "")
     }
 
     private func makeAnimation() -> CABasicAnimation {

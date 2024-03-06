@@ -31,6 +31,7 @@ final class AuthViewController: UIViewController {
 
         static let loginButtonText = "Login"
         static let errorMessageText = "Please check the accuracy of the\n entered credentials."
+        static let errorMessageDelay: DispatchTime = .now() + 3
     }
 
     // MARK: - Visual Components
@@ -350,7 +351,7 @@ extension AuthViewController: AuthViewProtocol {
         UIView.animate(withDuration: 1.0) {
             self.errorMessageLabel.isHidden = false
             self.errorMessageLabel.alpha = 1
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            DispatchQueue.main.asyncAfter(deadline: Constants.errorMessageDelay) {
                 UIView.animate(withDuration: 1.0) {
                     self.errorMessageLabel.alpha = 0
                 }
