@@ -19,7 +19,7 @@ protocol ProfilePresenterProtocol: AnyObject {
 
 /// Презентер модуля "Профиль пользователя"
 final class ProfilePresenter {
-    // MARK: - Public Properties
+    // MARK: - Private Properties
 
     private weak var view: ProfileViewControllerProtocol?
     private weak var coordinator: ProfileCoordinator?

@@ -206,7 +206,7 @@ extension ProfileViewController: UITableViewDelegate {
     }
 }
 
-// MARK: - Animation
+// MARK: - UIViewPropertyAnimator
 
 extension ProfileViewController {
     enum TermsViewState {

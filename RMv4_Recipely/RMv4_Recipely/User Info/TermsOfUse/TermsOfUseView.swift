@@ -188,5 +188,5 @@ final class TermsOfUseView: UIView {
     }
 }
 
-// - MARK: Extension BonusesViewController + BonusesViewControllerProtocol
+// - MARK: Extension TermsOfUseView + TermsOfUseViewControllerProtocol
 extension TermsOfUseView: TermsOfUseViewControllerProtocol {}

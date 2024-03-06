@@ -120,7 +120,8 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
     func pushToDetail(recipe: RecipeDescription) {
         coordinator?.pushToDetail(recipe: recipe)
     }
-//TODO: - нарушена логика сортировки - при проверке состояния второго фильтра приходится сортировать в порядке, обратном проверяемому свойству.
+
+    // TODO: - нарушена логика сортировки - при проверке состояния второго фильтра приходится сортировать в порядке, обратном проверяемому свойству.
     private func caloriesButtonTriggered(sender: FilterButton) {
         guard let anotherFilterState = view?.checkAnotherFilter(sender: sender) else { return }
         sender.isPressed = true
