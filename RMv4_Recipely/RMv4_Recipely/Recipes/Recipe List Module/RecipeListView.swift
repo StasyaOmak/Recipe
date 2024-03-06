@@ -13,14 +13,25 @@ protocol RecipeListViewControllerProtocol: AnyObject {
     func setTitle(_ title: String)
     /// Метод снятия выделения со всех кнопок фильтров
     func disableAllFilterButtons()
+    /// метод проверки состояния второго фильтра
+    func checkAnotherFilter(sender: FilterButton) -> (isPressed: Bool, increasing: Bool, decreasing: Bool)
+    /// метод перехода к следующему состоянию экрана
+    func nextState()
     /// метод обновления таблицы
     func reloadTableView()
+
 }
 
 /// Экран с рецептами для выбранной категории
 final class RecipeListViewController: UIViewController {
+    enum State {
+        case loading
+        case success
+    }
+
 //    var data = [RecipeDescription]
 //    var searching = true
+
 
     // MARK: - Constants
 
@@ -91,8 +102,11 @@ final class RecipeListViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
-        tableView.register(RecipeTableViewCell.self, forCellReuseIdentifier: Constants.recipeTableViewCellIdentifier)
+        tableView.register(RecipeTableViewCell.self, forCellReuseIdentifier: RecipeTableViewCell.description())
+        tableView.register(SkeletonTableViewCell.self, forCellReuseIdentifier: SkeletonTableViewCell.description())
         return tableView
     }()
 
@@ -105,17 +119,27 @@ final class RecipeListViewController: UIViewController {
     private var recipes: [RecipeDescription]?
     private lazy var buttons: [FilterButton] = [caloriesFilterButton, timeFilterButton]
 
+    var state: State = .loading
+    private var isLoaded: Bool {
+        switch state {
+        case .loading:
+            return false
+        case .success:
+            return true
+        }
+    }
+
     // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         setupUI()
     }
 
     // MARK: - Private Methods
 
     private func setupUI() {
+        view.backgroundColor = .white
         view.addSubview(searchBar)
         view.addSubview(filtersScrollView)
         view.addSubview(tableView)
@@ -126,6 +150,8 @@ final class RecipeListViewController: UIViewController {
             UIBarButtonItem(customView: arrowButton),
             UIBarButtonItem(customView: titleLabel)
         ]
+
+        presenter?.changeState()
     }
 
     private func setupConstraints() {
@@ -154,7 +180,7 @@ final class RecipeListViewController: UIViewController {
     private func setupFilterButtons() {
         for (index, button) in buttons.enumerated() {
             filtersScrollView.addSubview(button)
-
+            button.tag = index
             button.centerYAnchor.constraint(equalTo: filtersScrollView.centerYAnchor).isActive = true
             button.leadingAnchor.constraint(
                 equalTo: filtersScrollView.leadingAnchor,
@@ -205,6 +231,7 @@ extension RecipeListViewController: RecipeListViewControllerProtocol {
 
     func setRecipes(_ recipes: [RecipeDescription]) {
         self.recipes = recipes
+        tableView.reloadData()
     }
 
     func setTitle(_ title: String) {
@@ -213,6 +240,26 @@ extension RecipeListViewController: RecipeListViewControllerProtocol {
 
     func disableAllFilterButtons() {
         buttons.forEach { $0.isPressed = false }
+    }
+
+    func nextState() {
+        state = .success
+        tableView.reloadData()
+    }
+
+    func checkAnotherFilter(sender: FilterButton) -> (isPressed: Bool, increasing: Bool, decreasing: Bool) {
+        switch sender {
+        case caloriesFilterButton:
+            return (timeFilterButton.isPressed, timeFilterButton.isInIncreaseOrder, timeFilterButton.isInDecreaseOrder)
+        case timeFilterButton:
+            return (
+                caloriesFilterButton.isPressed,
+                caloriesFilterButton.isInIncreaseOrder,
+                caloriesFilterButton.isInDecreaseOrder
+            )
+        default:
+            return (false, true, false)
+        }
     }
 }
 
@@ -225,14 +272,22 @@ extension RecipeListViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView
+        guard let regularCell = tableView
             .dequeueReusableCell(
-                withIdentifier: Constants.recipeTableViewCellIdentifier,
+                withIdentifier: RecipeTableViewCell.description(),
                 for: indexPath
             ) as? RecipeTableViewCell,
             let searchRecipes = presenter?.checkSearch()
         else { return UITableViewCell() }
-        cell.configure(recipe: searchRecipes[indexPath.row])
+        regularCell.configure(recipe: recipes[indexPath.row])
+        guard let skeletonCell = tableView
+            .dequeueReusableCell(
+                withIdentifier: SkeletonTableViewCell.description(),
+                for: indexPath
+            ) as? SkeletonTableViewCell
+        else { return UITableViewCell() }
+        let cell = isLoaded ? regularCell : skeletonCell
+
         return cell
     }
 }

@@ -19,7 +19,7 @@ final class AppBuilder {
             selectedImage: UIImage.profileFill.withRenderingMode(.alwaysOriginal)
         )
         profileView.tabBarItem.setTitleTextAttributes(
-            [NSAttributedString.Key.foregroundColor: UIColor.basicGreen],
+            [NSAttributedString.Key.foregroundColor: UIColor.createColor(114, 186, 191, 1)],
             for: .selected
         )
         return profileView
@@ -42,7 +42,7 @@ final class AppBuilder {
             selectedImage: UIImage.cakeFill.withRenderingMode(.alwaysOriginal)
         )
         recipesView.tabBarItem.setTitleTextAttributes(
-            [NSAttributedString.Key.foregroundColor: UIColor.basicGreen],
+            [NSAttributedString.Key.foregroundColor: UIColor.createColor(114, 186, 191, 1)],
             for: .selected
         )
         return recipesView
@@ -59,7 +59,7 @@ final class AppBuilder {
         )
 
         favoritesView.tabBarItem.setTitleTextAttributes(
-            [NSAttributedString.Key.foregroundColor: UIColor.basicGreen],
+            [NSAttributedString.Key.foregroundColor: UIColor.createColor(114, 186, 191, 1)],
             for: .selected
         )
         return favoritesView

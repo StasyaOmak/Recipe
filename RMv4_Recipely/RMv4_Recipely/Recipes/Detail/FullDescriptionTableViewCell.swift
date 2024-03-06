@@ -16,7 +16,7 @@ final class FullDescriptionTableViewCell: UITableViewCell {
 
     private let backgroundColorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .basicGreen
+        view.backgroundColor = UIColor.createColor(114, 186, 191, 1)
         view.layer.cornerRadius = 25
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false

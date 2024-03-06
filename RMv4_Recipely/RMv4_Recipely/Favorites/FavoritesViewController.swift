@@ -28,7 +28,7 @@ final class FavoritesViewController: UIViewController {
     private let profileTitleBarButtonItem: UIBarButtonItem = {
         let label = UILabel()
         label.text = Constants.navigationTitleText
-        label.font = UIFont(name: Constants.verdanaBoldFontName, size: 28)
+        label.font = UIFont.createFont(name: Constants.verdanaBoldFontName, size: 28)
         let item = UIBarButtonItem(customView: label)
         return item
     }()
@@ -52,7 +52,7 @@ final class FavoritesViewController: UIViewController {
         let imageView = UIImageView()
         imageView.image = .bookmark
         imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = .basicGreen
+        imageView.tintColor = UIColor.createColor(114, 186, 191, 1)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -60,7 +60,7 @@ final class FavoritesViewController: UIViewController {
     private let emptyLabel: UILabel = {
         let label = UILabel()
         label.text = Constants.emptyLabelText
-        label.font = UIFont(name: Constants.verdanaBoldFontName, size: 18)
+        label.font = UIFont.createFont(name: Constants.verdanaBoldFontName, size: 18)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -69,7 +69,7 @@ final class FavoritesViewController: UIViewController {
     private let additionalEmptyLabel: UILabel = {
         let label = UILabel()
         label.text = Constants.additionalEmptyLabelText
-        label.font = UIFont(name: Constants.verdanaFontName, size: 14)
+        label.font = UIFont.createFont(name: Constants.verdanaFontName, size: 14)
         label.textColor = .lightGray
         label.numberOfLines = 2
         label.textAlignment = .center
@@ -197,7 +197,7 @@ extension FavoritesViewController: UITableViewDataSource {
             .dequeueReusableCell(withIdentifier: RecipeTableViewCell.description()) as? RecipeTableViewCell,
             let recipes = presenter?.getFavourites() else { return UITableViewCell() }
         cell.configure(recipe: recipes[indexPath.row])
-        cell.backgroundView?.backgroundColor = .basicGreen
+        cell.backgroundView?.backgroundColor = UIColor.createColor(114, 186, 191, 1)
         return cell
     }
 

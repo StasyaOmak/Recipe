@@ -26,7 +26,7 @@ final class FilterButton: UIControl {
 
     var isPressed: Bool {
         didSet {
-            backgroundColor = isPressed ? .basicGreen : .lightGreenBackground
+            backgroundColor = isPressed ? UIColor.createColor(114, 186, 191, 1) : .lightGreenBackground
             title.textColor = isPressed ? .white : .black
             iconImageView.image = isPressed ? UIImage.stack2 : UIImage.stack
         }
