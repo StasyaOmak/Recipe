@@ -3,6 +3,16 @@
 
 import UIKit
 
+/// Протокол экрана модуля "Авторизация"
+protocol AuthViewProtocol: AnyObject {
+    /// установка цвета для поля ввода логина
+    func setLoginColor(color: String, isValidate: Bool, borderColor: String)
+    /// установка цвета для поля ввода пароля
+    func setPasswordColor(color: String, isValidate: Bool, borderColor: String)
+    /// функция вызова уведомления об ошибке ввода данных
+    func showEntryErrorMessage()
+}
+
 /// Экран авторизации
 final class AuthViewController: UIViewController {
     // MARK: - Constants
@@ -140,6 +150,7 @@ final class AuthViewController: UIViewController {
         label.numberOfLines = 0
         label.backgroundColor = .warningLabel
         label.layer.masksToBounds = true
+        label.alpha = 0
         label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.layer.cornerRadius = 12
@@ -203,7 +214,8 @@ final class AuthViewController: UIViewController {
     }
 
     @objc private func loginButtonTapped(_ sender: UIButton) {
-        loginButton.setTitle("", for: .normal)
+        passwordTextField.resignFirstResponder()
+        loginButton.setTitle(nil, for: .normal)
         loginButton.setImage(UIImage(systemName: "slowmo"), for: .normal)
         loginButton.tintColor = .white
         UIView.animate(withDuration: 3.0) {
@@ -211,10 +223,8 @@ final class AuthViewController: UIViewController {
                 rotationAngle: CGFloat.pi
             )
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            UIView.animate(withDuration: 1.0) {
-                self.errorMessageLabel.isHidden = false
-            }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+            self?.presenter?.moveToMain()
         }
     }
 
@@ -333,6 +343,20 @@ extension AuthViewController: AuthViewProtocol {
         emailAddressTextField.layer.borderColor = UIColor(named: borderColor)?.cgColor
         incorrectFormatLabel.isHidden = isValidate
     }
+
+    func showEntryErrorMessage() {
+        loginButton.setImage(nil, for: .normal)
+        loginButton.setTitle("Login", for: .normal)
+        UIView.animate(withDuration: 1.0) {
+            self.errorMessageLabel.isHidden = false
+            self.errorMessageLabel.alpha = 1
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                UIView.animate(withDuration: 1.0) {
+                    self.errorMessageLabel.alpha = 0
+                }
+            }
+        }
+    }
 }
 
 // MARK: - UITextFieldDelegate
@@ -341,5 +365,15 @@ extension AuthViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         presenter?.checkLogin(login: emailAddressTextField.text)
         presenter?.checkPassword(password: passwordTextField.text)
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case emailAddressTextField:
+            passwordTextField.becomeFirstResponder()
+        default:
+            break
+        }
+        return true
     }
 }
