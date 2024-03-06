@@ -17,6 +17,9 @@ protocol RecipeListViewControllerProtocol: AnyObject {
     func checkAnotherFilter(sender: FilterButton) -> (isPressed: Bool, increasing: Bool, decreasing: Bool)
     /// метод перехода к следующему состоянию экрана
     func nextState()
+    /// метод обновления таблицы
+    func reloadTableView()
+
 }
 
 /// Экран с рецептами для выбранной категории
@@ -25,6 +28,10 @@ final class RecipeListViewController: UIViewController {
         case loading
         case success
     }
+
+//    var data = [RecipeDescription]
+//    var searching = true
+
 
     // MARK: - Constants
 
@@ -59,11 +66,12 @@ final class RecipeListViewController: UIViewController {
         return label
     }()
 
-    private let searchBar: UISearchBar = {
+    private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.layer.cornerRadius = 8
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.searchBarStyle = .minimal
+        searchBar.delegate = self
         searchBar.searchTextField.backgroundColor = .lightGreenBackground
         searchBar.placeholder = Constants.searchBarPlaceholder
         return searchBar
@@ -217,6 +225,10 @@ final class RecipeListViewController: UIViewController {
 // MARK: - RecipeListViewController + RecipeListViewControllerProtocol
 
 extension RecipeListViewController: RecipeListViewControllerProtocol {
+    func reloadTableView() {
+        tableView.reloadData()
+    }
+
     func setRecipes(_ recipes: [RecipeDescription]) {
         self.recipes = recipes
         tableView.reloadData()
@@ -255,8 +267,8 @@ extension RecipeListViewController: RecipeListViewControllerProtocol {
 
 extension RecipeListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let recipes else { return 0 }
-        return recipes.count
+        guard let searchRecipes = presenter?.checkSearch() else { return 0 }
+        return searchRecipes.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -265,7 +277,7 @@ extension RecipeListViewController: UITableViewDataSource {
                 withIdentifier: RecipeTableViewCell.description(),
                 for: indexPath
             ) as? RecipeTableViewCell,
-            let recipes
+            let searchRecipes = presenter?.checkSearch()
         else { return UITableViewCell() }
         regularCell.configure(recipe: recipes[indexPath.row])
         guard let skeletonCell = tableView
@@ -275,6 +287,7 @@ extension RecipeListViewController: UITableViewDataSource {
             ) as? SkeletonTableViewCell
         else { return UITableViewCell() }
         let cell = isLoaded ? regularCell : skeletonCell
+
         return cell
     }
 }
@@ -293,5 +306,22 @@ extension RecipeListViewController: UITableViewDelegate {
         guard let cell = tableView.cellForRow(at: indexPath) else { return indexPath }
         cell.isSelected = false
         return indexPath
+    }
+}
+
+// MARK: - RecipeListViewController: UISearchBarDelegate
+
+extension RecipeListViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.count >= 3 {
+            presenter?.searchRecipes(withText: searchText)
+        } else {
+            presenter?.searchRecipes(withText: "")
+        }
+    }
+
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        presenter?.startSearch()
+        tableView.reloadData()
     }
 }

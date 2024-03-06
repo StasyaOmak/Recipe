@@ -15,6 +15,14 @@ protocol RecipeListPresenterProtocol: AnyObject {
     func pushToDetail(recipe: RecipeDescription)
     /// метод смены состояния загрузки
     func changeState()
+    /// Поиск рецептов по запросу
+    func searchRecipes(withText text: String)
+    /// Проверка поиска
+    func checkSearch() -> [RecipeDescription]
+    /// Cмена свойства на true
+    func startSearch()
+    /// Cмена свойства на false
+    func stopSearch()
 }
 
 /// Презентер модуля "Рецепты выбранной категории"
@@ -24,6 +32,10 @@ final class RecipeListPresenter {
     private weak var view: RecipeListViewControllerProtocol?
     private weak var coordinator: RecipesCoordinator?
     private var category: DishCategory?
+
+    private var sourceOfRecepies: [RecipeDescription] = []
+    private var isSearching = false
+    private var searchedRecipes: [RecipeDescription] = []
 
     // MARK: - Initializers
 
@@ -36,11 +48,28 @@ final class RecipeListPresenter {
 // MARK: - RecipeListPresenter + RecipeListPresenterProtocol
 
 extension RecipeListPresenter: RecipeListPresenterProtocol {
+    func stopSearch() {
+        isSearching = false
+    }
+
+    func startSearch() {
+        isSearching = true
+    }
+
+    func checkSearch() -> [RecipeDescription] {
+        if isSearching {
+            return searchedRecipes
+        } else {
+            return sourceOfRecepies
+        }
+    }
+
     func setCategory(category: DishCategory) {
         let title = category.type.rawValue.capitalized
         view?.setTitle(title)
         self.category = category
         let recipes = RecipeDescription.getRecipes(category: category)
+        sourceOfRecepies = recipes
         view?.setRecipes(recipes)
     }
 
@@ -206,5 +235,17 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
                 view?.setRecipes(recipes)
             }
         }
+
+    func searchRecipes(withText text: String) {
+        guard !text.isEmpty else {
+            isSearching = false
+            searchedRecipes = []
+            view?.reloadTableView()
+            return
+        }
+        isSearching = true
+        searchedRecipes = sourceOfRecepies.filter { $0.title.lowercased().contains(text.lowercased()) }
+        view?.reloadTableView()
+
     }
 }
