@@ -26,7 +26,7 @@ final class FullDescriptionTableViewCell: UITableViewCell {
     private let textRecipeLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: Constants.verdana, size: 14)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 14)
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

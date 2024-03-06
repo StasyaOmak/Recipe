@@ -86,14 +86,15 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
     }
 
     func changeState() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
-            self?.view?.nextState()
+        view?.nextState(.loading)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+            self?.view?.nextState(.success)
         }
     }
 
     func filterButtonPressed(sender: FilterButton) {
         if sender.isPressed == false {
-            sender.isPressed = !sender.isPressed
+            sender.isPressed = true
             sender.isInIncreaseOrder = true
             sender.isInDecreaseOrder = false
             switch sender.tag {
@@ -119,7 +120,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
     func pushToDetail(recipe: RecipeDescription) {
         coordinator?.pushToDetail(recipe: recipe)
     }
-
+//TODO: - нарушена логика сортировки - при проверке состояния второго фильтра приходится сортировать в порядке, обратном проверяемому свойству.
     private func caloriesButtonTriggered(sender: FilterButton) {
         guard let anotherFilterState = view?.checkAnotherFilter(sender: sender) else { return }
         sender.isPressed = true
@@ -131,7 +132,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
                 case true:
                     let recipes = sourceOfRecepies.sorted {
                         if $0.value == $1.value {
-                            $0.time < $1.time
+                            $0.time > $1.time
                         } else {
                             $0.value < $1.value
                         }
@@ -140,7 +141,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
                 case false:
                     let recipes = sourceOfRecepies.sorted {
                         if $0.value == $1.value {
-                            $0.time > $1.time
+                            $0.time < $1.time
                         } else {
                             $0.value < $1.value
                         }
@@ -159,7 +160,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
                 case true:
                     let recipes = sourceOfRecepies.sorted {
                         if $0.value == $1.value {
-                            $0.time < $1.time
+                            $0.time > $1.time
                         } else {
                             $0.value > $1.value
                         }
@@ -168,7 +169,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
                 case false:
                     let recipes = sourceOfRecepies.sorted {
                         if $0.value == $1.value {
-                            $0.time > $1.time
+                            $0.time < $1.time
                         } else {
                             $0.value > $1.value
                         }
@@ -193,7 +194,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
                 case true:
                     let recipes = RecipeDescription.getRecipes(category: category).sorted {
                         if $0.time == $1.time {
-                            $0.value < $1.value
+                            $0.value > $1.value
                         } else {
                             $0.time < $1.time
                         }
@@ -202,7 +203,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
                 case false:
                     let recipes = RecipeDescription.getRecipes(category: category).sorted {
                         if $0.time == $1.time {
-                            $0.value > $1.value
+                            $0.value < $1.value
                         } else {
                             $0.time < $1.time
                         }
@@ -221,7 +222,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
                 case true:
                     let recipes = RecipeDescription.getRecipes(category: category).sorted {
                         if $0.time == $1.time {
-                            $0.value < $1.value
+                            $0.value > $1.value
                         } else {
                             $0.time > $1.time
                         }
@@ -230,7 +231,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
                 case false:
                     let recipes = RecipeDescription.getRecipes(category: category).sorted {
                         if $0.time == $1.time {
-                            $0.value > $1.value
+                            $0.value < $1.value
                         } else {
                             $0.time > $1.time
                         }

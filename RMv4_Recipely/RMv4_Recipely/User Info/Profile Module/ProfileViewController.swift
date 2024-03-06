@@ -10,7 +10,7 @@ protocol ProfileViewControllerProtocol: AnyObject {
     /// метод вызова алерта на смену имени
     func showNameEditorAlert()
     /// метод показа экрана политики
-    func showScreanTerms()
+    func showTermsScreen()
 }
 
 /// Экран данных пользователя
@@ -114,9 +114,8 @@ final class ProfileViewController: UIViewController {
 
 /// Расширение вью методами протокола-интерфейса ProfileViewControllerProtocol
 extension ProfileViewController: ProfileViewControllerProtocol {
-    func showScreanTerms() {
+    func showTermsScreen() {
         configureTermsView()
-        print(2)
     }
 
     func reloadTableView() {
@@ -268,12 +267,7 @@ extension ProfileViewController {
             runningAnimations.append(cornerRadiusAnimator)
 
             let blurAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
-                switch state {
-                case .expanded:
-                    self.visualEffectView?.effect = UIBlurEffect(style: .dark)
-                case .collapsed:
-                    self.visualEffectView?.effect = nil
-                }
+                self.visualEffectView?.effect = UIBlurEffect(style: .dark)
             }
 
             blurAnimator.startAnimation()

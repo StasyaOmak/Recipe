@@ -7,7 +7,7 @@ import UIKit
 protocol RecipesViewControllerProtocol: AnyObject {
     var recipesPresenter: RecipesPresenterProtocol? { get set }
 
-    func nextState()
+    func nextState(_ state: RecipesViewController.State)
 }
 
 /// Экран для отображения меню выбора рецептов
@@ -19,7 +19,7 @@ final class RecipesViewController: UIViewController {
         static let verdanaBold = "Verdana-Bold"
     }
 
-    private enum State {
+    enum State {
         case loading
         case success
     }
@@ -31,14 +31,9 @@ final class RecipesViewController: UIViewController {
 
     // MARK: - Private Properties
 
-    private var state: State = .loading
-
-    private var isLoaded: Bool {
-        switch state {
-        case .loading:
-            return false
-        case .success:
-            return true
+    private var state: State? {
+        didSet {
+            collectionView.reloadData()
         }
     }
 
@@ -74,7 +69,7 @@ final class RecipesViewController: UIViewController {
     private let recipesTitleBarButtonItem: UIBarButtonItem = {
         let label = UILabel()
         label.text = Constants.navigationTitleText
-        label.font = UIFont(name: Constants.verdanaBold, size: 28)
+        label.font = UIFont.createFont(name: Constants.verdanaBold, size: 28)
         let item = UIBarButtonItem(customView: label)
         return item
     }()
@@ -103,8 +98,8 @@ extension RecipesViewController: UICollectionViewDelegate {}
 // MARK: - RecipesViewController + RecipesViewControllerProtocol
 
 extension RecipesViewController: RecipesViewControllerProtocol {
-    func nextState() {
-        state = .success
+    func nextState(_ state: RecipesViewController.State) {
+        self.state = state
         collectionView.reloadData()
     }
 }
@@ -131,8 +126,14 @@ extension RecipesViewController: UICollectionViewDataSource {
             for: indexPath
         ) as? RecipesSkeletonCell
         else { return UICollectionViewCell() }
-        let cell = isLoaded ? regularCell : skeletonCell
-        return cell
+        switch state {
+        case .loading:
+            return skeletonCell
+        case .success:
+            return regularCell
+        default:
+            return skeletonCell
+        }
     }
 }
 

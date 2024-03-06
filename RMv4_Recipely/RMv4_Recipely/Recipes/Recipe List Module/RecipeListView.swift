@@ -16,7 +16,7 @@ protocol RecipeListViewControllerProtocol: AnyObject {
     /// метод проверки состояния второго фильтра
     func checkAnotherFilter(sender: FilterButton) -> (isPressed: Bool, increasing: Bool, decreasing: Bool)
     /// метод перехода к следующему состоянию экрана
-    func nextState()
+    func nextState(_ state: RecipeListViewController.State)
     /// метод обновления таблицы
     func reloadTableView()
 }
@@ -54,7 +54,7 @@ final class RecipeListViewController: UIViewController {
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: Constants.verdanaFontName, size: 28)
+        label.font = UIFont.createFont(name: Constants.verdanaFontName, size: 28)
         label.isUserInteractionEnabled = true
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(backButtonTapped))
         label.addGestureRecognizer(tapRecognizer)
@@ -114,13 +114,9 @@ final class RecipeListViewController: UIViewController {
     private var recipes: [RecipeDescription]?
     private lazy var buttons: [FilterButton] = [caloriesFilterButton, timeFilterButton]
 
-    var state: State = .loading
-    private var isLoaded: Bool {
-        switch state {
-        case .loading:
-            return false
-        case .success:
-            return true
+    private var state: State? {
+        didSet {
+            tableView.reloadData()
         }
     }
 
@@ -237,9 +233,8 @@ extension RecipeListViewController: RecipeListViewControllerProtocol {
         buttons.forEach { $0.isPressed = false }
     }
 
-    func nextState() {
-        state = .success
-        tableView.reloadData()
+    func nextState(_ state: State) {
+        self.state = state
     }
 
     func checkAnotherFilter(sender: FilterButton) -> (isPressed: Bool, increasing: Bool, decreasing: Bool) {
@@ -273,7 +268,6 @@ extension RecipeListViewController: UITableViewDataSource {
                 for: indexPath
             ) as? RecipeTableViewCell,
             let recipes
-//            let searchRecipes = presenter?.checkSearch()
         else { return UITableViewCell() }
         regularCell.configure(recipe: recipes[indexPath.row])
         guard let skeletonCell = tableView
@@ -282,8 +276,14 @@ extension RecipeListViewController: UITableViewDataSource {
                 for: indexPath
             ) as? SkeletonTableViewCell
         else { return UITableViewCell() }
-        let cell = isLoaded ? regularCell : skeletonCell
-        return cell
+        switch state {
+        case .loading:
+            return skeletonCell
+        case .success:
+            return regularCell
+        default:
+            return skeletonCell
+        }
     }
 }
 

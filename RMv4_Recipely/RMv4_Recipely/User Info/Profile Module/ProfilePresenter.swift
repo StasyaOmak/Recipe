@@ -35,9 +35,7 @@ final class ProfilePresenter {
 // - MARK: Extension ProfilePresenter + ProfilePresenterProtocol
 extension ProfilePresenter: ProfilePresenterProtocol {
     func termsOfUseCellTapped() {
-//        coordinator?.moveToTermsOfUseScreen()
-        view?.showScreanTerms()
-        print(1)
+        view?.showTermsScreen()
     }
 
     func editButtonTapped() {

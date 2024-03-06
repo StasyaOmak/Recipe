@@ -89,7 +89,7 @@ final class CharacteristicsTableViewCell: UITableViewCell {
     private let enercViewLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: Constants.verdana, size: 10)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 10)
         label.textColor = .white
         label.text = Constants.enercKcal
         return label
@@ -98,7 +98,7 @@ final class CharacteristicsTableViewCell: UITableViewCell {
     private let enercSubViewLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: Constants.verdana, size: 10)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 10)
         label.textColor = .basic
         return label
     }()
@@ -106,7 +106,7 @@ final class CharacteristicsTableViewCell: UITableViewCell {
     private let carbohydratesViewLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: Constants.verdana, size: 10)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 10)
         label.textColor = .white
         label.text = Constants.carbohydrates
         return label
@@ -115,7 +115,7 @@ final class CharacteristicsTableViewCell: UITableViewCell {
     private let carbohydratesSubViewLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: Constants.verdana, size: 10)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 10)
         label.textColor = .basic
         return label
     }()
@@ -123,7 +123,7 @@ final class CharacteristicsTableViewCell: UITableViewCell {
     private let fatsViewLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: Constants.verdana, size: 10)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 10)
         label.textColor = .white
         label.text = Constants.fats
         return label
@@ -132,7 +132,7 @@ final class CharacteristicsTableViewCell: UITableViewCell {
     private let fatsSubViewLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: Constants.verdana, size: 10)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 10)
         label.textColor = .basic
         return label
     }()
@@ -140,7 +140,7 @@ final class CharacteristicsTableViewCell: UITableViewCell {
     private let proteinsViewLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: Constants.verdana, size: 10)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 10)
         label.textColor = .white
         label.text = Constants.proteins
         return label
@@ -149,7 +149,7 @@ final class CharacteristicsTableViewCell: UITableViewCell {
     private let proteinsSubViewLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: Constants.verdana, size: 10)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 10)
         label.textColor = .basic
         return label
     }()

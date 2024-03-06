@@ -71,7 +71,7 @@ final class TermsOfUseView: UIView {
         let label = UILabel()
         label.text = Constants.termOfUseTitleText
         label.textColor = .black
-        label.font = UIFont(name: Constants.verdanaBoldFontName, size: 20)
+        label.font = UIFont.createFont(name: Constants.verdanaBoldFontName, size: 20)
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -81,7 +81,7 @@ final class TermsOfUseView: UIView {
         let label = UILabel()
         label.text = Constants.termOfUseText
         label.textColor = .black
-        label.font = UIFont(name: Constants.verdanaName, size: 14)
+        label.font = UIFont.createFont(name: Constants.verdanaName, size: 14)
         label.textAlignment = .left
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false

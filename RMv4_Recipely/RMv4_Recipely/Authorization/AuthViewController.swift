@@ -130,7 +130,7 @@ final class AuthViewController: UIViewController {
         let button = UIButton()
         button.setTitle(Constants.loginButtonText, for: .normal)
         button.backgroundColor = .buttonMain
-        button.titleLabel?.font = UIFont(name: Constants.verdana, size: 16)
+        button.titleLabel?.font = UIFont.createFont(name: Constants.verdana, size: 16)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 12
         button.translatesAutoresizingMaskIntoConstraints = false
