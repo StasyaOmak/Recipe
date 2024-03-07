@@ -8,6 +8,7 @@ protocol RecipesPresenterProtocol: AnyObject {
     func getInfo(categoryNumber: Int) -> DishCategory
     func getCategoryCount() -> Int
     func goToCategory(_ category: DishCategory)
+    func changeState()
 }
 
 /// Презентер модуля "рецепты"
@@ -37,5 +38,12 @@ final class RecipesPresenter: RecipesPresenterProtocol {
 
     func goToCategory(_ category: DishCategory) {
         coordinator?.moveToRecipeListScreen(category: category)
+    }
+
+    func changeState() {
+        view?.setState(.loading)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.view?.setState(.success)
+        }
     }
 }

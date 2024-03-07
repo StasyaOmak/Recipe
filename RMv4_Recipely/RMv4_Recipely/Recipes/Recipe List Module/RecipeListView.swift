@@ -7,16 +7,30 @@ import UIKit
 protocol RecipeListViewControllerProtocol: AnyObject {
     /// свойство-презентер
     var presenter: RecipeListPresenterProtocol? { get set }
-    /// метод установки категории рецептов
+    /// Установка категории рецептов
     func setRecipes(_ recipes: [RecipeDescription])
-    /// метод установки заголовка для страницы
+    /// Установка заголовка для страницы
     func setTitle(_ title: String)
-    /// Метод снятия выделения со всех кнопок фильтров
+    /// Снятие выделения со всех кнопок фильтров
     func disableAllFilterButtons()
+    /// Проверка состояния второго фильтра
+    func checkAnotherFilter(sender: FilterButton) -> (isPressed: Bool, increasing: Bool, decreasing: Bool)
+    /// переход к следующему состоянию экрана
+    func setState(_ state: RecipeListViewController.State)
+    /// метод обновления таблицы
+    func reloadTableView()
 }
 
 /// Экран с рецептами для выбранной категории
 final class RecipeListViewController: UIViewController {
+    /// Состояния экрана с таблицей рецептов
+    enum State {
+        /// идет загрузка
+        case loading
+        /// загрузка успешно завершена
+        case success
+    }
+
     // MARK: - Constants
 
     private enum Constants {
@@ -43,18 +57,19 @@ final class RecipeListViewController: UIViewController {
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: Constants.verdanaFontName, size: 28)
+        label.font = UIFont.createFont(name: Constants.verdanaFontName, size: 28)
         label.isUserInteractionEnabled = true
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(backButtonTapped))
         label.addGestureRecognizer(tapRecognizer)
         return label
     }()
 
-    private let searchBar: UISearchBar = {
+    private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.layer.cornerRadius = 8
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.searchBarStyle = .minimal
+        searchBar.delegate = self
         searchBar.searchTextField.backgroundColor = .lightGreenBackground
         searchBar.placeholder = Constants.searchBarPlaceholder
         return searchBar
@@ -85,8 +100,11 @@ final class RecipeListViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
-        tableView.register(RecipeTableViewCell.self, forCellReuseIdentifier: Constants.recipeTableViewCellIdentifier)
+        tableView.register(RecipeTableViewCell.self, forCellReuseIdentifier: RecipeTableViewCell.description())
+        tableView.register(SkeletonTableViewCell.self, forCellReuseIdentifier: SkeletonTableViewCell.description())
         return tableView
     }()
 
@@ -99,17 +117,23 @@ final class RecipeListViewController: UIViewController {
     private var recipes: [RecipeDescription]?
     private lazy var buttons: [FilterButton] = [caloriesFilterButton, timeFilterButton]
 
+    private var state: State? {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+
     // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         setupUI()
     }
 
     // MARK: - Private Methods
 
     private func setupUI() {
+        view.backgroundColor = .white
         view.addSubview(searchBar)
         view.addSubview(filtersScrollView)
         view.addSubview(tableView)
@@ -120,6 +144,8 @@ final class RecipeListViewController: UIViewController {
             UIBarButtonItem(customView: arrowButton),
             UIBarButtonItem(customView: titleLabel)
         ]
+
+        presenter?.changeState()
     }
 
     private func setupConstraints() {
@@ -148,7 +174,7 @@ final class RecipeListViewController: UIViewController {
     private func setupFilterButtons() {
         for (index, button) in buttons.enumerated() {
             filtersScrollView.addSubview(button)
-
+            button.tag = index
             button.centerYAnchor.constraint(equalTo: filtersScrollView.centerYAnchor).isActive = true
             button.leadingAnchor.constraint(
                 equalTo: filtersScrollView.leadingAnchor,
@@ -193,8 +219,13 @@ final class RecipeListViewController: UIViewController {
 // MARK: - RecipeListViewController + RecipeListViewControllerProtocol
 
 extension RecipeListViewController: RecipeListViewControllerProtocol {
+    func reloadTableView() {
+        tableView.reloadData()
+    }
+
     func setRecipes(_ recipes: [RecipeDescription]) {
         self.recipes = recipes
+        tableView.reloadData()
     }
 
     func setTitle(_ title: String) {
@@ -204,26 +235,58 @@ extension RecipeListViewController: RecipeListViewControllerProtocol {
     func disableAllFilterButtons() {
         buttons.forEach { $0.isPressed = false }
     }
+
+    func setState(_ state: State) {
+        self.state = state
+    }
+
+    func checkAnotherFilter(sender: FilterButton) -> (isPressed: Bool, increasing: Bool, decreasing: Bool) {
+        switch sender {
+        case caloriesFilterButton:
+            return (timeFilterButton.isPressed, timeFilterButton.isInIncreaseOrder, timeFilterButton.isInDecreaseOrder)
+        case timeFilterButton:
+            return (
+                caloriesFilterButton.isPressed,
+                caloriesFilterButton.isInIncreaseOrder,
+                caloriesFilterButton.isInDecreaseOrder
+            )
+        default:
+            return (false, true, false)
+        }
+    }
 }
 
 // MARK: - RecipeListViewController: UITableViewDataSource
 
 extension RecipeListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let recipes else { return 0 }
+        guard let recipes /* searchRecipes = presenter?.checkSearch() */ else { return 0 }
         return recipes.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView
+        guard let regularCell = tableView
             .dequeueReusableCell(
-                withIdentifier: Constants.recipeTableViewCellIdentifier,
+                withIdentifier: RecipeTableViewCell.description(),
                 for: indexPath
             ) as? RecipeTableViewCell,
             let recipes
         else { return UITableViewCell() }
-        cell.configure(recipe: recipes[indexPath.row])
-        return cell
+        regularCell.configure(recipe: recipes[indexPath.row])
+        guard let skeletonCell = tableView
+            .dequeueReusableCell(
+                withIdentifier: SkeletonTableViewCell.description(),
+                for: indexPath
+            ) as? SkeletonTableViewCell
+        else { return UITableViewCell() }
+        switch state {
+        case .loading:
+            return skeletonCell
+        case .success:
+            return regularCell
+        default:
+            return skeletonCell
+        }
     }
 }
 
@@ -241,5 +304,21 @@ extension RecipeListViewController: UITableViewDelegate {
         guard let cell = tableView.cellForRow(at: indexPath) else { return indexPath }
         cell.isSelected = false
         return indexPath
+    }
+}
+
+// MARK: - RecipeListViewController: UISearchBarDelegate
+
+extension RecipeListViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+
+        if searchText.count >= 3 {
+            presenter?.changeState()
+            presenter?.searchRecipes(withText: searchText)
+        }
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        tableView.isHidden = false
     }
 }

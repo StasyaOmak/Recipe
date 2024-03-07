@@ -3,6 +3,18 @@
 
 import UIKit
 
+/// Протокол экрана модуля "Авторизация"
+protocol AuthViewProtocol: AnyObject {
+    /// установка цвета для поля ввода логина
+    func setLoginColor(color: String, isValidate: Bool, borderColor: String)
+    /// установка цвета для поля ввода пароля
+    func setPasswordColor(color: String, isValidate: Bool, borderColor: String)
+    /// функция вызова уведомления об ошибке ввода данных
+    func showEntryErrorMessage()
+    /// функция ухода уведомления об ошибке ввода данных
+    func hideErrorMessageLabel()
+}
+
 /// Экран авторизации
 final class AuthViewController: UIViewController {
     // MARK: - Constants
@@ -21,6 +33,10 @@ final class AuthViewController: UIViewController {
 
         static let loginButtonText = "Login"
         static let errorMessageText = "Please check the accuracy of the\n entered credentials."
+
+        static let deadline = 3.0
+
+        static let errorMessageDelay: DispatchTime = .now() + 3
     }
 
     // MARK: - Visual Components
@@ -29,7 +45,7 @@ final class AuthViewController: UIViewController {
         let label = UILabel()
         label.text = Constants.loginText
         label.textColor = .darkGray
-        label.font = UIFont(name: Constants.verdanaBold, size: 28)
+        label.font = UIFont.createFont(name: Constants.verdanaBold, size: 28)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -38,7 +54,7 @@ final class AuthViewController: UIViewController {
         let label = UILabel()
         label.text = Constants.emailAddressText
         label.textColor = .darkGray
-        label.font = UIFont(name: Constants.verdanaBold, size: 18)
+        label.font = UIFont.createFont(name: Constants.verdanaBold, size: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -47,7 +63,7 @@ final class AuthViewController: UIViewController {
         let label = UILabel()
         label.text = Constants.passwordText
         label.textColor = .darkGray
-        label.font = UIFont(name: Constants.verdanaBold, size: 18)
+        label.font = UIFont.createFont(name: Constants.verdanaBold, size: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -57,7 +73,7 @@ final class AuthViewController: UIViewController {
         label.text = Constants.incorrectFormatText
         label.textColor = .red
         label.isHidden = true
-        label.font = UIFont(name: Constants.verdana, size: 12)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -67,7 +83,7 @@ final class AuthViewController: UIViewController {
         label.text = Constants.wrongPasswordText
         label.textColor = .red
         label.isHidden = true
-        label.font = UIFont(name: Constants.verdana, size: 12)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -75,7 +91,7 @@ final class AuthViewController: UIViewController {
     lazy var emailAddressTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = Constants.emailAddressPlaceholderText
-        textField.font = UIFont(name: Constants.verdana, size: 18)
+        textField.font = UIFont.createFont(name: Constants.verdana, size: 18)
         textField.borderStyle = .roundedRect
         textField.delegate = self
 
@@ -93,7 +109,7 @@ final class AuthViewController: UIViewController {
     lazy var passwordTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = Constants.passwordPlaceholderText
-        textField.font = UIFont(name: Constants.verdana, size: 18)
+        textField.font = UIFont.createFont(name: Constants.verdana, size: 18)
         textField.borderStyle = .roundedRect
         textField.delegate = self
 
@@ -120,7 +136,7 @@ final class AuthViewController: UIViewController {
         let button = UIButton()
         button.setTitle(Constants.loginButtonText, for: .normal)
         button.backgroundColor = .buttonMain
-        button.titleLabel?.font = UIFont(name: Constants.verdana, size: 16)
+        button.titleLabel?.font = UIFont.createFont(name: Constants.verdana, size: 16)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 12
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -140,6 +156,7 @@ final class AuthViewController: UIViewController {
         label.numberOfLines = 0
         label.backgroundColor = .warningLabel
         label.layer.masksToBounds = true
+        label.alpha = 0
         label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.layer.cornerRadius = 12
@@ -203,7 +220,8 @@ final class AuthViewController: UIViewController {
     }
 
     @objc private func loginButtonTapped(_ sender: UIButton) {
-        loginButton.setTitle("", for: .normal)
+        passwordTextField.resignFirstResponder()
+        loginButton.setTitle(nil, for: .normal)
         loginButton.setImage(UIImage(systemName: "slowmo"), for: .normal)
         loginButton.tintColor = .white
         UIView.animate(withDuration: 3.0) {
@@ -211,10 +229,8 @@ final class AuthViewController: UIViewController {
                 rotationAngle: CGFloat.pi
             )
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            UIView.animate(withDuration: 1.0) {
-                self.errorMessageLabel.isHidden = false
-            }
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.deadline) { [weak self] in
+            self?.presenter?.moveToMain()
         }
     }
 
@@ -333,6 +349,23 @@ extension AuthViewController: AuthViewProtocol {
         emailAddressTextField.layer.borderColor = UIColor(named: borderColor)?.cgColor
         incorrectFormatLabel.isHidden = isValidate
     }
+
+    func hideErrorMessageLabel() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.deadline) {
+            UIView.animate(withDuration: 1.0) {
+                self.errorMessageLabel.alpha = 0
+            }
+        }
+    }
+
+    func showEntryErrorMessage() {
+        loginButton.setImage(nil, for: .normal)
+        loginButton.setTitle("Login", for: .normal)
+        UIView.animate(withDuration: 1.0) {
+            self.errorMessageLabel.isHidden = false
+            self.errorMessageLabel.alpha = 1
+        }
+    }
 }
 
 // MARK: - UITextFieldDelegate
@@ -341,5 +374,15 @@ extension AuthViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         presenter?.checkLogin(login: emailAddressTextField.text)
         presenter?.checkPassword(password: passwordTextField.text)
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case emailAddressTextField:
+            passwordTextField.becomeFirstResponder()
+        default:
+            break
+        }
+        return true
     }
 }

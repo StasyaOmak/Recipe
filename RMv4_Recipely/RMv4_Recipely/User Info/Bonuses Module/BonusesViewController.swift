@@ -30,7 +30,7 @@ final class BonusesViewController: UIViewController {
         let label = UILabel()
         label.text = Constants.bonusesTitleText
         label.textColor = .darkGreenText
-        label.font = UIFont(name: Constants.verdanaBoldFontName, size: 20)
+        label.font = UIFont.createFont(name: Constants.verdanaBoldFontName, size: 20)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -52,7 +52,7 @@ final class BonusesViewController: UIViewController {
 
     private let bonusesAmountLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: Constants.verdanaBoldFontName, size: 30)
+        label.font = UIFont.createFont(name: Constants.verdanaBoldFontName, size: 30)
         label.textColor = .darkGreenText
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

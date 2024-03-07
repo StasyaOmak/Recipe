@@ -36,7 +36,7 @@ final class RecipeTableViewCell: UITableViewCell {
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: Constants.verdanaFontName, size: 14)
+        label.font = UIFont.createFont(name: Constants.verdanaFontName, size: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -50,7 +50,7 @@ final class RecipeTableViewCell: UITableViewCell {
 
     private let timeLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: Constants.verdanaFontName, size: 12)
+        label.font = UIFont.createFont(name: Constants.verdanaFontName, size: 12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -64,7 +64,7 @@ final class RecipeTableViewCell: UITableViewCell {
 
     private let caloriesLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: Constants.verdanaFontName, size: 12)
+        label.font = UIFont.createFont(name: Constants.verdanaFontName, size: 12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -81,7 +81,7 @@ final class RecipeTableViewCell: UITableViewCell {
     override var isSelected: Bool {
         didSet {
             super.isSelected = isSelected
-            backgroundCellView.layer.borderColor = isSelected ? UIColor.basicGreen.cgColor : UIColor
+            backgroundCellView.layer.borderColor = isSelected ? UIColor.createColor(114, 186, 191, 1).cgColor : UIColor
                 .lightGreenBackground.cgColor
         }
     }

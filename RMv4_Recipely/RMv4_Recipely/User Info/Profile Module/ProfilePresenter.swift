@@ -9,6 +9,8 @@ protocol ProfilePresenterProtocol: AnyObject {
     func changeUserName(name: String)
     /// метод-флаг нажатия на кнопку "редактировать"
     func editButtonTapped()
+    /// метод-флаг нажатия на ячейку "TermsOfUse"
+    func termsOfUseCellTapped()
     /// метод-флаг нажатия на ячейку "бонусы"
     func bonusesCellTapped()
     /// метод для получения данных пользователя
@@ -17,7 +19,7 @@ protocol ProfilePresenterProtocol: AnyObject {
 
 /// Презентер модуля "Профиль пользователя"
 final class ProfilePresenter {
-    // MARK: - Public Properties
+    // MARK: - Private Properties
 
     private weak var view: ProfileViewControllerProtocol?
     private weak var coordinator: ProfileCoordinator?
@@ -32,6 +34,10 @@ final class ProfilePresenter {
 
 // - MARK: Extension ProfilePresenter + ProfilePresenterProtocol
 extension ProfilePresenter: ProfilePresenterProtocol {
+    func termsOfUseCellTapped() {
+        view?.showTermsScreen()
+    }
+
     func editButtonTapped() {
         view?.showNameEditorAlert()
     }

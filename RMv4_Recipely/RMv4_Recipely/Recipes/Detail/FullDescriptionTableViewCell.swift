@@ -16,7 +16,7 @@ final class FullDescriptionTableViewCell: UITableViewCell {
 
     private let backgroundColorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .basicGreen
+        view.backgroundColor = UIColor.createColor(114, 186, 191, 1)
         view.layer.cornerRadius = 25
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -26,7 +26,7 @@ final class FullDescriptionTableViewCell: UITableViewCell {
     private let textRecipeLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: Constants.verdana, size: 14)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 14)
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

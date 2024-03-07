@@ -5,7 +5,11 @@ import UIKit
 
 /// Протокол экрана рецептов
 protocol RecipesViewControllerProtocol: AnyObject {
+    /// Презентер экрана рецептов
     var recipesPresenter: RecipesPresenterProtocol? { get set }
+    /// Метод для уведомления экрана о смене состояния
+    /// - Parameter state: Новое состояние экрана
+    func setState(_ state: RecipesViewController.State)
 }
 
 /// Экран для отображения меню выбора рецептов
@@ -17,10 +21,26 @@ final class RecipesViewController: UIViewController {
         static let verdanaBold = "Verdana-Bold"
     }
 
+    /// Состояния экрана с коллекцией рецептов
+    enum State {
+        /// идет загрузка
+        case loading
+        /// загрузка успешно завершена
+        case success
+    }
+
     // MARK: - Public Properties
 
-    weak var collectionView: UICollectionView!
+    private weak var collectionView: UICollectionView!
     var recipesPresenter: RecipesPresenterProtocol?
+
+    // MARK: - Private Properties
+
+    private var state: State? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
 
     // MARK: - Life Cycle
 
@@ -37,6 +57,12 @@ final class RecipesViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupCollection()
+    }
+
+    // MARK: - Private Properties
+
+    private func setupCollection() {
         view.backgroundColor = .white
 
         collectionView.backgroundColor = .white
@@ -44,14 +70,14 @@ final class RecipesViewController: UIViewController {
         collectionView.delegate = self
         collectionView.allowsSelection = true
         collectionView.register(RecipesCustomCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(RecipesSkeletonCell.self, forCellWithReuseIdentifier: RecipesSkeletonCell.description())
+        recipesPresenter?.changeState()
     }
-
-    // MARK: - Private Properties
 
     private let recipesTitleBarButtonItem: UIBarButtonItem = {
         let label = UILabel()
         label.text = Constants.navigationTitleText
-        label.font = UIFont(name: Constants.verdanaBold, size: 28)
+        label.font = UIFont.createFont(name: Constants.verdanaBold, size: 28)
         let item = UIBarButtonItem(customView: label)
         return item
     }()
@@ -79,7 +105,12 @@ extension RecipesViewController: UICollectionViewDelegate {}
 
 // MARK: - RecipesViewController + RecipesViewControllerProtocol
 
-extension RecipesViewController: RecipesViewControllerProtocol {}
+extension RecipesViewController: RecipesViewControllerProtocol {
+    func setState(_ state: RecipesViewController.State) {
+        self.state = state
+        collectionView.reloadData()
+    }
+}
 
 // MARK: - RecipesViewController + UICollectionViewDataSource
 
@@ -94,11 +125,23 @@ extension RecipesViewController: UICollectionViewDataSource {
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         let category = recipesPresenter?.getInfo(categoryNumber: indexPath.item)
-        guard let cell = collectionView
-            .dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? RecipesCustomCell
+        guard let regularCell = collectionView
+            .dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? RecipesCustomCell, let category
         else { return UICollectionViewCell() }
-        cell.setInfo(info: category ?? DishCategory(imageName: "", type: .chicken))
-        return cell
+        regularCell.setInfo(info: category)
+        guard let skeletonCell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: RecipesSkeletonCell.description(),
+            for: indexPath
+        ) as? RecipesSkeletonCell
+        else { return UICollectionViewCell() }
+        switch state {
+        case .loading:
+            return skeletonCell
+        case .success:
+            return regularCell
+        default:
+            return skeletonCell
+        }
     }
 }
 

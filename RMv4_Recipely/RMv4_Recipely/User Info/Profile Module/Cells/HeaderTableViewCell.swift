@@ -22,11 +22,11 @@ final class HeaderTableViewCell: UITableViewCell {
 
     private let avatarImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .basicGreen
+        imageView.backgroundColor = UIColor.createColor(114, 186, 191, 1)
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 80
         imageView.layer.borderWidth = 4
-        imageView.layer.borderColor = UIColor.basicGreen.cgColor
+        imageView.layer.borderColor = UIColor.createColor(114, 186, 191, 1).cgColor
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -34,7 +34,7 @@ final class HeaderTableViewCell: UITableViewCell {
     private let usernameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .darkGreenText
-        label.font = UIFont(name: Constants.verdanaBoldFontName, size: 25)
+        label.font = UIFont.createFont(name: Constants.verdanaBoldFontName, size: 25)
         label.textAlignment = .center
         label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -45,7 +45,10 @@ final class HeaderTableViewCell: UITableViewCell {
         let button = UIButton()
         button.setImage(UIImage(named: Constants.editButtonImageName), for: .normal)
         button.setImage(
-            UIImage(named: Constants.editButtonImageName)?.withTintColor(.basicGreen, renderingMode: .alwaysTemplate),
+            UIImage(named: Constants.editButtonImageName)?.withTintColor(
+                UIColor.createColor(114, 186, 191, 1),
+                renderingMode: .alwaysTemplate
+            ),
             for: .highlighted
         )
         button.addTarget(self, action: #selector(editName), for: .touchUpInside)

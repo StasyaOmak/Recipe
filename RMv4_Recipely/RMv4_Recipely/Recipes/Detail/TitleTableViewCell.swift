@@ -42,7 +42,7 @@ final class TitleTableViewCell: UITableViewCell {
     private let gramsLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: Constants.verdana, size: 10)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 10)
         label.textColor = .white
         return label
     }()
@@ -64,7 +64,7 @@ final class TitleTableViewCell: UITableViewCell {
     private let cookingTimeTitleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: Constants.verdana, size: 10)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 10)
         label.textColor = .white
         label.text = Constants.cookingTime
         return label
@@ -73,7 +73,7 @@ final class TitleTableViewCell: UITableViewCell {
     private let cookingTimeLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont(name: Constants.verdana, size: 10)
+        label.font = UIFont.createFont(name: Constants.verdana, size: 10)
         label.textColor = .white
         return label
     }()
@@ -82,7 +82,7 @@ final class TitleTableViewCell: UITableViewCell {
         let label = UILabel()
         label.textColor = .black
         label.textAlignment = .center
-        label.font = UIFont(name: Constants.verdanaBold, size: 16)
+        label.font = UIFont.createFont(name: Constants.verdanaBold, size: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
