@@ -37,7 +37,6 @@ final class AuthViewController: UIViewController {
         static let deadline = 3.0
 
         static let errorMessageDelay: DispatchTime = .now() + 3
-
     }
 
     // MARK: - Visual Components

@@ -311,14 +311,14 @@ extension RecipeListViewController: UITableViewDelegate {
 
 extension RecipeListViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+
         if searchText.count >= 3 {
             presenter?.changeState()
             presenter?.searchRecipes(withText: searchText)
         }
     }
 
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        presenter?.startSearch()
-        tableView.reloadData()
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        tableView.isHidden = false
     }
 }
