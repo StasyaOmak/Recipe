@@ -1,6 +1,7 @@
 // ProfileViewController.swift
 // Copyright © RoadMap. All rights reserved.
 
+import Photos
 import UIKit
 
 /// Протокол-интерфейс вью модуля "Профиль"
@@ -14,7 +15,7 @@ protocol ProfileViewControllerProtocol: AnyObject {
 }
 
 /// Экран данных пользователя
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController, UINavigationControllerDelegate {
     // MARK: - Constants
 
     private enum Constants {
@@ -113,6 +114,32 @@ final class ProfileViewController: UIViewController {
         tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
+
+    @objc private func changePhotoAction() {
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+        let chooseFromGalleryAction = UIAlertAction(title: "Выбрать из галереи", style: .default) { _ in
+            self.showImagePicker(sourceType: .photoLibrary)
+        }
+        actionSheet.addAction(chooseFromGalleryAction)
+
+        let takePhotoAction = UIAlertAction(title: "Сделать фото", style: .default) { _ in
+            self.showImagePicker(sourceType: .camera)
+        }
+        actionSheet.addAction(takePhotoAction)
+
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        actionSheet.addAction(cancelAction)
+
+        present(actionSheet, animated: true, completion: nil)
+    }
+
+    private func showImagePicker(sourceType: UIImagePickerController.SourceType) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = sourceType
+        imagePicker.delegate = self
+        present(imagePicker, animated: true, completion: nil)
+    }
 }
 
 /// Расширение вью методами протокола-интерфейса ProfileViewControllerProtocol
@@ -144,6 +171,58 @@ extension ProfileViewController: ProfileViewControllerProtocol {
 
         present(alert, animated: true)
     }
+
+    func showLogOutAlert() {
+        let alert = UIAlertController(
+            title: "Вы точно хотите выйти?",
+            message: "Подтвердите действие",
+            preferredStyle: .alert
+        )
+
+        let okAction = UIAlertAction(title: Constants.okActionText, style: .default) { [weak self] _ in
+            self?.presenter?.logOut()
+            self?.tableView.reloadData()
+        }
+
+        let cancelAction = UIAlertAction(title: Constants.cancelActionText, style: .cancel)
+
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+        alert.preferredAction = okAction
+
+        present(alert, animated: true)
+    }
+
+    func saveImageToDocumentDirectory(_ chosenImage: UIImage) -> String {
+        let directoryPath = NSHomeDirectory().appending("/Documents/")
+        if !FileManager.default.fileExists(atPath: directoryPath) {
+            do {
+                try FileManager.default.createDirectory(
+                    at: NSURL.fileURL(withPath: directoryPath),
+                    withIntermediateDirectories: true,
+                    attributes: nil
+                )
+            } catch {
+                print(error)
+            }
+        }
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMddhhmmss"
+
+        let filename = dateFormatter.string(from: Date()).appending(".jpg")
+        let filepath = directoryPath.appending(filename)
+        let url = NSURL.fileURL(withPath: filepath)
+        do {
+            try chosenImage.jpegData(compressionQuality: 1.0)?.write(to: url, options: .atomic)
+            return String("/Documents/\(filename)")
+
+        } catch {
+            print(error)
+            print("file cant not be save at path \(filepath), with error : \(error)")
+            return filepath
+        }
+    }
 }
 
 // MARK: - ProfileViewController + UITableViewDataSource
@@ -169,11 +248,15 @@ extension ProfileViewController: UITableViewDataSource {
                 .dequeueReusableCell(
                     withIdentifier: Constants.headerTableViewCellIdentifier,
                     for: indexPath
-                ) as? HeaderTableViewCell, let user = presenter?.getUserInfo()
+                ) as? HeaderTableViewCell
             else { return UITableViewCell() }
+            let user = UserSettings.shared.getUserSettings()
             cell.configure(user: user)
             cell.editNameHandler = { [weak self] in
                 self?.presenter?.editButtonTapped()
+            }
+            cell.changePhotoHandler = { [weak self] in
+                self?.changePhotoAction()
             }
             return cell
         case .common:
@@ -202,10 +285,30 @@ extension ProfileViewController: UITableViewDelegate {
                 presenter?.bonusesCellTapped()
             case .terms:
                 presenter?.termsOfUseCellTapped()
-            default:
-                break
+            case .logOut:
+                showLogOutAlert()
             }
         }
+    }
+}
+
+// MARK: - UIImagePickerControllerDelegate
+
+extension ProfileViewController: UIImagePickerControllerDelegate {
+    func imagePickerController(
+        _ picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
+    ) {
+        if let selectedImage = info[.originalImage] as? UIImage {
+            guard let imageData = selectedImage.pngData() else { return }
+            UserSettings.shared.changeUserImage(imageData: imageData)
+            tableView.reloadData()
+        }
+        dismiss(animated: true, completion: nil)
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
     }
 }
 

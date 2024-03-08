@@ -311,7 +311,6 @@ extension RecipeListViewController: UITableViewDelegate {
 
 extension RecipeListViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-
         if searchText.count >= 3 {
             presenter?.changeState()
             presenter?.searchRecipes(withText: searchText)

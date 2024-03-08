@@ -33,6 +33,10 @@ final class AppCoordinator: BaseCoordinator {
         profileCoordinator.setRootViewController(view: profileModuleView)
         add(coordinator: profileCoordinator)
         guard let profileView = profileCoordinator.rootController else { return }
+        profileCoordinator.onFinishFlow = { [weak self] in
+            self?.remove(coordinator: profileCoordinator)
+            self?.toAuth()
+        }
 
         let favoritesCoordinator = FavoritesCoordinator()
         let favoritesModuleView = builder.makeFavoritesModule(coordinator: favoritesCoordinator)

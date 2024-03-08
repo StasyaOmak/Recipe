@@ -4,18 +4,22 @@
 import Foundation
 
 /// Модель модуля профиль пользователя
-struct User {
+struct User: Codable {
     /// имя пользователя
-    var name: String
+    var name = "User"
     /// аватар пользователя
-    var avatarImageName: String
+    var avatarImageData: Data?
     /// Число бонусов
-    var bonusesCount: Int
+    var bonusesCount = 0
+    /// логин
+    var login: String?
+    /// пароль
+    var password: String?
     /// Экземпляр "Пользователь"
-    static var user = User(name: "Maria", avatarImageName: "user", bonusesCount: 350)
+    static var user = User(name: "No name", bonusesCount: 350)
     /// Метод получения мока
     static func sendMock() -> User {
-        user
+        User()
     }
 }
 

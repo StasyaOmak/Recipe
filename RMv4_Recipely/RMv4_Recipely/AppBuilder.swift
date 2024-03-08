@@ -7,6 +7,8 @@ import UIKit
 final class AppBuilder {
     // MARK: - Public Methods
 
+    // инит на логгер и приватное свойство
+
     // TODO: - баг, при возврате из рецептов в таб бар тайтлы таббара игнорируют кастомный цвет (кроме "recipes")
 
     func makeProfileModule(coordinator: ProfileCoordinator) -> ProfileViewController {

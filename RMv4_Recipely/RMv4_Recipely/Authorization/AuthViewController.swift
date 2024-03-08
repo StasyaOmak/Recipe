@@ -50,6 +50,15 @@ final class AuthViewController: UIViewController {
         return label
     }()
 
+    private lazy var logOutButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "rectangle.portrait.and.arrow.right.fill"), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(logOutButtonTapped), for: .touchUpInside)
+        button.tintColor = .basicGreen
+        return button
+    }()
+
     private let emailAdressLabel: UILabel = {
         let label = UILabel()
         label.text = Constants.emailAddressText
@@ -201,6 +210,7 @@ final class AuthViewController: UIViewController {
         view.addSubview(passwordTextField)
         view.addSubview(loginButton)
         view.addSubview(errorMessageLabel)
+        view.addSubview(logOutButton)
     }
 
     @objc private func handleTap() {
@@ -230,6 +240,7 @@ final class AuthViewController: UIViewController {
             )
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + Constants.deadline) { [weak self] in
+            self?.presenter?.checkPassword(password: self?.passwordTextField.text)
             self?.presenter?.moveToMain()
         }
     }
@@ -255,6 +266,12 @@ final class AuthViewController: UIViewController {
         loginLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         loginLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         loginLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 82).isActive = true
+    }
+
+    private func setLogOutButtonConstraints() {
+        logOutButton.centerYAnchor.constraint(equalTo: loginLabel.centerYAnchor).isActive = true
+        logOutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+            .isActive = true
     }
 
     private func setupEmailAddressConstraints() {
@@ -318,6 +335,15 @@ final class AuthViewController: UIViewController {
         setPasswordTextFieldConstraints()
         setLoginButtonConstraints()
         setupWarningLabelPassConstraints()
+        setLogOutButtonConstraints()
+    }
+
+    @objc private func logOutButtonTapped() {
+        presenter?.logOut()
+        clearFields()
+        emailAddressTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
+        view.endEditing(true)
     }
 
     // MARK: - Public Methods
@@ -350,6 +376,18 @@ extension AuthViewController: AuthViewProtocol {
         incorrectFormatLabel.isHidden = isValidate
     }
 
+    func clearFields() {
+        emailAdressLabel.textColor = .darkGray
+        emailAddressTextField.text = ""
+        emailAddressTextField.layer.borderColor = UIColor.lightGray.cgColor
+        incorrectFormatLabel.isHidden = true
+
+        passwordLabel.textColor = .darkGray
+        passwordTextField.text = ""
+        emailAddressTextField.layer.borderColor = UIColor.lightGray.cgColor
+        wrongPasswordLabel.isHidden = true
+    }
+
     func hideErrorMessageLabel() {
         DispatchQueue.main.asyncAfter(deadline: .now() + Constants.deadline) {
             UIView.animate(withDuration: 1.0) {
@@ -373,7 +411,6 @@ extension AuthViewController: AuthViewProtocol {
 extension AuthViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         presenter?.checkLogin(login: emailAddressTextField.text)
-        presenter?.checkPassword(password: passwordTextField.text)
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
