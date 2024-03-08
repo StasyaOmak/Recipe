@@ -21,6 +21,12 @@ protocol RecipeListPresenterProtocol: AnyObject {
     func startSearch()
     /// Остановить поиск
     func stopSearch()
+
+    /// Инициализатор с присвоением вью
+    init(view: RecipeListViewControllerProtocol, coordinator: RecipesCoordinator, loggerManager: LoggerManagerProtocol)
+
+    /// Добавление логов
+    func sendLog(message: LogActions)
 }
 
 /// Презентер модуля "Рецепты выбранной категории"
@@ -36,6 +42,7 @@ final class RecipeListPresenter {
     private weak var view: RecipeListViewControllerProtocol?
     private weak var coordinator: RecipesCoordinator?
     private var category: DishCategory?
+    private var loggerManager: LoggerManagerProtocol?
 
     private var sourceOfRecepies: [RecipeDescription] = []
     private var isSearching = false
@@ -43,15 +50,24 @@ final class RecipeListPresenter {
 
     // MARK: - Initializers
 
-    init(view: RecipeListViewControllerProtocol, coordinator: RecipesCoordinator) {
+    init(
+        view: RecipeListViewControllerProtocol,
+        coordinator: RecipesCoordinator,
+        loggerManager: LoggerManagerProtocol
+    ) {
         self.view = view
         self.coordinator = coordinator
+        self.loggerManager = loggerManager
     }
 }
 
 // MARK: - RecipeListPresenter + RecipeListPresenterProtocol
 
 extension RecipeListPresenter: RecipeListPresenterProtocol {
+    func sendLog(message: LogActions) {
+        loggerManager?.log(message)
+    }
+
     func searchRecipes(withText text: String) {
         guard !text.isEmpty else {
             isSearching = false

@@ -5,10 +5,23 @@ import Foundation
 
 /// Интерфейс презентера модуля "рецепты"
 protocol RecipesPresenterProtocol: AnyObject {
+    /// Получить информацию о категории
     func getInfo(categoryNumber: Int) -> DishCategory
+    /// Получить количество категорий
     func getCategoryCount() -> Int
+    /// Перейти к категории
     func goToCategory(_ category: DishCategory)
+    /// Изменить состояние
     func changeState()
+    /// Отправить лог
+    func sendLog(message: LogActions)
+    
+    /// Инициализатор презентера
+    /// - Parameters:
+    ///   - view: Протокол взаимодействия с представлением
+    ///   - coordinator: Координатор модуля
+    ///   - loggerManager: Менеджер логгера
+    init(view: RecipesViewControllerProtocol, coordinator: RecipesCoordinator, loggerManager: LoggerManagerProtocol)
 }
 
 /// Презентер модуля "рецепты"
@@ -18,15 +31,21 @@ final class RecipesPresenter: RecipesPresenterProtocol {
     private weak var view: RecipesViewControllerProtocol?
     private weak var coordinator: RecipesCoordinator?
     private let informationSource = InformationSource()
+    private var loggerManager: LoggerManagerProtocol?
 
     // MARK: - Initializers
 
-    init(view: RecipesViewControllerProtocol, coordinator: RecipesCoordinator) {
+    init(view: RecipesViewControllerProtocol, coordinator: RecipesCoordinator, loggerManager: LoggerManagerProtocol) {
         self.view = view
         self.coordinator = coordinator
+        self.loggerManager = loggerManager
     }
 
     // MARK: - Public Methods
+
+    func sendLog(message: LogActions) {
+        loggerManager?.log(message)
+    }
 
     func getInfo(categoryNumber: Int) -> DishCategory {
         InformationSource.categories[categoryNumber]

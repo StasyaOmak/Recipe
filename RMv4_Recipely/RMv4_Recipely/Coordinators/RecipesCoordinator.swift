@@ -8,7 +8,13 @@ final class RecipesCoordinator: BaseCoordinator {
     // MARK: - Public Properties
 
     var rootController: UINavigationController?
-    let appBuilder = AppBuilder()
+    let appBuilder: AppBuilder
+
+    // MARK: - Initializers
+
+    init(appBuilder: AppBuilder) {
+        self.appBuilder = appBuilder
+    }
 
     // MARK: - Public Functions
 

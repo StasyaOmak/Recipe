@@ -19,7 +19,13 @@ final class ProfileCoordinator: BaseCoordinator {
 
     // MARK: - Private Properties
 
-    private var appBuilder = AppBuilder()
+    private var appBuilder: AppBuilder
+
+    // MARK: - Initializers
+
+    init(appBuilder: AppBuilder) {
+        self.appBuilder = appBuilder
+    }
 
     // MARK: - Public Methods
 

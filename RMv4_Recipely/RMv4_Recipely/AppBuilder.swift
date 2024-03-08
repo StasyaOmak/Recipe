@@ -5,9 +5,19 @@ import UIKit
 
 /// Создание модулей для приложения
 final class AppBuilder {
-    // MARK: - Public Methods
+    // MARK: - Private Properties
+
+    private let loggerManager: LoggerManagerProtocol
+
+    // MARK: - Initializers
+
+    init(loggerManager: LoggerManagerProtocol) {
+        self.loggerManager = loggerManager
+    }
 
     // TODO: - баг, при возврате из рецептов в таб бар тайтлы таббара игнорируют кастомный цвет (кроме "recipes")
+
+    // MARK: - Public Methods
 
     func makeProfileModule(coordinator: ProfileCoordinator) -> ProfileViewController {
         let profileView = ProfileViewController()
@@ -27,14 +37,23 @@ final class AppBuilder {
 
     func makeRecipeDetailModule(coordinator: RecipesCoordinator, recipe: RecipeDescription) -> RecipeDetailView {
         let view = RecipeDetailView()
-        let presenter = RecipeDetailPresenter(coordinator: coordinator, view: view, recipe: recipe)
+        let presenter = RecipeDetailPresenter(
+            coordinator: coordinator,
+            view: view,
+            recipe: recipe,
+            loggerManager: loggerManager
+        )
         view.presenter = presenter
         return view
     }
 
     func makeRecipesModule(coordinator: RecipesCoordinator) -> RecipesViewController {
         let recipesView = RecipesViewController()
-        let recipesPresenter = RecipesPresenter(view: recipesView, coordinator: coordinator)
+        let recipesPresenter = RecipesPresenter(
+            view: recipesView,
+            coordinator: coordinator,
+            loggerManager: loggerManager
+        )
         recipesView.recipesPresenter = recipesPresenter
         recipesView.tabBarItem = UITabBarItem(
             title: "Recipes",
@@ -82,7 +101,11 @@ final class AppBuilder {
 
     func makeRecipeListModule(coordinator: RecipesCoordinator) -> RecipeListViewController {
         let recipeListView = RecipeListViewController()
-        let recipeListPresenter = RecipeListPresenter(view: recipeListView, coordinator: coordinator)
+        let recipeListPresenter = RecipeListPresenter(
+            view: recipeListView,
+            coordinator: coordinator,
+            loggerManager: loggerManager
+        )
         recipeListView.presenter = recipeListPresenter
         return recipeListView
     }
