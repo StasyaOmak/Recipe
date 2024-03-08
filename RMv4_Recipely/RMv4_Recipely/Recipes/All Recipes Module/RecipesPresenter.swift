@@ -17,10 +17,6 @@ protocol RecipesPresenterProtocol: AnyObject {
     func sendLog(message: LogAction)
 
     /// Инициализатор презентера
-    /// - Parameters:
-    ///   - view: Протокол взаимодействия с представлением
-    ///   - coordinator: Координатор модуля
-    ///   - loggerManager: Менеджер логгера
     init(view: RecipesViewControllerProtocol, coordinator: RecipesCoordinator, loggerManager: LoggerManagerProtocol)
 }
 
