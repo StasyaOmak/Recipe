@@ -14,8 +14,8 @@ protocol RecipesPresenterProtocol: AnyObject {
     /// Изменить состояние
     func changeState()
     /// Отправить лог
-    func sendLog(message: LogActions)
-    
+    func sendLog(message: LogAction)
+
     /// Инициализатор презентера
     /// - Parameters:
     ///   - view: Протокол взаимодействия с представлением
@@ -43,7 +43,7 @@ final class RecipesPresenter: RecipesPresenterProtocol {
 
     // MARK: - Public Methods
 
-    func sendLog(message: LogActions) {
+    func sendLog(message: LogAction) {
         loggerManager?.log(message)
     }
 

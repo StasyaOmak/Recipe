@@ -1,10 +1,10 @@
-// LogActions.swift
+// LogAction.swift
 // Copyright © RoadMap. All rights reserved.
 
 import Foundation
 
 /// Действия для записи логов
-public enum LogActions {
+public enum LogAction {
     /// Открытие экрана рецептов
     case openRecipe
     /// Открытие экрана категорий рецептов

@@ -14,9 +14,9 @@ protocol RecipeDetailPresenterProtocol: AnyObject {
     /// метод проверки, находится ли отображаемый рецепт в избранном
     func checkIfFavorite()
     /// поделиться рецептом
-    func shareRecipe(message: LogActions)
+    func shareRecipe(message: LogAction)
     /// Добавление логов
-    func sendLog(message: LogActions)
+    func sendLog(message: LogAction)
     /// Инициализатор с присвоением вью
     init(
         coordinator: RecipesCoordinator,
@@ -50,11 +50,11 @@ final class RecipeDetailPresenter: RecipeDetailPresenterProtocol {
 
     // MARK: - Public Methods
 
-    func shareRecipe(message: LogActions) {
+    func shareRecipe(message: LogAction) {
         loggerManager?.log(message)
     }
 
-    func sendLog(message: LogActions) {
+    func sendLog(message: LogAction) {
         loggerManager?.log(message)
     }
 

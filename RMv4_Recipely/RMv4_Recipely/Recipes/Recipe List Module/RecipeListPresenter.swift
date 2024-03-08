@@ -26,7 +26,7 @@ protocol RecipeListPresenterProtocol: AnyObject {
     init(view: RecipeListViewControllerProtocol, coordinator: RecipesCoordinator, loggerManager: LoggerManagerProtocol)
 
     /// Добавление логов
-    func sendLog(message: LogActions)
+    func sendLog(message: LogAction)
 }
 
 /// Презентер модуля "Рецепты выбранной категории"
@@ -64,7 +64,7 @@ final class RecipeListPresenter {
 // MARK: - RecipeListPresenter + RecipeListPresenterProtocol
 
 extension RecipeListPresenter: RecipeListPresenterProtocol {
-    func sendLog(message: LogActions) {
+    func sendLog(message: LogAction) {
         loggerManager?.log(message)
     }
 
