@@ -130,6 +130,11 @@ final class RecipeListViewController: UIViewController {
         setupUI()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addLogs()
+    }
+
     // MARK: - Private Methods
 
     private func setupUI() {
@@ -205,6 +210,10 @@ final class RecipeListViewController: UIViewController {
         tableView.separatorStyle = .none
 
         tableView.register(RecipeTableViewCell.self, forCellReuseIdentifier: Constants.recipeTableViewCellIdentifier)
+    }
+
+    private func addLogs() {
+        presenter?.sendLog(message: .openCatagoryOfRecipe)
     }
 
     @objc private func backButtonTapped() {

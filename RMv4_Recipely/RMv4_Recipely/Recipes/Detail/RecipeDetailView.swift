@@ -53,6 +53,7 @@ final class RecipeDetailView: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         presenter?.checkIfFavorite()
+        addLogs()
     }
 
     // MARK: - Private Methods
@@ -112,6 +113,10 @@ final class RecipeDetailView: UIViewController {
         target: self,
         action: #selector(addToFavouritesBarButtonItemTapped)
     )
+
+    private func addLogs() {
+        presenter?.sendLog(message: .openDetailsRecipe)
+    }
 
     @objc private func shareBarButtonItemTapped() {}
 

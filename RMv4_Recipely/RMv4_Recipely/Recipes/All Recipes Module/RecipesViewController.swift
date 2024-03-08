@@ -60,6 +60,11 @@ final class RecipesViewController: UIViewController {
         setupCollection()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addLogs()
+    }
+
     // MARK: - Private Properties
 
     private func setupCollection() {
@@ -96,6 +101,10 @@ final class RecipesViewController: UIViewController {
         collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+    }
+
+    private func addLogs() {
+        recipesPresenter?.sendLog(message: .openRecipe)
     }
 }
 
