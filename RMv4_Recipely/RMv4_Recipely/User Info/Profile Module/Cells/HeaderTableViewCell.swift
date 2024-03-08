@@ -20,7 +20,7 @@ final class HeaderTableViewCell: UITableViewCell {
 
     // MARK: - Visual Components
 
-    private let avatarImageView: UIImageView = {
+    private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = UIColor.createColor(114, 186, 191, 1)
         imageView.clipsToBounds = true
@@ -28,6 +28,9 @@ final class HeaderTableViewCell: UITableViewCell {
         imageView.layer.borderWidth = 4
         imageView.layer.borderColor = UIColor.createColor(114, 186, 191, 1).cgColor
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(changeName))
+        imageView.addGestureRecognizer(tap)
         return imageView
     }()
 
@@ -59,6 +62,7 @@ final class HeaderTableViewCell: UITableViewCell {
     // MARK: - Public Properties
 
     var editNameHandler: VoidHandler?
+    var changePhotoHandler: VoidHandler?
 
     // MARK: - Initializers
 
@@ -75,8 +79,9 @@ final class HeaderTableViewCell: UITableViewCell {
     // MARK: - Public Methods
 
     func configure(user: User) {
-        avatarImageView.image = UIImage(named: user.avatarImageName)
         usernameLabel.text = user.name
+        guard let data = user.avatarImageData else { return }
+        avatarImageView.image = UIImage(data: data)
     }
 
     // MARK: - Private Methods
@@ -85,7 +90,7 @@ final class HeaderTableViewCell: UITableViewCell {
         selectionStyle = .none
         contentView.heightAnchor.constraint(equalToConstant: 250).isActive = true
 
-        addSubview(avatarImageView)
+        contentView.addSubview(avatarImageView)
         addSubview(usernameLabel)
         contentView.addSubview(editNameButton)
 
@@ -119,7 +124,26 @@ final class HeaderTableViewCell: UITableViewCell {
         editNameButton.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -10).isActive = true
     }
 
+    private func loadImageFromDiskWith(fileName: String) -> UIImage? {
+        let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
+
+        let userDomainMask = FileManager.SearchPathDomainMask.userDomainMask
+        let paths = NSSearchPathForDirectoriesInDomains(documentDirectory, userDomainMask, true)
+
+        if let dirPath = paths.first {
+            let imageUrl = URL(fileURLWithPath: dirPath).appendingPathComponent(fileName)
+            let image = UIImage(contentsOfFile: imageUrl.path)
+            return image
+        }
+
+        return nil
+    }
+
     @objc private func editName() {
         editNameHandler?()
+    }
+
+    @objc private func changeName() {
+        changePhotoHandler?()
     }
 }

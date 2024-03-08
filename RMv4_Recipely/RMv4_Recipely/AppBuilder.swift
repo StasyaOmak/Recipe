@@ -15,6 +15,8 @@ final class AppBuilder {
         self.loggerManager = loggerManager
     }
 
+    // инит на логгер и приватное свойство
+
     // TODO: - баг, при возврате из рецептов в таб бар тайтлы таббара игнорируют кастомный цвет (кроме "recipes")
 
     // MARK: - Public Methods
