@@ -14,7 +14,7 @@ final class LoggerInvoker {
     private let logger = Logger()
     private var commands: [LogCommand] = []
 
-    // MARK: Internal
+    // MARK: - Public Methods
 
     func addLogCommand(_ command: LogCommand) {
         commands.append(command)

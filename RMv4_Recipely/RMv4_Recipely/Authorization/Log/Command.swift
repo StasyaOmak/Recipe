@@ -5,14 +5,12 @@ import Foundation
 
 /// Команда логирования действий
 final class LogCommand {
-    private let action: LogActions
+    // MARK: - Private Properties
 
-    /// Инициализатор с действием
-    /// - Parameter action: Действие для логирования
-    init(action: LogActions) {
-        self.action = action
-    }
-    
+    private let action: LogAction
+
+    // MARK: - Public Properties
+
     /// Сообщение для логирования, соответствующее действию
     var logMessage: String {
         switch action {
@@ -25,5 +23,11 @@ final class LogCommand {
         case .tapShareButton:
             "Пользователь поделился рецептом"
         }
+    }
+
+    // MARK: - Initializers
+
+    init(action: LogAction) {
+        self.action = action
     }
 }

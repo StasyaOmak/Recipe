@@ -3,14 +3,15 @@
 
 import Foundation
 
+///  Реализация логгера в приложении
 protocol LoggerManagerProtocol {
     /// Функция для вызова добавления в Логгер
-    func log(_ action: LogActions)
+    func log(_ action: LogAction)
 }
 
 /// Логгер Менеджер
-class LoggerManager: LoggerManagerProtocol {
-    func log(_ action: LogActions) {
+final class LoggerManager: LoggerManagerProtocol {
+    func log(_ action: LogAction) {
         let command = LogCommand(action: action)
         LoggerInvoker.shared.addLogCommand(command)
     }
