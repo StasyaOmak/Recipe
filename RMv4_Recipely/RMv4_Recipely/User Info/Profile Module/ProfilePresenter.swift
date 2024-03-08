@@ -15,6 +15,8 @@ protocol ProfilePresenterProtocol: AnyObject {
     func bonusesCellTapped()
     /// метод для получения данных пользователя
     func getUserInfo() -> User
+    /// метод вызода в экран авторизации
+    func logOut()
 }
 
 /// Презентер модуля "Профиль пользователя"
@@ -49,11 +51,17 @@ extension ProfilePresenter: ProfilePresenterProtocol {
 
     func changeUserName(name: String) {
         User.user.name = name
+        UserSettings.shared.changeUserName(to: name)
         view?.reloadTableView()
     }
 
     func getUserInfo() -> User {
         let user = User.sendMock()
         return user
+    }
+
+    func logOut() {
+        UserSettings.shared.logOut()
+        coordinator?.onFinishFlow?()
     }
 }

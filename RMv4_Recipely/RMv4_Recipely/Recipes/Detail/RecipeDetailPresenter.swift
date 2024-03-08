@@ -5,8 +5,6 @@ import Foundation
 
 /// Интерфейс презентера модуля "Детальный экран"
 protocol RecipeDetailPresenterProtocol: AnyObject {
-    /// Инициализатор с присвоением вью
-    init(coordinator: RecipesCoordinator, view: RecipeDetailViewProtocol, recipe: RecipeDescription)
     /// Рецепт, отображаемый в детальном экране
     var recipe: RecipeDescription? { get set }
     /// Экшн кнопки назад
@@ -15,6 +13,17 @@ protocol RecipeDetailPresenterProtocol: AnyObject {
     func addToFavorites()
     /// метод проверки, находится ли отображаемый рецепт в избранном
     func checkIfFavorite()
+    /// поделиться рецептом
+    func shareRecipe(message: LogAction)
+    /// Добавление логов
+    func sendLog(message: LogAction)
+    /// Инициализатор с присвоением вью
+    init(
+        coordinator: RecipesCoordinator,
+        view: RecipeDetailViewProtocol,
+        recipe: RecipeDescription,
+        loggerManager: LoggerManagerProtocol
+    )
 }
 
 final class RecipeDetailPresenter: RecipeDetailPresenterProtocol {
@@ -22,17 +31,32 @@ final class RecipeDetailPresenter: RecipeDetailPresenterProtocol {
 
     private weak var coordinator: RecipesCoordinator?
     private weak var view: RecipeDetailViewProtocol?
+    private var loggerManager: LoggerManagerProtocol?
     var recipe: RecipeDescription?
 
     // MARK: - Initializers
 
-    init(coordinator: RecipesCoordinator, view: RecipeDetailViewProtocol, recipe: RecipeDescription) {
+    init(
+        coordinator: RecipesCoordinator,
+        view: RecipeDetailViewProtocol,
+        recipe: RecipeDescription,
+        loggerManager: LoggerManagerProtocol
+    ) {
         self.coordinator = coordinator
         self.view = view
         self.recipe = recipe
+        self.loggerManager = loggerManager
     }
 
     // MARK: - Public Methods
+
+    func shareRecipe(message: LogAction) {
+        loggerManager?.log(message)
+    }
+
+    func sendLog(message: LogAction) {
+        loggerManager?.log(message)
+    }
 
     func popToAllRecipes() {
         coordinator?.popToAllRecipes()
