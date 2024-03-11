@@ -41,7 +41,7 @@ private enum Constants {
 }
 
 /// Содержание рецепта для таблицы
-struct RecipeDescription: Equatable {
+struct RecipeDescription: Equatable, Codable {
     /// тип рецепта
     let type: RecipeCategories
     /// название

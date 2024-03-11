@@ -34,18 +34,18 @@ final class FavoritesPresenter {
 
 extension FavoritesPresenter: FavoritesPresenterProtocol {
     func removeFromFavourites(recipeIndex: Int) {
-        let recipe = RecipeDescription.favoritesRecipes.remove(at: recipeIndex)
+        let recipe = FavoriteService.shared.removeFavorite(recipeIndex)
         for var item in RecipeDescription.allRecipes where item == recipe {
             item.isFavorite = false
         }
     }
 
     func getFavourites() -> [RecipeDescription] {
-        RecipeDescription.favoritesRecipes
+        FavoriteService.shared.getFavorites()
     }
 
     func checkIfFavouritesEmpty() {
-        if RecipeDescription.favoritesRecipes.isEmpty {
+        if FavoriteService.shared.getFavorites().isEmpty {
             favoritesView?.setEmptyState()
         } else {
             favoritesView?.setNonEmptyState()
@@ -53,6 +53,6 @@ extension FavoritesPresenter: FavoritesPresenterProtocol {
     }
 
     func getFavouritesCount() -> Int {
-        RecipeDescription.favoritesRecipes.count
+        FavoriteService.shared.getFavorites().count
     }
 }
