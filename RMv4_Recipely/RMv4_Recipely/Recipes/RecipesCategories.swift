@@ -4,7 +4,7 @@
 import Foundation
 
 /// Категории рецептов
-enum RecipeCategories: String {
+enum RecipeCategories: String, Codable {
     /// Салаты
     case salad = "Salad"
     /// Супы

@@ -64,12 +64,12 @@ final class RecipeDetailPresenter: RecipeDetailPresenterProtocol {
 
     func addToFavorites() {
         guard let recipe else { return }
-        if RecipeDescription.favoritesRecipes.filter({ $0 == recipe }).isEmpty {
-            RecipeDescription.favoritesRecipes.append(recipe)
+        if FavoriteService.shared.getFavorites().filter({ $0 == recipe }).isEmpty {
+            FavoriteService.shared.addFavorite(recipe)
             view?.setRedAddToFavoritesButtonColor()
         } else {
-            for (index, element) in RecipeDescription.favoritesRecipes.enumerated() where element == recipe {
-                RecipeDescription.favoritesRecipes.remove(at: index)
+            for (index, element) in FavoriteService.shared.getFavorites().enumerated() where element == recipe {
+                FavoriteService.shared.removeFavorite(index)
             }
             view?.setBlackAddToFavoritesButtonColor()
         }
@@ -77,7 +77,7 @@ final class RecipeDetailPresenter: RecipeDetailPresenterProtocol {
 
     func checkIfFavorite() {
         guard let recipe else { return }
-        if RecipeDescription.favoritesRecipes.contains(recipe) { view?.setRedAddToFavoritesButtonColor()
+        if FavoriteService.shared.getFavorites().contains(recipe) { view?.setRedAddToFavoritesButtonColor()
         } else {
             view?.setBlackAddToFavoritesButtonColor()
         }
