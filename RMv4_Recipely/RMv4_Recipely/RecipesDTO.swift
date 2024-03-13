@@ -1,10 +1,5 @@
-//
-//  RecipesDTO.swift
-//  RMv4_Recipely
-//
-//  Created by Anastasiya Omak on 12/03/2024.
-//
-
+// RecipesDTO.swift
+// Copyright © RoadMap. All rights reserved.
 
 import Foundation
 
@@ -80,13 +75,10 @@ struct RecipeDTO: Codable {
     let label: String
     let image: String
     let images: Images
-    let source: Source
     let url: String
     let shareAs: String
     let yield: Int
-    let dietLabels: [DietLabel]
     let healthLabels: [String]
-    let cautions: [Caution]
     let ingredientLines: [String]
     let ingredients: [Ingredient]
     let calories, totalCO2Emissions: Double
@@ -94,41 +86,9 @@ struct RecipeDTO: Codable {
     let totalWeight: Double
     let totalTime: Int
     let cuisineType: [String]
-    let mealType: [MealType]
     let dishType: [DishType]
     let totalNutrients, totalDaily: [String: Total]
-    let digest: [Digest]
     let tags: [String]?
-}
-
-/// Перечисление для предупреждений
-enum Caution: String, Codable {
-    case gluten = "Gluten"
-    case sulfites = "Sulfites"
-    case wheat = "Wheat"
-}
-
-/// Перечисление для диетических меток
-enum DietLabel: String, Codable {
-    case balanced = "Balanced"
-    case highFiber = "High-Fiber"
-    case lowCarb = "Low-Carb"
-    case lowFat = "Low-Fat"
-    case lowSodium = "Low-Sodium"
-}
-
-// MARK: - Digest
-
-/// DTO для пищевых веществ
-struct Digest: Codable {
-    let label: Label
-    let tag: String
-    let schemaOrgTag: SchemaOrgTag?
-    let total: Double
-    let hasRDI: Bool
-    let daily: Double
-    let unit: Unit
-    let sub: [Digest]?
 }
 
 /// Перечисление для меток
@@ -171,40 +131,47 @@ enum Label: String, Codable {
     case zinc = "Zinc"
 }
 
-/// Перечисление для меток схемы
-enum SchemaOrgTag: String, Codable {
-    case carbohydrateContent
-    case cholesterolContent
-    case fatContent
-    case fiberContent
-    case proteinContent
-    case saturatedFatContent
-    case sodiumContent
-    case sugarContent
-    case transFatContent
-}
-
 /// Перечисление для единиц измерения
 enum Unit: String, Codable {
     case empty = "%"
+    // swiftlint:disable identifier_name
+    /// граммы
     case g
+    // swiftlint:enable identifier_name
+    /// килокалории
     case kcal
+    /// миллиграммы
     case mg
+    /// микрограммы
     case µg
 }
 
 /// Перечисление для типов блюд
 enum DishType: String, Codable {
+    /// салат
     case salad
+    /// первое блюдо
+    case soup
+    /// второе блюдо?
+    case mainCourse = "Main course"
+    /// панкейки
+    case pancake
+    /// напитки
+    case drinks
+    /// десерты
+    case desserts
 }
 
 // MARK: - Images
 
 /// DTO для изображений
 struct Images: Codable {
+    /// типы изображений - заглушка, маленькое, обычное
     let thumbnail, small, regular: Large
+    /// большое изображение
     let large: Large?
 
+    /// ключи для парсинга в DTO
     enum CodingKeys: String, CodingKey {
         case thumbnail = "THUMBNAIL"
         case small = "SMALL"
@@ -217,20 +184,30 @@ struct Images: Codable {
 
 /// Структура для больших изображений
 struct Large: Codable {
+    /// ссылка на изображение
     let url: String
+    /// параметры ширины и высоты
     let width, height: Int
 }
 
 /// DTO для ингредиентов
 struct Ingredient: Codable {
+    /// текст ингредиента
     let text: String
+    /// количество
     let quantity: Double
+    /// единицы измерения
     let measure: String?
+    /// продукт
     let food: String
+    /// вес
     let weight: Double
+    /// категория продукта и id
     let foodCategory, foodID: String
+    /// изображение
     let image: String
 
+    /// ключи для парсинга в DTO
     enum CodingKeys: String, CodingKey {
         case text, quantity, measure, food, weight, foodCategory
         case foodID = "foodId"
@@ -238,25 +215,14 @@ struct Ingredient: Codable {
     }
 }
 
-/// Перечисление для типов приемов пищи
-enum MealType: String, Codable {
-    case breakfast
-    case lunchDinner = "lunch/dinner"
-}
-
-/// Перечисление для источников
-enum Source: String, Codable {
-    case notWithoutSalt = "Not Without Salt"
-    case seriousEats = "Serious Eats"
-    case smittenKitchen = "Smitten Kitchen"
-    case tartelette = "Tartelette"
-}
-
 // MARK: - Total
 
-/// DTO для суммарных значений
+// DTO для суммарных значений
 struct Total: Codable {
+    /// название лейбла
     let label: Label
+    /// числовой параметр лейбла
     let quantity: Double
+    /// единицы измерения и другие суффиксы
     let unit: Unit
 }
