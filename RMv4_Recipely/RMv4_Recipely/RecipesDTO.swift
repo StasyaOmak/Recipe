@@ -1,9 +1,14 @@
-// RecipesDTO.swift
-// Copyright © RoadMap. All rights reserved.
+//
+//  RecipesDTO.swift
+//  RMv4_Recipely
+//
+//  Created by Anastasiya Omak on 12/03/2024.
+//
+
 
 import Foundation
 
-/// маленькая модель рецепта
+/// Модель краткого описания рецепта
 struct ShortRecipe {
     let imageName: String
     let label: String
@@ -20,7 +25,7 @@ struct ShortRecipe {
     }
 }
 
-/// полная модель рецепта
+/// Модель полного описания рецепта
 struct FullRecipe {
     let label: String
     let imageName: String
@@ -45,7 +50,7 @@ struct FullRecipe {
     }
 }
 
-/// Nutrients
+/// Перечисление для пищевых компонентов
 enum Nutrients {
     static let enercKcal = "ENERC_KCAL"
     static let fat = "FAT"
@@ -53,7 +58,7 @@ enum Nutrients {
     static let proteins = "PROCNT"
 }
 
-/// Upper level dto
+/// Структура DTO
 struct HitsDTO: Codable {
     let hits: [HitDTO]
 
@@ -64,12 +69,12 @@ struct HitsDTO: Codable {
 
 // MARK: - Hit
 
-/// HitDTO
+/// DTO хита
 struct HitDTO: Codable {
     let recipe: RecipeDTO
 }
 
-/// RecipeDTO
+/// DTO рецепта
 struct RecipeDTO: Codable {
     let uri: String
     let label: String
@@ -96,14 +101,14 @@ struct RecipeDTO: Codable {
     let tags: [String]?
 }
 
-/// Caution
+/// Перечисление для предупреждений
 enum Caution: String, Codable {
     case gluten = "Gluten"
     case sulfites = "Sulfites"
     case wheat = "Wheat"
 }
 
-/// DietLabel
+/// Перечисление для диетических меток
 enum DietLabel: String, Codable {
     case balanced = "Balanced"
     case highFiber = "High-Fiber"
@@ -114,7 +119,7 @@ enum DietLabel: String, Codable {
 
 // MARK: - Digest
 
-/// Digest
+/// DTO для пищевых веществ
 struct Digest: Codable {
     let label: Label
     let tag: String
@@ -126,7 +131,7 @@ struct Digest: Codable {
     let sub: [Digest]?
 }
 
-/// Label
+/// Перечисление для меток
 enum Label: String, Codable {
     case calcium = "Calcium"
     case carbohydratesNet = "Carbohydrates (net)"
@@ -166,7 +171,7 @@ enum Label: String, Codable {
     case zinc = "Zinc"
 }
 
-/// ghghg
+/// Перечисление для меток схемы
 enum SchemaOrgTag: String, Codable {
     case carbohydrateContent
     case cholesterolContent
@@ -179,26 +184,23 @@ enum SchemaOrgTag: String, Codable {
     case transFatContent
 }
 
-/// ghghg
+/// Перечисление для единиц измерения
 enum Unit: String, Codable {
     case empty = "%"
-    // swiftlint:disable identifier_name
     case g
-    // swiftlint:enable identifier_name
     case kcal
     case mg
     case µg
 }
 
-/// ghghg
+/// Перечисление для типов блюд
 enum DishType: String, Codable {
-    case salad = "Salad"
-    case soup = "Soup"
+    case salad
 }
 
 // MARK: - Images
 
-/// ghghg
+/// DTO для изображений
 struct Images: Codable {
     let thumbnail, small, regular: Large
     let large: Large?
@@ -213,13 +215,13 @@ struct Images: Codable {
 
 // MARK: - Large
 
-/// image size
+/// Структура для больших изображений
 struct Large: Codable {
     let url: String
     let width, height: Int
 }
 
-/// ghghg
+/// DTO для ингредиентов
 struct Ingredient: Codable {
     let text: String
     let quantity: Double
@@ -236,13 +238,13 @@ struct Ingredient: Codable {
     }
 }
 
-/// ghghg
+/// Перечисление для типов приемов пищи
 enum MealType: String, Codable {
     case breakfast
     case lunchDinner = "lunch/dinner"
 }
 
-/// ghghg
+/// Перечисление для источников
 enum Source: String, Codable {
     case notWithoutSalt = "Not Without Salt"
     case seriousEats = "Serious Eats"
@@ -252,7 +254,7 @@ enum Source: String, Codable {
 
 // MARK: - Total
 
-/// ghghg
+/// DTO для суммарных значений
 struct Total: Codable {
     let label: Label
     let quantity: Double
