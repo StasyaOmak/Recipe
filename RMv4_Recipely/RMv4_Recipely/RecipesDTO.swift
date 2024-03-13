@@ -226,40 +226,47 @@ enum Label: String, Codable {
     case zinc = "Zinc"
 }
 
-/// Перечисление для меток схемы
-enum SchemaOrgTag: String, Codable {
-    case carbohydrateContent
-    case cholesterolContent
-    case fatContent
-    case fiberContent
-    case proteinContent
-    case saturatedFatContent
-    case sodiumContent
-    case sugarContent
-    case transFatContent
-}
-
 /// Перечисление для единиц измерения
 enum Unit: String, Codable {
     case empty = "%"
+    // swiftlint:disable identifier_name
+    /// граммы
     case g
+    // swiftlint:enable identifier_name
+    /// килокалории
     case kcal
+    /// миллиграммы
     case mg
+    /// микрограммы
     case µg
 }
 
 /// Перечисление для типов блюд
 enum DishType: String, Codable {
+    /// салат
     case salad
+    /// первое блюдо
+    case soup
+    /// второе блюдо?
+    case mainCourse = "Main course"
+    /// панкейки
+    case pancake
+    /// напитки
+    case drinks
+    /// десерты
+    case desserts
 }
 
 // MARK: - Images
 
 /// DTO для изображений
 struct Images: Codable {
+    /// типы изображений - заглушка, маленькое, обычное
     let thumbnail, small, regular: Large
+    /// большое изображение
     let large: Large?
 
+    /// ключи для парсинга в DTO
     enum CodingKeys: String, CodingKey {
         case thumbnail = "THUMBNAIL"
         case small = "SMALL"
@@ -272,20 +279,30 @@ struct Images: Codable {
 
 /// Структура для больших изображений
 struct Large: Codable {
+    /// ссылка на изображение
     let url: String
+    /// параметры ширины и высоты
     let width, height: Int
 }
 
 /// DTO для ингредиентов
 struct Ingredient: Codable {
+    /// текст ингредиента
     let text: String
+    /// количество
     let quantity: Double
+    /// единицы измерения
     let measure: String?
+    /// продукт
     let food: String
+    /// вес
     let weight: Double
+    /// категория продукта и id
     let foodCategory, foodID: String
+    /// изображение
     let image: String
 
+    /// ключи для парсинга в DTO
     enum CodingKeys: String, CodingKey {
         case text, quantity, measure, food, weight, foodCategory
         case foodID = "foodId"
@@ -293,25 +310,14 @@ struct Ingredient: Codable {
     }
 }
 
-/// Перечисление для типов приемов пищи
-enum MealType: String, Codable {
-    case breakfast
-    case lunchDinner = "lunch/dinner"
-}
-
-/// Перечисление для источников
-enum Source: String, Codable {
-    case notWithoutSalt = "Not Without Salt"
-    case seriousEats = "Serious Eats"
-    case smittenKitchen = "Smitten Kitchen"
-    case tartelette = "Tartelette"
-}
-
 // MARK: - Total
 
-/// DTO для суммарных значений
+// DTO для суммарных значений
 struct Total: Codable {
+    /// название лейбла
     let label: Label
+    /// числовой параметр лейбла
     let quantity: Double
+    /// единицы измерения и другие суффиксы
     let unit: Unit
 }
