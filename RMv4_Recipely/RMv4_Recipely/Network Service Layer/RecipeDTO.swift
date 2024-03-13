@@ -5,42 +5,42 @@ import Foundation
 
 /// DTO рецепта
 struct RecipeDTO: Codable {
-    // Уникальный идентификатор рецепта
+    /// Уникальный идентификатор рецепта
     let uri: String
-    // Название рецепта
+    /// Название рецепта
     let label: String
-    // Ссылка на изображение рецепта
+    /// Ссылка на изображение рецепта
     let image: String
-    // Дополнительные изображения
-    let images: ImagesDTO
-    // Ссылка на страницу с рецептом
+    /// Дополнительные изображения
+    let images: ImageDTO
+    /// Ссылка на страницу с рецептом
     let url: String
-    // Ссылка для поделиться рецептом
+    /// Ссылка для поделиться рецептом
     let shareAs: String
-    // Количество порций
+    /// Количество порций
     let yield: Int
-    // Метки здоровья
+    /// Метки здоровья
     let healthLabels: [String]
-    // Список ингредиентов
+    /// Список ингредиентов
     let ingredientLines: [String]
-    // Дополнительная информация о ингредиентах
-    let ingredients: [Ingredient]
-    // Количество калорий
+    /// Дополнительная информация о ингредиентах
+    let ingredients: [IngredientDTO]
+    /// Количество калорий
     let calories, totalCO2Emissions: Double
-    // Класс выбросов CO2
+    /// Класс выбросов CO2
     let co2EmissionsClass: String
-    // Общий вес ингредиентов
+    /// Общий вес ингредиентов
     let totalWeight: Double
-    // Общее время приготовления
+    /// Общее время приготовления
     let totalTime: Int
-    // Тип кухни
+    /// Тип кухни
     let cuisineType: [String]
-    // Тип блюда
+    /// Тип блюда
     let dishType: [DishType]
-    // Общие пищевые компоненты
+    /// Общие пищевые компоненты
     let totalNutrients, totalDaily: [String: TotalDTO]
-    // Дайджест о рецепте
+    /// Дайджест о рецепте
     let digest: [DigestDTO]
-    // Теги рецепта
+    /// Теги рецепта
     let tags: [String]?
 }

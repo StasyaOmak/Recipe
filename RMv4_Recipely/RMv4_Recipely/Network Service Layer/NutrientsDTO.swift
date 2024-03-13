@@ -5,12 +5,12 @@ import Foundation
 
 /// Перечисление для пищевых компонентов
 enum NutrientsDTO {
-    // Калории
+    /// Калории
     static let enercKcal = "ENERC_KCAL"
-    // Жиры
+    /// Жиры
     static let fat = "FAT"
-    // Сахара
+    /// Сахара
     static let sugars = "CHOCDF"
-    // Белки
+    /// Белки
     static let proteins = "PROCNT"
 }

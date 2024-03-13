@@ -5,76 +5,76 @@ import Foundation
 
 /// Перечисление для меток
 enum LabelDTO: String, Codable {
-    // Кальций
+    /// Кальций
     case calcium = "Calcium"
-    // Углеводы (net)
+    /// Углеводы (net)
     case carbohydratesNet = "Carbohydrates (net)"
-    // Углеводы
+    /// Углеводы
     case carbs = "Carbs"
-    // Углеводы (net)
+    /// Углеводы (net)
     case carbsNet = "Carbs (net)"
-    // Холестерин
+    /// Холестерин
     case cholesterol = "Cholesterol"
-    // Энергия
+    /// Энергия
     case energy = "Energy"
-    // Жиры
+    /// Жиры
     case fat = "Fat"
-    // Пищевые волокна
+    /// Пищевые волокна
     case fiber = "Fiber"
-    // Фолат эквивалентный (total)
+    /// Фолат эквивалентный (total)
     case folateEquivalentTotal = "Folate equivalent (total)"
-    // Фолат (food)
+    /// Фолат (food)
     case folateFood = "Folate (food)"
-    // Фолиевая кислота
+    /// Фолиевая кислота
     case folicAcid = "Folic acid"
-    // Железо
+    /// Железо
     case iron = "Iron"
-    // Магний
+    /// Магний
     case magnesium = "Magnesium"
-    // Мононенасыщенные жиры
+    /// Мононенасыщенные жиры
     case monounsaturated = "Monounsaturated"
-    // Ниацин (B3)
+    /// Ниацин (B3)
     case niacinB3 = "Niacin (B3)"
-    // Фосфор
+    /// Фосфор
     case phosphorus = "Phosphorus"
-    // Полиненасыщенные жиры
+    /// Полиненасыщенные жиры
     case polyunsaturated = "Polyunsaturated"
-    // Калий
+    /// Калий
     case potassium = "Potassium"
-    // Белки
+    /// Белки
     case protein = "Protein"
-    // Рибофлавин (B2)
+    /// Рибофлавин (B2)
     case riboflavinB2 = "Riboflavin (B2)"
-    // Насыщенные жиры
+    /// Насыщенные жиры
     case saturated = "Saturated"
-    // Натрий
+    /// Натрий
     case sodium = "Sodium"
-    // Сахарные алкоголи
+    /// Сахарные алкоголи
     case sugarAlcohols = "Sugar alcohols"
-    // Сахар
+    /// Сахар
     case sugars = "Sugars"
-    // Добавленный сахар
+    /// Добавленный сахар
     case sugarsAdded = "Sugars, added"
-    // Тиамин (B1)
+    /// Тиамин (B1)
     case thiaminB1 = "Thiamin (B1)"
-    // Транс-жиры
+    /// Транс-жиры
     case trans = "Trans"
-    // Витамин A
+    /// Витамин A
     case vitaminA = "Vitamin A"
-    // Витамин B12
+    /// Витамин B12
     case vitaminB12 = "Vitamin B12"
-    // Витамин B6
+    /// Витамин B6
     case vitaminB6 = "Vitamin B6"
-    // Витамин C
+    /// Витамин C
     case vitaminC = "Vitamin C"
-    // Витамин D
+    /// Витамин D
     case vitaminD = "Vitamin D"
-    // Витамин E
+    /// Витамин E
     case vitaminE = "Vitamin E"
-    // Витамин K
+    /// Витамин K
     case vitaminK = "Vitamin K"
-    // Вода
+    /// Вода
     case water = "Water"
-    // Цинк
+    /// Цинк
     case zinc = "Zinc"
 }

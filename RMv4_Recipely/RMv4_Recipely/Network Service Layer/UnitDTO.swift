@@ -7,13 +7,13 @@ import Foundation
 enum UnitDTO: String, Codable {
     case empty = "%"
     // swiftlint:disable identifier_name
-    /// граммы
+    /// Граммы
     case g
     // swiftlint:enable identifier_name
-    /// килокалории
+    /// Килокалории
     case kcal
-    /// миллиграммы
+    /// Миллиграммы
     case mg
-    /// микрограммы
+    /// Микрограммы
     case µg
 }

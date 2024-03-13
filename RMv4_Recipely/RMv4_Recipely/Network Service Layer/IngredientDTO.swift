@@ -4,23 +4,23 @@
 import Foundation
 
 /// DTO для ингредиентов
-struct Ingredient: Codable {
-    /// текст ингредиента
+struct IngredientDTO: Codable {
+    /// Текст ингредиента
     let text: String
-    /// количество
+    /// Количество
     let quantity: Double
-    /// единицы измерения
+    /// Единицы измерения
     let measure: String?
-    /// продукт
+    /// Продукт
     let food: String
-    /// вес
+    /// Вес
     let weight: Double
-    /// категория продукта и id
+    /// Категория продукта и id
     let foodCategory, foodID: String
-    /// изображение
+    /// Изображение
     let image: String
 
-    /// ключи для парсинга в DTO
+    /// Ключи для парсинга в DTO
     enum CodingKeys: String, CodingKey {
         case text, quantity, measure, food, weight, foodCategory
         case foodID = "foodId"

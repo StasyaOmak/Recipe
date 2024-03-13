@@ -5,15 +5,15 @@ import Foundation
 
 /// Модель краткого описания рецепта
 struct ShortRecipe {
-    // Имя изображения рецепта
+    /// Имя изображения рецепта
     let imageName: String
-    // название рецепта
+    /// название рецепта
     let label: String
-    // Общее время приготовления рецепта в минутах
+    /// Общее время приготовления рецепта в минутах
     let totalTime: Int
-    // Количество калорий
+    /// Количество калорий
     let calories: Double
-    // URI рецепта
+    /// URI рецепта
     let uri: String
 
     init(dto: RecipeDTO) {
