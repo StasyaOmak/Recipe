@@ -23,7 +23,12 @@ protocol RecipeListPresenterProtocol: AnyObject {
     func stopSearch()
 
     /// Инициализатор с присвоением вью
-    init(view: RecipeListViewControllerProtocol, coordinator: RecipesCoordinator, loggerManager: LoggerManagerProtocol)
+    init(
+        view: RecipeListViewControllerProtocol,
+        coordinator: RecipesCoordinator,
+        loggerManager: LoggerManagerProtocol,
+        networkService: NetworkServiceProtocol
+    )
 
     /// Добавление логов
     func sendLog(message: LogAction)
@@ -43,6 +48,7 @@ final class RecipeListPresenter {
     private weak var coordinator: RecipesCoordinator?
     private var category: DishCategory?
     private var loggerManager: LoggerManagerProtocol?
+    private var networkService: NetworkServiceProtocol?
 
     private var sourceOfRecepies: [RecipeDescription] = []
     private var isSearching = false
@@ -53,7 +59,8 @@ final class RecipeListPresenter {
     init(
         view: RecipeListViewControllerProtocol,
         coordinator: RecipesCoordinator,
-        loggerManager: LoggerManagerProtocol
+        loggerManager: LoggerManagerProtocol,
+        networkService: NetworkServiceProtocol
     ) {
         self.view = view
         self.coordinator = coordinator
