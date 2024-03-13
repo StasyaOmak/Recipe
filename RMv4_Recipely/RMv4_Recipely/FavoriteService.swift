@@ -5,14 +5,17 @@ import Foundation
 
 /// сервис для избранного
 final class FavoriteService {
-// MARK: - Public Properties
+    // MARK: - Public Properties
+
     static let shared = FavoriteService()
-    
-// MARK: - Private Properties
+
+    // MARK: - Private Properties
+
     private let userDefaults = UserDefaults.standard
     private let key = "Favorites"
 
- // MARK: - Public Methods
+    // MARK: - Public Methods
+
     func getFavorites() -> [RecipeDescription] {
         guard let data = FavoriteService.shared.userDefaults.data(forKey: key) else { return [] }
         do {
@@ -39,9 +42,10 @@ final class FavoriteService {
         save(favorites)
     }
 
+    @discardableResult
     func removeFavorite(_ index: Int) -> RecipeDescription {
         var favorites = getFavorites()
-        var removeFavorite = favorites.remove(at: index)
+        let removeFavorite = favorites.remove(at: index)
         save(favorites)
         return removeFavorite
     }

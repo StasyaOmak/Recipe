@@ -8,11 +8,13 @@ final class AppBuilder {
     // MARK: - Private Properties
 
     private let loggerManager: LoggerManagerProtocol
+    private let networkService: NetworkServiceProtocol
 
     // MARK: - Initializers
 
-    init(loggerManager: LoggerManagerProtocol) {
+    init(loggerManager: LoggerManagerProtocol, networkService: NetworkServiceProtocol) {
         self.loggerManager = loggerManager
+        self.networkService = networkService
     }
 
     // инит на логгер и приватное свойство
@@ -106,7 +108,8 @@ final class AppBuilder {
         let recipeListPresenter = RecipeListPresenter(
             view: recipeListView,
             coordinator: coordinator,
-            loggerManager: loggerManager
+            loggerManager: loggerManager,
+            networkService: networkService
         )
         recipeListView.presenter = recipeListPresenter
         return recipeListView

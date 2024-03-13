@@ -133,6 +133,7 @@ final class RecipeListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         addLogs()
+        presenter?.fetchRecipes()
     }
 
     // MARK: - Private Methods
