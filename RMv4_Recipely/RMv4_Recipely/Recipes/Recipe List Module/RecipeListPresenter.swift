@@ -71,7 +71,6 @@ final class RecipeListPresenter {
 // MARK: - RecipeListPresenter + RecipeListPresenterProtocol
 
 extension RecipeListPresenter: RecipeListPresenterProtocol {
-    
     func sendLog(message: LogAction) {
         loggerManager?.log(message)
     }
