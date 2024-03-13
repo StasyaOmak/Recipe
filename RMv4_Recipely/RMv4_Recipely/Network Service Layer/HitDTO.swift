@@ -3,8 +3,8 @@
 
 import Foundation
 
-/// DTO хита
+/// Структура представляющее конкретное блюдо
 struct HitDTO: Codable {
-    // Рецепт
+    /// Рецепт
     let recipe: RecipeDTO
 }

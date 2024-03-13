@@ -5,10 +5,10 @@ import Foundation
 
 // DTO для суммарных значений
 struct TotalDTO: Codable {
-    /// название лейбла
+    /// Название лейбла
     let label: LabelDTO
-    /// числовой параметр лейбла
+    /// Числовой параметр лейбла
     let quantity: Double
-    /// единицы измерения и другие суффиксы
+    /// Единицы измерения и другие суффиксы
     let unit: UnitDTO
 }

@@ -4,13 +4,13 @@
 import Foundation
 
 /// DTO для изображений
-struct ImagesDTO: Codable {
-    /// типы изображений - заглушка, маленькое, обычное
-    let thumbnail, small, regular: LargeDTO
-    /// большое изображение
-    let large: LargeDTO?
+struct ImageDTO: Codable {
+    /// Типы изображений - заглушка, маленькое, обычное
+    let thumbnail, small, regular: ImageParameterDTO
+    /// Большое изображение
+    let large: ImageParameterDTO?
 
-    /// ключи для парсинга в DTO
+    /// Ключи для парсинга в DTO
     enum CodingKeys: String, CodingKey {
         case thumbnail = "THUMBNAIL"
         case small = "SMALL"
@@ -20,9 +20,9 @@ struct ImagesDTO: Codable {
 }
 
 /// DTO для больших изображений
-struct LargeDTO: Codable {
-    /// ссылка на изображение
+struct ImageParameterDTO: Codable {
+    /// Ссылка на изображение
     let url: String
-    /// параметры ширины и высоты
+    /// Сараметры ширины и высоты
     let width, height: Int
 }

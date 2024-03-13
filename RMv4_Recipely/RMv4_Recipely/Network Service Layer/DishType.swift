@@ -6,16 +6,16 @@ import Foundation
 // TODO: уже было одно перечисление, можно ли использовать его?
 /// Перечисление для типов блюд, используется в качестве url-компонента
 enum DishType: String, Codable {
-    /// салат
+    /// Салат
     case salad
-    /// первое блюдо
+    /// Первое блюдо
     case soup
-    /// второе блюдо?
+    /// Второе блюдо?
     case mainCourse = "Main course"
-    /// панкейки
+    /// Панкейки
     case pancake
-    /// напитки
+    /// Напитки
     case drinks
-    /// десерты
+    /// Десерты
     case desserts
 }
