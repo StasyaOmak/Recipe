@@ -28,6 +28,9 @@
 		4F29FE902BA1DDFD00DB0C8E /* IngredientDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F29FE8F2BA1DDFD00DB0C8E /* IngredientDTO.swift */; };
 		4F29FE922BA1DE1600DB0C8E /* TotalDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F29FE912BA1DE1600DB0C8E /* TotalDTO.swift */; };
 		4F29FE942BA1DE3D00DB0C8E /* NutrientsDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F29FE932BA1DE3D00DB0C8E /* NutrientsDTO.swift */; };
+		4F29FE972BA23E1300DB0C8E /* URLSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F29FE962BA23E1300DB0C8E /* URLSession+Extension.swift */; };
+		4F29FE992BA2417000DB0C8E /* ResultDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F29FE982BA2417000DB0C8E /* ResultDecoder.swift */; };
+		4F29FE9B2BA25EC500DB0C8E /* NetworkService+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F29FE9A2BA25EC500DB0C8E /* NetworkService+Extension.swift */; };
 		4F9AB0462B8E1821000544DD /* FavoritesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9AB0452B8E1821000544DD /* FavoritesPresenter.swift */; };
 		4F9AB0482B8E184C000544DD /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9AB0472B8E184C000544DD /* FavoritesViewController.swift */; };
 		4F9AB04A2B8E18CE000544DD /* FavoritesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9AB0492B8E18CE000544DD /* FavoritesCoordinator.swift */; };
@@ -101,6 +104,9 @@
 		4F29FE8F2BA1DDFD00DB0C8E /* IngredientDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientDTO.swift; sourceTree = "<group>"; };
 		4F29FE912BA1DE1600DB0C8E /* TotalDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalDTO.swift; sourceTree = "<group>"; };
 		4F29FE932BA1DE3D00DB0C8E /* NutrientsDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrientsDTO.swift; sourceTree = "<group>"; };
+		4F29FE962BA23E1300DB0C8E /* URLSession+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Extension.swift"; sourceTree = "<group>"; };
+		4F29FE982BA2417000DB0C8E /* ResultDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDecoder.swift; sourceTree = "<group>"; };
+		4F29FE9A2BA25EC500DB0C8E /* NetworkService+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkService+Extension.swift"; sourceTree = "<group>"; };
 		4F9AB0452B8E1821000544DD /* FavoritesPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesPresenter.swift; sourceTree = "<group>"; };
 		4F9AB0472B8E184C000544DD /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		4F9AB0492B8E18CE000544DD /* FavoritesCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCoordinator.swift; sourceTree = "<group>"; };
@@ -189,7 +195,10 @@
 				4F29FE872BA1DCCF00DB0C8E /* LabelDTO.swift */,
 				4F29FE852BA1DCAA00DB0C8E /* DigestDTO.swift */,
 				4F29FE832BA1DC8F00DB0C8E /* RecipeDTO.swift */,
+				4F29FE982BA2417000DB0C8E /* ResultDecoder.swift */,
+				4F29FE962BA23E1300DB0C8E /* URLSession+Extension.swift */,
 				4F29FE762BA0CB9500DB0C8E /* NetworkService.swift */,
+				4F29FE9A2BA25EC500DB0C8E /* NetworkService+Extension.swift */,
 			);
 			path = "Network Service Layer";
 			sourceTree = "<group>";
@@ -492,6 +501,7 @@
 				6FD5563E2B91289100630E17 /* DishCategory.swift in Sources */,
 				4F9AB04A2B8E18CE000544DD /* FavoritesCoordinator.swift in Sources */,
 				4FE755AE2B8D08AC00C67B8A /* AuthPresenter.swift in Sources */,
+				4F29FE972BA23E1300DB0C8E /* URLSession+Extension.swift in Sources */,
 				4F29FE682B98E80400DB0C8E /* RecipeListPresenter+Extension.swift in Sources */,
 				4FE755DC2B8D43F900C67B8A /* BaseCoordinator.swift in Sources */,
 				6FC9607E2B961360002717A1 /* TermsOfUseView.swift in Sources */,
@@ -531,6 +541,7 @@
 				4FB15BF92B90D7DE00FA2EFA /* RecipeTableViewCell.swift in Sources */,
 				4FB15BF52B90C7F700FA2EFA /* RecipeListPresenter.swift in Sources */,
 				4F29FE622B979CD800DB0C8E /* SkeletonTableViewCell.swift in Sources */,
+				4F29FE992BA2417000DB0C8E /* ResultDecoder.swift in Sources */,
 				4F29FE792BA0E82A00DB0C8E /* RecipesDTO.swift in Sources */,
 				6FD5563C2B91284200630E17 /* InformationSource.swift in Sources */,
 				6FC960802B9613AC002717A1 /* TermsOfUsePresenter.swift in Sources */,
@@ -546,6 +557,7 @@
 				4F9AB0482B8E184C000544DD /* FavoritesViewController.swift in Sources */,
 				4F9AB0502B8E641A000544DD /* HeaderTableViewCell.swift in Sources */,
 				6F5B0A322B9AF5DB00F138AF /* Command.swift in Sources */,
+				4F29FE9B2BA25EC500DB0C8E /* NetworkService+Extension.swift in Sources */,
 				4FB15BF72B90C80300FA2EFA /* RecipeListModel.swift in Sources */,
 				6F5B0A342B9AF5E100F138AF /* Receiver.swift in Sources */,
 				4F29FE822BA1DC7600DB0C8E /* HitDTO.swift in Sources */,

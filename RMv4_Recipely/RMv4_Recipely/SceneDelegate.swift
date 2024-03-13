@@ -20,10 +20,6 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     networkService: networkService
                 )
             )
-            networkService.getRecipes(health: nil, query: nil) { _ in
-            }
-            networkService.getSingleRecipe { _ in
-            }
             appCoordinator?.start()
         }
     }
