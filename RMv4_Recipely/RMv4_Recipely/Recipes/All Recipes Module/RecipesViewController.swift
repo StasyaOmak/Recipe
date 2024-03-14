@@ -29,9 +29,12 @@ final class RecipesViewController: UIViewController {
         case success
     }
 
-    // MARK: - Public Properties
+    // MARK: - Visual Components
 
     private weak var collectionView: UICollectionView!
+
+    // MARK: - Public Properties
+
     var recipesPresenter: RecipesPresenterProtocol?
 
     // MARK: - Private Properties

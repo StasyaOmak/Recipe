@@ -117,7 +117,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
     func changeState() {
         view?.setState(.loading)
         DispatchQueue.main.asyncAfter(deadline: Constants.loadingRecipesDelay) { [weak self] in
-            self?.view?.setState(.success)
+            self?.view?.setState(.data)
         }
     }
 

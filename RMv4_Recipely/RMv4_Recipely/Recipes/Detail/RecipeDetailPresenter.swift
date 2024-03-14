@@ -7,6 +7,8 @@ import Foundation
 protocol RecipeDetailPresenterProtocol: AnyObject {
     /// Рецепт, отображаемый в детальном экране
     var recipe: RecipeDescription? { get set }
+    /// Состояние загрузки данных модуля
+    var state: State<FullRecipe> { get set }
     /// Экшн кнопки назад
     func popToAllRecipes()
     /// метод добавления рецепта в избранное
@@ -27,6 +29,14 @@ protocol RecipeDetailPresenterProtocol: AnyObject {
 }
 
 final class RecipeDetailPresenter: RecipeDetailPresenterProtocol {
+    // MARK: - Public Properties
+
+    var state: State<FullRecipe> = .loading {
+        didset {
+            self.view.stat
+        }
+    }
+
     // MARK: - Private Properties
 
     private weak var coordinator: RecipesCoordinator?

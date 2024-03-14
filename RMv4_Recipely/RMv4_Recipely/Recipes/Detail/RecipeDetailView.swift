@@ -11,6 +11,7 @@ protocol RecipeDetailViewProtocol: AnyObject {
     func setRedAddToFavoritesButtonColor()
     /// метод смены цвета кнопки "добавить в избранное"
     func setBlackAddToFavoritesButtonColor()
+    func updateState()
 }
 
 /// Экран деталей рецепта
@@ -39,54 +40,13 @@ final class RecipeDetailView: UIViewController {
 
     private let sectionCell: [CellType] = [.title, .characteristics, .fullDescription]
 
-    private let tableView = UITableView()
+    // MARK: - Visual Components
 
-    // MARK: - Life Cycle
-
-    override func viewDidLoad() {
-        view.backgroundColor = .white
-        super.viewDidLoad()
-        setupNavigationBar()
-        configureTableView()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        presenter?.checkIfFavorite()
-        addLogs()
-    }
-
-    // MARK: - Private Methods
-
-    private func configureTableView() {
-        tableView.rowHeight = UITableView.automaticDimension
-        view.addSubview(tableView)
-        tableView.dataSource = self
-        tableView.separatorStyle = .none
-        tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: Constants.titleTableViewCellIdentifier)
-        tableView.register(
-            CharacteristicsTableViewCell.self,
-            forCellReuseIdentifier: Constants.characteristicsTableViewCellIdentifier
-        )
-        tableView.register(
-            FullDescriptionTableViewCell.self,
-            forCellReuseIdentifier: Constants.fullDescriptionTableViewCellIdentifier
-        )
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 70).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-    }
-
-    private func setupNavigationBar() {
-        navigationItem.rightBarButtonItems = [addToFavouritesBarButtonItem, shareBarButtonItem]
-        navigationItem.leftBarButtonItems = [UIBarButtonItem(customView: arrowButton)]
-        addToFavouritesBarButtonItem.tintColor = .black
-        shareBarButtonItem.tintColor = .black
-        addToFavouritesBarButtonItem.isEnabled = true
-        shareBarButtonItem.isEnabled = true
-    }
+    private lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.addTarget(self, action: #selector(refreshControlPulled(_:)), for: .valueChanged)
+        return control
+    }()
 
     private lazy var arrowButton: UIButton = {
         let view = UIView()
@@ -114,6 +74,56 @@ final class RecipeDetailView: UIViewController {
         action: #selector(addToFavouritesBarButtonItemTapped)
     )
 
+    private let tableView = UITableView()
+
+    // MARK: - Life Cycle
+
+    override func viewDidLoad() {
+        view.backgroundColor = .white
+        super.viewDidLoad()
+        setupNavigationBar()
+        configureTableView()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter?.checkIfFavorite()
+        addLogs()
+    }
+
+    // MARK: - Private Methods
+
+    private func configureTableView() {
+        tableView.rowHeight = UITableView.automaticDimension
+        view.addSubview(tableView)
+        tableView.dataSource = self
+        tableView.separatorStyle = .none
+        tableView.refreshControl = refreshControl
+        tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: Constants.titleTableViewCellIdentifier)
+        tableView.register(
+            CharacteristicsTableViewCell.self,
+            forCellReuseIdentifier: Constants.characteristicsTableViewCellIdentifier
+        )
+        tableView.register(
+            FullDescriptionTableViewCell.self,
+            forCellReuseIdentifier: Constants.fullDescriptionTableViewCellIdentifier
+        )
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 70).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+    }
+
+    private func setupNavigationBar() {
+        navigationItem.rightBarButtonItems = [addToFavouritesBarButtonItem, shareBarButtonItem]
+        navigationItem.leftBarButtonItems = [UIBarButtonItem(customView: arrowButton)]
+        addToFavouritesBarButtonItem.tintColor = .black
+        shareBarButtonItem.tintColor = .black
+        addToFavouritesBarButtonItem.isEnabled = true
+        shareBarButtonItem.isEnabled = true
+    }
+
     private func addLogs() {
         presenter?.sendLog(message: .openDetailsRecipe)
     }
@@ -127,6 +137,10 @@ final class RecipeDetailView: UIViewController {
     @objc private func backButtonTapped() {
         presenter?.popToAllRecipes()
     }
+
+    @objc private func refreshControlPulled(_ sender: UIRefreshControl) {
+        sender.endRefreshing()
+    }
 }
 
 extension RecipeDetailView: RecipeDetailViewProtocol {
@@ -138,6 +152,17 @@ extension RecipeDetailView: RecipeDetailViewProtocol {
     func setBlackAddToFavoritesButtonColor() {
         addToFavouritesBarButtonItem.image = UIImage.favBookmarkPlain
         view.layoutIfNeeded()
+    }
+
+    func updateState() {
+        switch presenter?.state {
+        case .loading, .data:
+            tableView.reloadData()
+        case .noData:
+            print("noData")
+        case let .error(error), .none:
+            print("err or none")
+        }
     }
 }
 
