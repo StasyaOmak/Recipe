@@ -12,7 +12,7 @@ protocol RecipeListPresenterProtocol: AnyObject {
     /// метод-флаг нажатия на кнопку фильтра
     func filterButtonPressed(sender: FilterButton)
     /// Переход в экран с описанием рецепта
-    func pushToDetail(recipe: RecipeDescription)
+    func pushToDetail()
     /// смена состояния экрана рецептов
     func changeState()
     /// Поиск рецептов по запросу
@@ -117,7 +117,7 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
     func changeState() {
         view?.setState(.loading)
         DispatchQueue.main.asyncAfter(deadline: Constants.loadingRecipesDelay) { [weak self] in
-            self?.view?.setState(.data)
+            self?.view?.setState(.noData)
         }
     }
 
@@ -146,8 +146,8 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
         }
     }
 
-    func pushToDetail(recipe: RecipeDescription) {
-        coordinator?.pushToDetail(recipe: recipe)
+    func pushToDetail() {
+        coordinator?.pushToDetail(recipeUri: "recipe")
     }
 
     // TODO: - нарушена логика сортировки - при проверке состояния второго фильтра приходится сортировать в порядке, обратном проверяемому свойству.

@@ -103,17 +103,21 @@ final class TitleTableViewCell: UITableViewCell {
 
     // MARK: - Public Methods
 
-    func configure(recipe: RecipeDescription?) {
-        nameRecipeLabel.text = recipe?.title
-        recipeImageView.image = UIImage(named: recipe?.imageName ?? "")
-        gramsLabel.text = "\(recipe?.weight ?? 0) g"
-        cookingTimeLabel.text = "\(recipe?.time ?? 0) min"
+    func configure(recipe: FullRecipe?) {
+        nameRecipeLabel.text = recipe?.label
+        gramsLabel.text = "\(recipe?.totalWeight ?? 0) g"
+        cookingTimeLabel.text = "\(recipe?.totalTime ?? 0) min"
+    }
+
+    func setImage(data: Data) {
+        recipeImageView.image = UIImage(data: data)
     }
 
     // MARK: - Private Methods
 
     private func setupView() {
         contentView.clipsToBounds = true
+        selectionStyle = .none
         contentView.addSubview(nameRecipeLabel)
         contentView.addSubview(recipeImageView)
         recipeImageView.addSubview(gramsView)

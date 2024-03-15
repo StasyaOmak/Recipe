@@ -127,6 +127,7 @@ final class RecipeListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        presenter?.pushToDetail()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -277,14 +278,6 @@ extension RecipeListViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let regularCell = tableView
-            .dequeueReusableCell(
-                withIdentifier: RecipeTableViewCell.description(),
-                for: indexPath
-            ) as? RecipeTableViewCell,
-            let recipes
-        else { return UITableViewCell() }
-        regularCell.configure(recipe: recipes[indexPath.row])
         guard let skeletonCell = tableView
             .dequeueReusableCell(
                 withIdentifier: SkeletonTableViewCell.description(),
@@ -295,6 +288,13 @@ extension RecipeListViewController: UITableViewDataSource {
         case .loading:
             return skeletonCell
         case let .data(recipes):
+            guard let regularCell = tableView
+                .dequeueReusableCell(
+                    withIdentifier: RecipeTableViewCell.description(),
+                    for: indexPath
+                ) as? RecipeTableViewCell
+            else { return UITableViewCell() }
+            regularCell.configure(recipe: recipes[indexPath.row])
             return regularCell
         default:
             return skeletonCell
@@ -309,7 +309,7 @@ extension RecipeListViewController: UITableViewDelegate {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
         cell.isSelected = !cell.isSelected
         guard let recipes = recipes else { return }
-        presenter?.pushToDetail(recipe: recipes[indexPath.row])
+        presenter?.pushToDetail()
     }
 
     func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {

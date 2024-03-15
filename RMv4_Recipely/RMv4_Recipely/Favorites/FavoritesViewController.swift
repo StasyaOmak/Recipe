@@ -194,8 +194,9 @@ extension FavoritesViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView
-            .dequeueReusableCell(withIdentifier: RecipeTableViewCell.description()) as? RecipeTableViewCell,
-            let recipes = presenter?.getFavourites() else { return UITableViewCell() }
+            .dequeueReusableCell(withIdentifier: RecipeTableViewCell.description()) as? RecipeTableViewCell
+        else { return UITableViewCell() }
+        let recipes: [ShortRecipe] = []
         cell.configure(recipe: recipes[indexPath.row])
         cell.backgroundView?.backgroundColor = UIColor.createColor(114, 186, 191, 1)
         return cell

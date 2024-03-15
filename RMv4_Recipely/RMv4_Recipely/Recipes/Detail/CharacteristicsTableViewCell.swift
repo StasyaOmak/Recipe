@@ -172,6 +172,7 @@ final class CharacteristicsTableViewCell: UITableViewCell {
 
     private func setupView() {
         contentView.clipsToBounds = true
+        selectionStyle = .none
         contentView.addSubview(enercView)
         enercView.addSubview(enercSubView)
         contentView.addSubview(carbohydratesView)
@@ -342,10 +343,10 @@ final class CharacteristicsTableViewCell: UITableViewCell {
 
     // MARK: - Public Methods
 
-    func configure(recipe: RecipeDescription?) {
-        enercSubViewLabel.text = "\(recipe?.value ?? 0) kkal"
-        carbohydratesSubViewLabel.text = "\(recipe?.carbohydrates ?? 0) g"
-        fatsSubViewLabel.text = "\(recipe?.fats ?? 0) g"
-        proteinsSubViewLabel.text = "\(recipe?.proteins ?? 0) g"
+    func configure(recipe: FullRecipe?) {
+        enercSubViewLabel.text = "\(recipe?.totalCalories ?? 0) kkal"
+        carbohydratesSubViewLabel.text = "\(recipe?.totalSugars ?? 0) g"
+        fatsSubViewLabel.text = "\(recipe?.totalFat ?? 0) g"
+        proteinsSubViewLabel.text = "\(recipe?.totalProtein ?? 0) g"
     }
 }
