@@ -23,4 +23,21 @@ enum RecipeCategories: String, Codable {
     case pancake = "Pancake"
     /// Десерты
     case desserts = "Desserts"
+
+//    var discription: String {
+//        switch self {
+//        case .salad:
+//            "Salad"
+//        case .soup:
+//            "Soup"
+//        case .meat, .sideDish, .fish, .chicken:
+//            "Main course"
+//        case .drinks:
+//            "Drinks"
+//        case .pancake:
+//            "Pancake"
+//        case .desserts:
+//            "Desserts"
+//        }
+//    }
 }

@@ -68,6 +68,8 @@
 		6F5B0A382B9AF5E700F138AF /* Invoker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F5B0A372B9AF5E700F138AF /* Invoker.swift */; };
 		6F5B0A3A2B9AF5EE00F138AF /* LogAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F5B0A392B9AF5EE00F138AF /* LogAction.swift */; };
 		6F5B0A822B9CE75800F138AF /* FavoriteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F5B0A812B9CE75800F138AF /* FavoriteService.swift */; };
+		6FB01B5F2BA37940001AF5DC /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB01B5E2BA37940001AF5DC /* UIImageView+Extension.swift */; };
+		6FB01B612BA3A624001AF5DC /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB01B602BA3A624001AF5DC /* ErrorView.swift */; };
 		6FC9607E2B961360002717A1 /* TermsOfUseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FC9607D2B961360002717A1 /* TermsOfUseView.swift */; };
 		6FC960802B9613AC002717A1 /* TermsOfUsePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FC9607F2B9613AC002717A1 /* TermsOfUsePresenter.swift */; };
 		6FD556382B90BCF400630E17 /* RecipesCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FD556372B90BCF400630E17 /* RecipesCustomCell.swift */; };
@@ -145,6 +147,8 @@
 		6F5B0A372B9AF5E700F138AF /* Invoker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invoker.swift; sourceTree = "<group>"; };
 		6F5B0A392B9AF5EE00F138AF /* LogAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogAction.swift; sourceTree = "<group>"; };
 		6F5B0A812B9CE75800F138AF /* FavoriteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteService.swift; sourceTree = "<group>"; };
+		6FB01B5E2BA37940001AF5DC /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
+		6FB01B602BA3A624001AF5DC /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		6FC9607D2B961360002717A1 /* TermsOfUseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUseView.swift; sourceTree = "<group>"; };
 		6FC9607F2B9613AC002717A1 /* TermsOfUsePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUsePresenter.swift; sourceTree = "<group>"; };
 		6FD556372B90BCF400630E17 /* RecipesCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipesCustomCell.swift; sourceTree = "<group>"; };
@@ -276,8 +280,10 @@
 				4F29FE7D2BA1DC0500DB0C8E /* FullRecipe.swift */,
 				4FE755902B8D036100C67B8A /* AppDelegate.swift */,
 				4FE755922B8D036100C67B8A /* SceneDelegate.swift */,
+				6FB01B5E2BA37940001AF5DC /* UIImageView+Extension.swift */,
 				4FE755A82B8D07DE00C67B8A /* TabBarController.swift */,
 				4FE755E02B8D5EFB00C67B8A /* AppBuilder.swift */,
+				6FB01B602BA3A624001AF5DC /* ErrorView.swift */,
 				4F29FE692B99E83E00DB0C8E /* UserDefaultsService.swift */,
 				6F5B0A812B9CE75800F138AF /* FavoriteService.swift */,
 				4F29FE7A2BA1DAEB00DB0C8E /* Network Service Layer */,
@@ -500,6 +506,7 @@
 				4FE755AE2B8D08AC00C67B8A /* AuthPresenter.swift in Sources */,
 				4F29FE972BA23E1300DB0C8E /* URLSession+Extension.swift in Sources */,
 				4F29FE682B98E80400DB0C8E /* RecipeListPresenter+Extension.swift in Sources */,
+				6FB01B612BA3A624001AF5DC /* ErrorView.swift in Sources */,
 				4FE755DC2B8D43F900C67B8A /* BaseCoordinator.swift in Sources */,
 				6FC9607E2B961360002717A1 /* TermsOfUseView.swift in Sources */,
 				4F29FE862BA1DCAA00DB0C8E /* DigestDTO.swift in Sources */,
@@ -540,6 +547,7 @@
 				4F29FE622B979CD800DB0C8E /* SkeletonTableViewCell.swift in Sources */,
 				4F29FE992BA2417000DB0C8E /* ResultDecoder.swift in Sources */,
 				6FD5563C2B91284200630E17 /* InformationSource.swift in Sources */,
+				6FB01B5F2BA37940001AF5DC /* UIImageView+Extension.swift in Sources */,
 				6FC960802B9613AC002717A1 /* TermsOfUsePresenter.swift in Sources */,
 				4F9AB0532B8E809C000544DD /* OptionsTableViewCell.swift in Sources */,
 				4FB15BFB2B911D4400FA2EFA /* UIControl FilterButton.swift in Sources */,
