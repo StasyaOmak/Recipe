@@ -18,15 +18,12 @@ final class Logger {
         let logSessionUrl = url[0].appendingPathComponent("LogSession")
         do {
             try manager.createDirectory(at: logSessionUrl, withIntermediateDirectories: true)
-        } catch {
-            print(error)
-        }
+        } catch {}
         let logFileUrl = logSessionUrl.appendingPathComponent("Log.txt")
         let data = "\(infoMessages)".data(using: .utf8)
         manager.createFile(
             atPath: logFileUrl.path(percentEncoded: true),
             contents: data
         )
-        print(message)
     }
 }

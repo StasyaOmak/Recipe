@@ -46,7 +46,7 @@ final class ErrorView: UIView {
         return button
     }()
 
-    private let errorView = UIView()
+//    private let errorView = UIView()
 
     private let errorImageView = UIImageView(image: UIImage(named: "lightning"))
 
@@ -70,12 +70,12 @@ final class ErrorView: UIView {
 
     private func configureErrorView() {
         isUserInteractionEnabled = true
-        errorView.isUserInteractionEnabled = true
-        addSubview(errorView)
-        errorView.addSubview(backgroundLightningView)
-        errorView.addSubview(errorImageView)
-        errorView.addSubview(errorLabel)
-        errorView.addSubview(reloadButton)
+//        errorView.isUserInteractionEnabled = true
+//        addSubview(errorView)
+        addSubview(backgroundLightningView)
+        addSubview(errorImageView)
+        addSubview(errorLabel)
+        addSubview(reloadButton)
         createErrorViewConstraints()
         createBackgroundLightningViewConstraints()
         createErrorImageViewConstraints()
@@ -84,17 +84,17 @@ final class ErrorView: UIView {
     }
 
     private func createErrorViewConstraints() {
-        errorView.translatesAutoresizingMaskIntoConstraints = false
-        errorView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 8).isActive = true
-        errorView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        errorView.widthAnchor.constraint(equalToConstant: 350).isActive = true
-        errorView.heightAnchor.constraint(equalToConstant: 140).isActive = true
+//        errorView.translatesAutoresizingMaskIntoConstraints = false
+//        errorView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 8).isActive = true
+//        errorView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        widthAnchor.constraint(equalToConstant: 350).isActive = true
+        heightAnchor.constraint(equalToConstant: 140).isActive = true
     }
 
     private func createBackgroundLightningViewConstraints() {
         backgroundLightningView.translatesAutoresizingMaskIntoConstraints = false
-        backgroundLightningView.topAnchor.constraint(equalTo: errorView.topAnchor).isActive = true
-        backgroundLightningView.centerXAnchor.constraint(equalTo: errorView.centerXAnchor).isActive = true
+        backgroundLightningView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        backgroundLightningView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         backgroundLightningView.widthAnchor.constraint(equalToConstant: 50).isActive = true
         backgroundLightningView.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
@@ -110,15 +110,15 @@ final class ErrorView: UIView {
     private func createErrorLabelConstraints() {
         errorLabel.translatesAutoresizingMaskIntoConstraints = false
         errorLabel.topAnchor.constraint(equalTo: backgroundLightningView.bottomAnchor, constant: 17).isActive = true
-        errorLabel.centerXAnchor.constraint(equalTo: errorView.centerXAnchor).isActive = true
-        errorLabel.widthAnchor.constraint(equalTo: errorView.widthAnchor).isActive = true
+        errorLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        errorLabel.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
         errorLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
     }
 
     private func createReloadButtonConstraints() {
         reloadButton.translatesAutoresizingMaskIntoConstraints = false
-        reloadButton.bottomAnchor.constraint(equalTo: errorView.bottomAnchor).isActive = true
-        reloadButton.centerXAnchor.constraint(equalTo: errorView.centerXAnchor).isActive = true
+        reloadButton.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        reloadButton.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         reloadButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
         reloadButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
     }

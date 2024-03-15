@@ -27,12 +27,12 @@ struct FullRecipe {
     init(dto: RecipeDTO) {
         label = dto.label
         imageName = dto.image
-        totalWeight = Int(dto.totalWeight.rounded())
+        totalWeight = Int(dto.totalWeight?.rounded() ?? 0)
         totalTime = dto.totalTime
-        totalCalories = Int(dto.totalNutrients[NutrientsDTO.enercKcal]?.quantity.rounded() ?? 0)
-        totalSugars = Int(dto.totalNutrients[NutrientsDTO.sugars]?.quantity.rounded() ?? 0)
-        totalProtein = Int(dto.totalNutrients[NutrientsDTO.proteins]?.quantity.rounded() ?? 0)
-        totalFat = Int(dto.totalNutrients[NutrientsDTO.fat]?.quantity.rounded() ?? 0)
+        totalCalories = Int(dto.totalNutrients?[NutrientsDTO.enercKcal]?.quantity.rounded() ?? 0)
+        totalSugars = Int(dto.totalNutrients?[NutrientsDTO.sugars]?.quantity.rounded() ?? 0)
+        totalProtein = Int(dto.totalNutrients?[NutrientsDTO.proteins]?.quantity.rounded() ?? 0)
+        totalFat = Int(dto.totalNutrients?[NutrientsDTO.fat]?.quantity.rounded() ?? 0)
         ingredients = dto.ingredientLines
     }
 }

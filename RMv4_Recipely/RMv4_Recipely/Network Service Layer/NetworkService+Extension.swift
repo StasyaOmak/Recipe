@@ -21,7 +21,7 @@ extension NetworkService {
         static let uriName = "uri"
     }
 
-    func createAllRecipesUrlRequest(dishType: String, health: String?, query: String?) -> URLRequest? {
+    func createAllRecipesUrlRequest(dishType: DishCategory, health: String?, query: String?) -> URLRequest? {
         var components = URLComponents()
         components.scheme = URLComponentConstants.scheme
         components.host = URLComponentConstants.host
@@ -31,12 +31,11 @@ extension NetworkService {
             .init(name: URLComponentConstants.idName, value: URLComponentConstants.id),
             .init(name: URLComponentConstants.keyName, value: URLComponentConstants.key),
         ]
-        urlQueryItems.append(.init(name: URLComponentConstants.dishTypeName, value: dishType))
+        urlQueryItems.append(.init(name: URLComponentConstants.dishTypeName, value: dishType.type.urlComponent))
 
         if let health {
             urlQueryItems.append(.init(name: URLComponentConstants.healthName, value: health))
         }
-
         if let query {
             urlQueryItems.append(.init(name: URLComponentConstants.queryName, value: query))
         }

@@ -5,6 +5,8 @@ import Foundation
 
 /// Интерфейс презентера модуля "Рецепты выбранной категории"
 protocol RecipeListPresenterProtocol: AnyObject {
+    /// State
+    var state: State<[ShortRecipe]>? { get set }
     /// Метод установки категории на экран
     func setCategory(category: DishCategory)
     /// Метод-флаг возврата на прдыдущий экран
@@ -12,9 +14,7 @@ protocol RecipeListPresenterProtocol: AnyObject {
     /// метод-флаг нажатия на кнопку фильтра
     func filterButtonPressed(sender: FilterButton)
     /// Переход в экран с описанием рецепта
-    func pushToDetail()
-    /// смена состояния экрана рецептов
-    func changeState()
+    func pushToDetail(uri: String)
     /// Поиск рецептов по запросу
     func searchRecipes(withText text: String)
     /// Начать поиск
@@ -23,13 +23,16 @@ protocol RecipeListPresenterProtocol: AnyObject {
     func stopSearch()
     /// парсит рецепт
     func getRecipes()
+    /// загрузка картинки в кэш
+    func loadImage(url: URL?, completion: @escaping (Data) -> ())
 
     /// Инициализатор с присвоением вью
     init(
         view: RecipeListViewControllerProtocol,
         coordinator: RecipesCoordinator,
         loggerManager: LoggerManagerProtocol,
-        networkService: NetworkServiceProtocol
+        networkService: NetworkServiceProtocol,
+        imageLoader: LoadImageServiceProtocol
     )
 
     /// Добавление логов
@@ -44,6 +47,14 @@ final class RecipeListPresenter {
         static let loadingRecipesDelay: DispatchTime = .now() + 3
     }
 
+    // MARK: - Public Properties
+
+    var state: State<[ShortRecipe]>? = .loading {
+        didSet {
+            view?.reloadTableView()
+        }
+    }
+
     // MARK: - Private Properties
 
     private weak var view: RecipeListViewControllerProtocol?
@@ -51,10 +62,14 @@ final class RecipeListPresenter {
     private var category: DishCategory?
     private var loggerManager: LoggerManagerProtocol?
     private var networkService: NetworkServiceProtocol?
+    private var imageLoader: LoadImageServiceProtocol?
 
     private var sourceOfRecepies: [ShortRecipe] = []
     private var isSearching = false
     private var searchedRecipes: [ShortRecipe] = []
+    private var query: String?
+    private var searchedText = ""
+    private var health: String?
 
     // MARK: - Initializers
 
@@ -62,12 +77,14 @@ final class RecipeListPresenter {
         view: RecipeListViewControllerProtocol,
         coordinator: RecipesCoordinator,
         loggerManager: LoggerManagerProtocol,
-        networkService: NetworkServiceProtocol
+        networkService: NetworkServiceProtocol,
+        imageLoader: LoadImageServiceProtocol
     ) {
         self.view = view
         self.coordinator = coordinator
         self.loggerManager = loggerManager
         self.networkService = networkService
+        self.imageLoader = imageLoader
     }
 }
 
@@ -75,22 +92,62 @@ final class RecipeListPresenter {
 
 extension RecipeListPresenter: RecipeListPresenterProtocol {
     func getRecipes() {
+        state = .loading
+        guard let category else { return }
         networkService?.getRecipes(
-            dishType: category?.type.rawValue ?? "",
-            health: nil,
-            query: nil,
+            dishType: category,
+            health: makeHealth(),
+            query: makeQuery(searchText: searchedText),
             completion: { [weak self] result in
                 DispatchQueue.main.async {
                     switch result {
                     case let .success(recipes):
-                        self?.view?.setRecipes(recipes)
-                        self?.sourceOfRecepies = recipes
+                        self?.state = !recipes.isEmpty ? .data(recipes) : .noData
                     case let .failure(error):
-                        print(error)
+                        self?.state = .error(error)
                     }
                 }
             }
         )
+        view?.reloadTableView()
+    }
+
+    func makeQuery(searchText: String) -> String? {
+        var query: String?
+        guard let category else { return nil }
+        query = category.type.urlComponent == "Main course" ? category.type.rawValue : nil
+        print(searchText)
+        switch query {
+        case .some:
+            query?.append(" ")
+            print(query)
+            query?.append(searchText)
+            print(query)
+        case .none:
+            if searchText.count != 0 {
+                query = searchText
+                print(query)
+            }
+        }
+        print(query)
+        return query
+    }
+
+    func makeHealth() -> String? {
+        var health: String?
+        guard let category else { return nil }
+        health = category.type.urlComponent == "Side Dish" ? "Vegetarian" : nil
+        return health
+    }
+
+    func loadImage(url: URL?, completion: @escaping (Data) -> ()) {
+        guard let url else { return }
+        imageLoader?.loadImage(url: url, completion: { data, _, _ in
+            guard let data else { return }
+            DispatchQueue.main.async {
+                completion(data)
+            }
+        })
     }
 
     func sendLog(message: LogAction) {
@@ -105,6 +162,9 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
             return
         }
         isSearching = true
+        searchedText = " \(text)"
+        query = searchedText
+        getRecipes()
         searchedRecipes = sourceOfRecepies.filter {
             if let recipeLabel = $0.label {
                 recipeLabel.lowercased().contains(text.lowercased())
@@ -141,13 +201,6 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
         coordinator?.popToAllRecipes()
     }
 
-    func changeState() {
-        view?.setState(.loading)
-        DispatchQueue.main.asyncAfter(deadline: Constants.loadingRecipesDelay) { [weak self] in
-            self?.view?.setState(.noData)
-        }
-    }
-
     func filterButtonPressed(sender: FilterButton) {
         if sender.isPressed == false {
             sender.isPressed = true
@@ -173,8 +226,8 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
         }
     }
 
-    func pushToDetail() {
-        coordinator?.pushToDetail(recipeUri: "recipe")
+    func pushToDetail(uri: String) {
+        coordinator?.pushToDetail(recipeUri: uri)
     }
 
     // TODO: - нарушена логика сортировки - при проверке состояния второго фильтра приходится сортировать в порядке, обратном проверяемому свойству.

@@ -27,11 +27,12 @@ final class ErrorTableViewCell: UITableViewCell {
 
     private func setupView() {
         contentView.addSubview(errorView)
+        contentView.heightAnchor.constraint(equalToConstant: 400).isActive = true
         selectionStyle = .none
-        errorView.reloadButtonHandler = reloadButtonHandler
+        errorView.reloadButtonHandler = {
+            self.reloadButtonHandler?()
+        }
         errorView.translatesAutoresizingMaskIntoConstraints = false
-        errorView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        errorView.widthAnchor.constraint(equalToConstant: 100).isActive = true
         errorView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         errorView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }

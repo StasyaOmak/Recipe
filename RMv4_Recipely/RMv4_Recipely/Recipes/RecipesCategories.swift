@@ -24,20 +24,27 @@ enum RecipeCategories: String, Codable {
     /// Десерты
     case desserts = "Desserts"
 
-//    var discription: String {
-//        switch self {
-//        case .salad:
-//            "Salad"
-//        case .soup:
-//            "Soup"
-//        case .meat, .sideDish, .fish, .chicken:
-//            "Main course"
-//        case .drinks:
-//            "Drinks"
-//        case .pancake:
-//            "Pancake"
-//        case .desserts:
-//            "Desserts"
-//        }
-//    }
+    /// возвращает строку для юрл-компонента, т.к. значения по умолчанию не могут быть одинаковыми
+    var urlComponent: String {
+        switch self {
+        case .salad:
+            "Salad"
+        case .soup:
+            "Soup"
+        case .meat:
+            "Main course"
+        case .sideDish:
+            "Main course"
+        case .fish:
+            "Main course"
+        case .chicken:
+            "Main course"
+        case .drinks:
+            "Drinks"
+        case .pancake:
+            "Pancake"
+        case .desserts:
+            "Desserts"
+        }
+    }
 }

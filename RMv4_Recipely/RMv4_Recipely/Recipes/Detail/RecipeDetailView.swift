@@ -11,6 +11,7 @@ protocol RecipeDetailViewProtocol: AnyObject {
     func setRedAddToFavoritesButtonColor()
     /// метод смены цвета кнопки "добавить в избранное"
     func setBlackAddToFavoritesButtonColor()
+    /// обновление состояния вью
     func updateState()
 }
 
@@ -110,6 +111,10 @@ final class RecipeDetailView: UIViewController {
             FullDescriptionTableViewCell.self,
             forCellReuseIdentifier: Constants.fullDescriptionTableViewCellIdentifier
         )
+        tableView.register(
+            EmptyResultTableViewCell.self,
+            forCellReuseIdentifier: EmptyResultTableViewCell.description()
+        )
 
         tableView.register(
             ErrorTableViewCell.self,
@@ -147,7 +152,6 @@ final class RecipeDetailView: UIViewController {
     }
 
     @objc private func refreshControlPulled(_ sender: UIRefreshControl) {
-        presenter?.state = .loading
         presenter?.getRecipeDescription()
         updateState()
         sender.endRefreshing()
@@ -168,16 +172,6 @@ extension RecipeDetailView: RecipeDetailViewProtocol {
     func updateState() {
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
-//            switch self?.presenter?.state {
-//            case .loading, .data:
-//                self?.tableView.reloadData()
-//            case .noData:
-//                self?.tableView.reloadData()
-//                print("noData")
-//            case .error, .none:
-//                self?.tableView.reloadData()
-//                print("err or none")
-//            }
         }
     }
 }
@@ -211,7 +205,7 @@ extension RecipeDetailView: UITableViewDataSource {
                     for: indexPath
                 ) as? TitleTableViewCell
                 else { return UITableViewCell() }
-                presenter?.loadImage(url: URL(string: recipe.imageName), completion: { data in
+                presenter?.loadImage(url: URL(string: recipe.imageName ?? ""), completion: { data in
                     cell.setImage(data: data)
                 })
                 cell.configure(recipe: recipe)
@@ -252,19 +246,15 @@ extension RecipeDetailView: UITableViewDataSource {
                 return cell
             }
         case .noData:
+            let cell = EmptyResultTableViewCell()
+            return cell
+        case .error, .none:
             let cell = ErrorTableViewCell()
             cell.reloadButtonHandler = { [weak self] in
-                print(11111)
+                self?.presenter?.getRecipeDescription()
+                tableView.reloadData()
             }
             return cell
-        case let .error(error):
-            let cell = ErrorTableViewCell()
-            cell.reloadButtonHandler = { [weak self] in
-                print(11111)
-            }
-            return cell
-        case .none:
-            return ErrorTableViewCell()
         }
     }
 }
@@ -272,7 +262,7 @@ extension RecipeDetailView: UITableViewDataSource {
 extension RecipeDetailView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch presenter?.state {
-        case let .error(error):
+        case .error:
             return tableView.frame.height
         case .noData:
             return tableView.frame.height

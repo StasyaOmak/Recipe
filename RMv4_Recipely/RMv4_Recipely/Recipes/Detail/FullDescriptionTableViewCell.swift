@@ -95,6 +95,6 @@ final class FullDescriptionTableViewCell: UITableViewCell {
     // MARK: - Public Methods
 
     func configure(recipe: FullRecipe?) {
-        textRecipeLabel.text = recipe?.ingredients.joined(separator: "\n")
+        textRecipeLabel.text = recipe?.ingredients?.joined(separator: "\n")
     }
 }

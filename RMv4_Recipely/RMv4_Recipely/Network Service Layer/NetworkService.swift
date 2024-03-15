@@ -14,7 +14,7 @@ protocol NetworkServiceProtocol {
     /// - query: параметр для поиска и для основных блюд
     /// - completion: замыкание, возвращающее результат запроса и ошибки
     func getRecipes(
-        dishType: String,
+        dishType: DishCategory,
         health: String?,
         query: String?,
         completion: @escaping (Result<[ShortRecipe], NetworkError>) -> ()
@@ -35,7 +35,6 @@ final class NetworkService: NetworkServiceProtocol {
             let hitsDTO = try JSONDecoder().decode(HitsDTO.self, from: data)
             return hitsDTO.hits.map { ShortRecipe(dto: $0.recipe) }
         } catch {
-            print(error.localizedDescription)
             return []
         }
     }
@@ -49,12 +48,16 @@ final class NetworkService: NetworkServiceProtocol {
     // MARK: - Public Methods
 
     func getRecipes(
-        dishType: String = DishType.salad.rawValue,
+        dishType: DishCategory,
         health: String?,
         query: String?,
         completion: @escaping (Result<[ShortRecipe], NetworkError>) -> ()
     ) {
-        guard let urlRequest = createAllRecipesUrlRequest(dishType: dishType, health: health, query: query)
+        guard let urlRequest = createAllRecipesUrlRequest(
+            dishType: dishType,
+            health: health,
+            query: query
+        )
         else { return }
 
         let task = URLSession.shared.dataTask(with: urlRequest) { result in

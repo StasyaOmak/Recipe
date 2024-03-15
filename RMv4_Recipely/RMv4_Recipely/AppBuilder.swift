@@ -48,7 +48,7 @@ final class AppBuilder {
             view: view,
             loggerManager: loggerManager,
             networkService: networkService,
-            imageLoader: imageLoader
+            imageLoader: imageLoader, recipe: recipeUri
         )
         view.presenter = presenter
         return view
@@ -112,7 +112,7 @@ final class AppBuilder {
             view: recipeListView,
             coordinator: coordinator,
             loggerManager: loggerManager,
-            networkService: networkService
+            networkService: networkService, imageLoader: imageLoader
         )
         recipeListView.presenter = recipeListPresenter
         return recipeListView

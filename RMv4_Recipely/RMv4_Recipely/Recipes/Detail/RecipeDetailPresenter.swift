@@ -6,7 +6,7 @@ import Foundation
 /// Интерфейс презентера модуля "Детальный экран"
 protocol RecipeDetailPresenterProtocol: AnyObject {
     /// Рецепт, отображаемый в детальном экране
-    var recipe: FullRecipe? { get set }
+    var recipe: String { get set }
     /// Состояние загрузки данных модуля
     var state: State<FullRecipe> { get set }
     /// Экшн кнопки назад
@@ -29,14 +29,15 @@ protocol RecipeDetailPresenterProtocol: AnyObject {
         view: RecipeDetailViewProtocol,
         loggerManager: LoggerManagerProtocol,
         networkService: NetworkServiceProtocol,
-        imageLoader: LoadImageServiceProtocol
+        imageLoader: LoadImageServiceProtocol,
+        recipe: String
     )
 }
 
 final class RecipeDetailPresenter: RecipeDetailPresenterProtocol {
     // MARK: - Public Properties
 
-    var recipe: FullRecipe?
+    var recipe: String
 
     var state: State<FullRecipe> = .loading {
         didSet {
@@ -59,29 +60,29 @@ final class RecipeDetailPresenter: RecipeDetailPresenterProtocol {
         view: RecipeDetailViewProtocol,
         loggerManager: LoggerManagerProtocol,
         networkService: NetworkServiceProtocol,
-        imageLoader: LoadImageServiceProtocol
+        imageLoader: LoadImageServiceProtocol, recipe: String
     ) {
         self.coordinator = coordinator
         self.view = view
         self.loggerManager = loggerManager
         self.networkService = networkService
         self.imageLoader = imageLoader
+        self.recipe = recipe
     }
 
     // MARK: - Public Methods
 
     func getRecipeDescription() {
+        state = .loading
         networkService?.getSingleRecipe(
-            recipeUri: "http://www.edamam.com/ontologies/edamam.owl#recipe_2c3f520229386d51f359475a58d539aa",
+            recipeUri: recipe,
             completion: { [weak self] result in
                 switch result {
                 case let .success(recipe):
-                    self?.recipe = recipe
                     guard let recipe else { return }
                     self?.state = self?.recipe != nil ? .data(recipe) : .noData
                 case let .failure(error):
                     self?.state = .error(error)
-                    print(error.localizedDescription)
                 }
             }
         )
@@ -101,25 +102,10 @@ final class RecipeDetailPresenter: RecipeDetailPresenterProtocol {
 
     func addToFavorites() {
         // TODO: - переделать с данными из сети, когда будет поставлена задача
-//        guard let recipe else { return }
-//        if FavoriteService.shared.getFavorites().filter({ $0 == recipe }).isEmpty {
-//            FavoriteService.shared.addFavorite(recipe)
-//            view?.setRedAddToFavoritesButtonColor()
-//        } else {
-//            for (index, element) in FavoriteService.shared.getFavorites().enumerated() where element == recipe {
-//                FavoriteService.shared.removeFavorite(index)
-//            }
-//            view?.setBlackAddToFavoritesButtonColor()
-//        }
     }
 
     func checkIfFavorite() {
         // TODO: - переделать с данными из сети, когда будет поставлена задача
-//        guard let recipe else { return }
-//        if FavoriteService.shared.getFavorites().isEmpty { view?.setRedAddToFavoritesButtonColor()
-//        } else {
-//            view?.setBlackAddToFavoritesButtonColor()
-//        }
     }
 
     func loadImage(url: URL?, completion: @escaping (Data) -> ()) {

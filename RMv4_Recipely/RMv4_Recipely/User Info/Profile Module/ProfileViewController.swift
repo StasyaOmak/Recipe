@@ -202,9 +202,7 @@ extension ProfileViewController: ProfileViewControllerProtocol {
                     withIntermediateDirectories: true,
                     attributes: nil
                 )
-            } catch {
-                print(error)
-            }
+            } catch {}
         }
 
         let dateFormatter = DateFormatter()
@@ -218,8 +216,6 @@ extension ProfileViewController: ProfileViewControllerProtocol {
             return String("/Documents/\(filename)")
 
         } catch {
-            print(error)
-            print("file cant not be save at path \(filepath), with error : \(error)")
             return filepath
         }
     }
