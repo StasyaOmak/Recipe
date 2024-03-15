@@ -42,8 +42,8 @@ final class NetworkService: NetworkServiceProtocol {
 
     private let singleRecipeDecoder = ResultDecoder<FullRecipe?> { data in
         let hitsDTO = try JSONDecoder().decode(HitsDTO.self, from: data)
-        guard let recipe = hitsDTO.hits.first?.recipe else { return nil }
-        return FullRecipe(dto: recipe)
+        guard let recipeDTO = hitsDTO.hits.first?.recipe else { return nil }
+        return FullRecipe(dto: recipeDTO)
     }
 
     // MARK: - Public Methods

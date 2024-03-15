@@ -16,21 +16,13 @@ protocol RecipeListViewControllerProtocol: AnyObject {
     /// Проверка состояния второго фильтра
     func checkAnotherFilter(sender: FilterButton) -> (isPressed: Bool, increasing: Bool, decreasing: Bool)
     /// переход к следующему состоянию экрана
-    func setState(_ state: RecipeListViewController.State)
+    func setState(_ state: State<[ShortRecipe]>)
     /// метод обновления таблицы
     func reloadTableView()
 }
 
 /// Экран с рецептами для выбранной категории
 final class RecipeListViewController: UIViewController {
-    /// Состояния экрана с таблицей рецептов
-    enum State {
-        /// идет загрузка
-        case loading
-        /// загрузка успешно завершена
-        case success
-    }
-
     // MARK: - Constants
 
     private enum Constants {
@@ -42,6 +34,12 @@ final class RecipeListViewController: UIViewController {
     }
 
     // MARK: - Visual Components
+
+    private lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.addTarget(self, action: #selector(refreshControlPulled(_:)), for: .valueChanged)
+        return control
+    }()
 
     private lazy var arrowButton: UIButton = {
         let view = UIView()
@@ -100,6 +98,7 @@ final class RecipeListViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.refreshControl = refreshControl
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
@@ -118,7 +117,7 @@ final class RecipeListViewController: UIViewController {
     private var recipes: [ShortRecipe]?
     private lazy var buttons: [FilterButton] = [caloriesFilterButton, timeFilterButton]
 
-    private var state: State? {
+    private var state: State<[ShortRecipe]>? {
         didSet {
             tableView.reloadData()
         }
@@ -225,6 +224,10 @@ final class RecipeListViewController: UIViewController {
     @objc private func filterButtonTapped(sender: FilterButton) {
         presenter?.filterButtonPressed(sender: sender)
     }
+
+    @objc private func refreshControlPulled(_ sender: UIRefreshControl) {
+        sender.endRefreshing()
+    }
 }
 
 // MARK: - RecipeListViewController + RecipeListViewControllerProtocol
@@ -247,7 +250,7 @@ extension RecipeListViewController: RecipeListViewControllerProtocol {
         buttons.forEach { $0.isPressed = false }
     }
 
-    func setState(_ state: State) {
+    func setState(_ state: State<[ShortRecipe]>) {
         self.state = state
     }
 
@@ -276,14 +279,6 @@ extension RecipeListViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let regularCell = tableView
-            .dequeueReusableCell(
-                withIdentifier: RecipeTableViewCell.description(),
-                for: indexPath
-            ) as? RecipeTableViewCell,
-            let recipes
-        else { return UITableViewCell() }
-        regularCell.configure(recipe: recipes[indexPath.row])
         guard let skeletonCell = tableView
             .dequeueReusableCell(
                 withIdentifier: SkeletonTableViewCell.description(),
@@ -293,7 +288,14 @@ extension RecipeListViewController: UITableViewDataSource {
         switch state {
         case .loading:
             return skeletonCell
-        case .success:
+        case let .data(recipes):
+            guard let regularCell = tableView
+                .dequeueReusableCell(
+                    withIdentifier: RecipeTableViewCell.description(),
+                    for: indexPath
+                ) as? RecipeTableViewCell
+            else { return UITableViewCell() }
+            regularCell.configure(recipe: recipes[indexPath.row])
             return regularCell
         default:
             return skeletonCell
@@ -308,7 +310,7 @@ extension RecipeListViewController: UITableViewDelegate {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
         cell.isSelected = !cell.isSelected
         guard let recipes = recipes else { return }
-//        presenter?.pushToDetail(recipe: recipes[indexPath.row])
+        presenter?.pushToDetail()
     }
 
     func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
