@@ -8,7 +8,7 @@ protocol RecipeListViewControllerProtocol: AnyObject {
     /// свойство-презентер
     var presenter: RecipeListPresenterProtocol? { get set }
     /// Установка категории рецептов
-    func setRecipes(_ recipes: [RecipeDescription])
+    func setRecipes(_ recipes: [ShortRecipe])
     /// Установка заголовка для страницы
     func setTitle(_ title: String)
     /// Снятие выделения со всех кнопок фильтров
@@ -114,7 +114,8 @@ final class RecipeListViewController: UIViewController {
 
     // MARK: - Private Properties
 
-    private var recipes: [RecipeDescription]?
+//    private var recipes: [RecipeDescription]?
+    private var recipes: [ShortRecipe]?
     private lazy var buttons: [FilterButton] = [caloriesFilterButton, timeFilterButton]
 
     private var state: State? {
@@ -128,6 +129,7 @@ final class RecipeListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        presenter?.getRecipes()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -232,7 +234,7 @@ extension RecipeListViewController: RecipeListViewControllerProtocol {
         tableView.reloadData()
     }
 
-    func setRecipes(_ recipes: [RecipeDescription]) {
+    func setRecipes(_ recipes: [ShortRecipe]) {
         self.recipes = recipes
         tableView.reloadData()
     }
@@ -306,7 +308,7 @@ extension RecipeListViewController: UITableViewDelegate {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
         cell.isSelected = !cell.isSelected
         guard let recipes = recipes else { return }
-        presenter?.pushToDetail(recipe: recipes[indexPath.row])
+//        presenter?.pushToDetail(recipe: recipes[indexPath.row])
     }
 
     func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {

@@ -10,7 +10,7 @@ protocol FavoritesPresenterProtocol: AnyObject {
     /// метод возвращает число элементов в избранном
     func getFavouritesCount() -> Int
     /// метод возвращает массив избранных рецептов
-    func getFavourites() -> [RecipeDescription]
+    func getFavourites() -> [ShortRecipe]
     /// метод удаляет элемент из избранного
     func removeFromFavourites(recipeIndex: Int)
 }
@@ -40,8 +40,9 @@ extension FavoritesPresenter: FavoritesPresenterProtocol {
         }
     }
 
-    func getFavourites() -> [RecipeDescription] {
-        FavoriteService.shared.getFavorites()
+    func getFavourites() -> [ShortRecipe] {
+//        FavoriteService.shared.getFavorites()
+        []
     }
 
     func checkIfFavouritesEmpty() {

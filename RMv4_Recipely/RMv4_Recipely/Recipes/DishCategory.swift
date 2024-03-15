@@ -4,7 +4,7 @@
 import Foundation
 
 /// Категории рецептов
-struct DishCategory {
+struct DishCategory: Codable {
     let imageName: String
     let type: RecipeCategories
 }
