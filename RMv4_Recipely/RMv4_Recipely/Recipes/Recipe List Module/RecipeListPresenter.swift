@@ -21,6 +21,8 @@ protocol RecipeListPresenterProtocol: AnyObject {
     func startSearch()
     /// Остановить поиск
     func stopSearch()
+    /// парсит рецепт
+    func getRecipes()
 
     /// Инициализатор с присвоением вью
     init(
@@ -50,9 +52,9 @@ final class RecipeListPresenter {
     private var loggerManager: LoggerManagerProtocol?
     private var networkService: NetworkServiceProtocol?
 
-    private var sourceOfRecepies: [RecipeDescription] = []
+    private var sourceOfRecepies: [ShortRecipe] = []
     private var isSearching = false
-    private var searchedRecipes: [RecipeDescription] = []
+    private var searchedRecipes: [ShortRecipe] = []
 
     // MARK: - Initializers
 
@@ -65,12 +67,32 @@ final class RecipeListPresenter {
         self.view = view
         self.coordinator = coordinator
         self.loggerManager = loggerManager
+        self.networkService = networkService
     }
 }
 
 // MARK: - RecipeListPresenter + RecipeListPresenterProtocol
 
 extension RecipeListPresenter: RecipeListPresenterProtocol {
+    func getRecipes() {
+        networkService?.getRecipes(
+            dishType: category?.type.rawValue ?? "",
+            health: nil,
+            query: nil,
+            completion: { [weak self] result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case let .success(recipes):
+                        self?.view?.setRecipes(recipes)
+                        self?.sourceOfRecepies = recipes
+                    case let .failure(error):
+                        print(error)
+                    }
+                }
+            }
+        )
+    }
+
     func sendLog(message: LogAction) {
         loggerManager?.log(message)
     }
@@ -83,7 +105,13 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
             return
         }
         isSearching = true
-        searchedRecipes = sourceOfRecepies.filter { $0.title.lowercased().contains(text.lowercased()) }
+        searchedRecipes = sourceOfRecepies.filter {
+            if let recipeLabel = $0.label {
+                recipeLabel.lowercased().contains(text.lowercased())
+            } else {
+                false
+            }
+        }
         view?.setRecipes(searchedRecipes)
     }
 
@@ -97,11 +125,10 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
     }
 
     func setCategory(category: DishCategory) {
-        sourceOfRecepies = RecipeDescription.getRecipes(category: category)
         let title = category.type.rawValue.capitalized
         view?.setTitle(title)
         self.category = category
-        var recipes: [RecipeDescription] = []
+        var recipes: [ShortRecipe] = []
         if isSearching {
             recipes = searchedRecipes
         } else {
@@ -165,9 +192,9 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
         guard let category, let anotherFilterState = view?.checkAnotherFilter(sender: sender) else { return }
         sender.isPressed = true
         if sender.isInIncreaseOrder {
-            checkForIncreaseTimeSearch(category: category, sender: sender, anotherFilterState: anotherFilterState)
+//            checkForIncreaseTimeSearch(category: category, sender: sender, anotherFilterState: anotherFilterState)
         } else {
-            checkForDecreaseTimeSearch(category: category, sender: sender, anotherFilterState: anotherFilterState)
+//            checkForDecreaseTimeSearch(category: category, sender: sender, anotherFilterState: anotherFilterState)
         }
     }
 }
@@ -179,66 +206,66 @@ extension RecipeListPresenter {
         sender: FilterButton,
         anotherFilterState: (isPressed: Bool, increasing: Bool, decreasing: Bool)
     ) {
-        sender.isInIncreaseOrder = false
-        sender.isInDecreaseOrder = true
-        if anotherFilterState.isPressed {
-            switch anotherFilterState.increasing {
-            case true:
-                let recipes = sourceOfRecepies.sorted {
-                    if $0.value == $1.value {
-                        $0.time > $1.time
-                    } else {
-                        $0.value < $1.value
-                    }
-                }
-                view?.setRecipes(recipes)
-            case false:
-                let recipes = sourceOfRecepies.sorted {
-                    if $0.value == $1.value {
-                        $0.time < $1.time
-                    } else {
-                        $0.value < $1.value
-                    }
-                }
-                view?.setRecipes(recipes)
-            }
-        } else {
-            let recipes = sourceOfRecepies.sorted { $0.value < $1.value }
-            view?.setRecipes(recipes)
-        }
+//        sender.isInIncreaseOrder = false
+//        sender.isInDecreaseOrder = true
+//        if anotherFilterState.isPressed {
+//            switch anotherFilterState.increasing {
+//            case true:
+//                let recipes = sourceOfRecepies.sorted {
+//                    if $0.value == $1.value {
+//                        $0.time > $1.time
+//                    } else {
+//                        $0.value < $1.value
+//                    }
+//                }
+//                view?.setRecipes(recipes)
+//            case false:
+//                let recipes = sourceOfRecepies.sorted {
+//                    if $0.value == $1.value {
+//                        $0.time < $1.time
+//                    } else {
+//                        $0.value < $1.value
+//                    }
+//                }
+//                view?.setRecipes(recipes)
+//            }
+//        } else {
+//            let recipes = sourceOfRecepies.sorted { $0.value < $1.value }
+//            view?.setRecipes(recipes)
+//        }
     }
 
     func checkForDecreaseCaloriesSearch(
         sender: FilterButton,
         anotherFilterState: (isPressed: Bool, increasing: Bool, decreasing: Bool)
     ) {
-        sender.isInIncreaseOrder = true
-        sender.isInDecreaseOrder = false
-        if anotherFilterState.isPressed {
-            switch anotherFilterState.increasing {
-            case true:
-                let recipes = sourceOfRecepies.sorted {
-                    if $0.value == $1.value {
-                        $0.time > $1.time
-                    } else {
-                        $0.value > $1.value
-                    }
-                }
-                view?.setRecipes(recipes)
-            case false:
-                let recipes = sourceOfRecepies.sorted {
-                    if $0.value == $1.value {
-                        $0.time < $1.time
-                    } else {
-                        $0.value > $1.value
-                    }
-                }
-                view?.setRecipes(recipes)
-            }
-        } else {
-            let recipes = sourceOfRecepies.sorted { $0.value > $1.value }
-            view?.setRecipes(recipes)
-        }
+//        sender.isInIncreaseOrder = true
+//        sender.isInDecreaseOrder = false
+//        if anotherFilterState.isPressed {
+//            switch anotherFilterState.increasing {
+//            case true:
+//                let recipes = sourceOfRecepies.sorted {
+//                    if $0.value == $1.value {
+//                        $0.time > $1.time
+//                    } else {
+//                        $0.value > $1.value
+//                    }
+//                }
+//                view?.setRecipes(recipes)
+//            case false:
+//                let recipes = sourceOfRecepies.sorted {
+//                    if $0.value == $1.value {
+//                        $0.time < $1.time
+//                    } else {
+//                        $0.value > $1.value
+//                    }
+//                }
+//                view?.setRecipes(recipes)
+//            }
+//        } else {
+//            let recipes = sourceOfRecepies.sorted { $0.value > $1.value }
+//            view?.setRecipes(recipes)
+//        }
     }
 
     func checkForIncreaseTimeSearch(
@@ -246,33 +273,33 @@ extension RecipeListPresenter {
         sender: FilterButton,
         anotherFilterState: (isPressed: Bool, increasing: Bool, decreasing: Bool)
     ) {
-        sender.isInIncreaseOrder = false
-        sender.isInDecreaseOrder = true
-        if anotherFilterState.isPressed {
-            switch anotherFilterState.increasing {
-            case true:
-                let recipes = RecipeDescription.getRecipes(category: category).sorted {
-                    if $0.time == $1.time {
-                        $0.value > $1.value
-                    } else {
-                        $0.time < $1.time
-                    }
-                }
-                view?.setRecipes(recipes)
-            case false:
-                let recipes = RecipeDescription.getRecipes(category: category).sorted {
-                    if $0.time == $1.time {
-                        $0.value < $1.value
-                    } else {
-                        $0.time < $1.time
-                    }
-                }
-                view?.setRecipes(recipes)
-            }
-        } else {
-            let recipes = RecipeDescription.getRecipes(category: category).sorted { $0.time < $1.time }
-            view?.setRecipes(recipes)
-        }
+//        sender.isInIncreaseOrder = false
+//        sender.isInDecreaseOrder = true
+//        if anotherFilterState.isPressed {
+//            switch anotherFilterState.increasing {
+//            case true:
+//                let recipes = RecipeDescription.getRecipes(category: category).sorted {
+//                    if $0.time == $1.time {
+//                        $0.value > $1.value
+//                    } else {
+//                        $0.time < $1.time
+//                    }
+//                }
+//                view?.setRecipes(recipes)
+//            case false:
+//                let recipes = RecipeDescription.getRecipes(category: category).sorted {
+//                    if $0.time == $1.time {
+//                        $0.value < $1.value
+//                    } else {
+//                        $0.time < $1.time
+//                    }
+//                }
+//                view?.setRecipes(recipes)
+//            }
+//        } else {
+//            let recipes = RecipeDescription.getRecipes(category: category).sorted { $0.time < $1.time }
+//            view?.setRecipes(recipes)
+//        }
     }
 
     func checkForDecreaseTimeSearch(
@@ -280,32 +307,32 @@ extension RecipeListPresenter {
         sender: FilterButton,
         anotherFilterState: (isPressed: Bool, increasing: Bool, decreasing: Bool)
     ) {
-        sender.isInIncreaseOrder = true
-        sender.isInDecreaseOrder = false
-        if anotherFilterState.isPressed {
-            switch anotherFilterState.increasing {
-            case true:
-                let recipes = RecipeDescription.getRecipes(category: category).sorted {
-                    if $0.time == $1.time {
-                        $0.value > $1.value
-                    } else {
-                        $0.time > $1.time
-                    }
-                }
-                view?.setRecipes(recipes)
-            case false:
-                let recipes = RecipeDescription.getRecipes(category: category).sorted {
-                    if $0.time == $1.time {
-                        $0.value < $1.value
-                    } else {
-                        $0.time > $1.time
-                    }
-                }
-                view?.setRecipes(recipes)
-            }
-        } else {
-            let recipes = RecipeDescription.getRecipes(category: category).sorted { $0.time > $1.time }
-            view?.setRecipes(recipes)
-        }
+//        sender.isInIncreaseOrder = true
+//        sender.isInDecreaseOrder = false
+//        if anotherFilterState.isPressed {
+//            switch anotherFilterState.increasing {
+//            case true:
+//                let recipes = RecipeDescription.getRecipes(category: category).sorted {
+//                    if $0.time == $1.time {
+//                        $0.value > $1.value
+//                    } else {
+//                        $0.time > $1.time
+//                    }
+//                }
+//                view?.setRecipes(recipes)
+//            case false:
+//                let recipes = RecipeDescription.getRecipes(category: category).sorted {
+//                    if $0.time == $1.time {
+//                        $0.value < $1.value
+//                    } else {
+//                        $0.time > $1.time
+//                    }
+//                }
+//                view?.setRecipes(recipes)
+//            }
+//        } else {
+//            let recipes = RecipeDescription.getRecipes(category: category).sorted { $0.time > $1.time }
+//            view?.setRecipes(recipes)
+//        }
     }
 }

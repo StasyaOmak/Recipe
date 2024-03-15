@@ -8,7 +8,7 @@ protocol RecipeListViewControllerProtocol: AnyObject {
     /// свойство-презентер
     var presenter: RecipeListPresenterProtocol? { get set }
     /// Установка категории рецептов
-    func setRecipes(_ recipes: [RecipeDescription])
+    func setRecipes(_ recipes: [ShortRecipe])
     /// Установка заголовка для страницы
     func setTitle(_ title: String)
     /// Снятие выделения со всех кнопок фильтров
@@ -113,7 +113,8 @@ final class RecipeListViewController: UIViewController {
 
     // MARK: - Private Properties
 
-    private var recipes: [RecipeDescription]?
+//    private var recipes: [RecipeDescription]?
+    private var recipes: [ShortRecipe]?
     private lazy var buttons: [FilterButton] = [caloriesFilterButton, timeFilterButton]
 
     private var state: State<[ShortRecipe]>? {
@@ -127,7 +128,7 @@ final class RecipeListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        presenter?.pushToDetail()
+        presenter?.getRecipes()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -236,7 +237,7 @@ extension RecipeListViewController: RecipeListViewControllerProtocol {
         tableView.reloadData()
     }
 
-    func setRecipes(_ recipes: [RecipeDescription]) {
+    func setRecipes(_ recipes: [ShortRecipe]) {
         self.recipes = recipes
         tableView.reloadData()
     }

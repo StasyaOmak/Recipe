@@ -101,7 +101,7 @@ final class RecipeTableViewCell: UITableViewCell {
     // MARK: - Public Methods
 
     func configure(recipe: ShortRecipe) {
-        recipeImageView.image = UIImage(named: recipe.imageName)
+        recipeImageView.getImage(from: recipe.imageName ?? "")
         titleLabel.text = recipe.label
         timeLabel.text = "\(recipe.totalTime) \(Constants.minutesText)"
         caloriesLabel.text = "\(recipe.calories) \(Constants.caloriesText)"

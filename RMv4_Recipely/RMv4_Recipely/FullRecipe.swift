@@ -6,13 +6,13 @@ import Foundation
 /// Модель полного описания рецепта
 struct FullRecipe {
     // Название рецепта
-    let label: String
+    let label: String?
     // Имя изображения рецепта
-    let imageName: String
+    let imageName: String?
     // Общий вес ингредиентов рецепта
     let totalWeight: Int
     // Общее время приготовления рецепта в минутах
-    let totalTime: Int
+    let totalTime: Int?
     // Общее количество калорий в рецепте
     let totalCalories: Int
     // Общее количество сахара в рецепте
@@ -22,7 +22,7 @@ struct FullRecipe {
     // Общее количество жира в рецепте
     let totalFat: Int
     // Список ингредиентов рецепта
-    let ingredients: [String]
+    let ingredients: [String]?
 
     init(dto: RecipeDTO) {
         label = dto.label
