@@ -25,7 +25,6 @@ final class RecipesCoordinator: BaseCoordinator {
     func moveToRecipeListScreen(category: DishCategory) {
         let recipeListModule = appBuilder.makeRecipeListModule(coordinator: self)
         recipeListModule.presenter?.setCategory(category: category)
-        recipeListModule.hidesBottomBarWhenPushed = true
         rootController?.pushViewController(recipeListModule, animated: true)
     }
 
@@ -33,8 +32,8 @@ final class RecipesCoordinator: BaseCoordinator {
         rootController?.popViewController(animated: true)
     }
 
-    func pushToDetail(recipe: RecipeDescription) {
-        let recipeDetailModule = appBuilder.makeRecipeDetailModule(coordinator: self, recipe: recipe)
+    func pushToDetail(recipeUri: String) {
+        let recipeDetailModule = appBuilder.makeRecipeDetailModule(coordinator: self, recipeUri: recipeUri)
         rootController?.pushViewController(recipeDetailModule, animated: true)
     }
 }

@@ -8,7 +8,7 @@ protocol RecipeListViewControllerProtocol: AnyObject {
     /// свойство-презентер
     var presenter: RecipeListPresenterProtocol? { get set }
     /// Установка категории рецептов
-    func setRecipes(_ recipes: [RecipeDescription])
+    func setRecipes(_ recipes: [ShortRecipe])
     /// Установка заголовка для страницы
     func setTitle(_ title: String)
     /// Снятие выделения со всех кнопок фильтров
@@ -16,21 +16,13 @@ protocol RecipeListViewControllerProtocol: AnyObject {
     /// Проверка состояния второго фильтра
     func checkAnotherFilter(sender: FilterButton) -> (isPressed: Bool, increasing: Bool, decreasing: Bool)
     /// переход к следующему состоянию экрана
-    func setState(_ state: RecipeListViewController.State)
+    func updateState(_ state: State<[ShortRecipe]>)
     /// метод обновления таблицы
     func reloadTableView()
 }
 
 /// Экран с рецептами для выбранной категории
 final class RecipeListViewController: UIViewController {
-    /// Состояния экрана с таблицей рецептов
-    enum State {
-        /// идет загрузка
-        case loading
-        /// загрузка успешно завершена
-        case success
-    }
-
     // MARK: - Constants
 
     private enum Constants {
@@ -42,6 +34,12 @@ final class RecipeListViewController: UIViewController {
     }
 
     // MARK: - Visual Components
+
+    private lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.addTarget(self, action: #selector(refreshControlPulled(_:)), for: .valueChanged)
+        return control
+    }()
 
     private lazy var arrowButton: UIButton = {
         let view = UIView()
@@ -100,11 +98,13 @@ final class RecipeListViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.refreshControl = refreshControl
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
         tableView.register(RecipeTableViewCell.self, forCellReuseIdentifier: RecipeTableViewCell.description())
         tableView.register(SkeletonTableViewCell.self, forCellReuseIdentifier: SkeletonTableViewCell.description())
+        tableView.register(ErrorTableViewCell.self, forCellReuseIdentifier: ErrorTableViewCell.description())
         return tableView
     }()
 
@@ -114,10 +114,10 @@ final class RecipeListViewController: UIViewController {
 
     // MARK: - Private Properties
 
-    private var recipes: [RecipeDescription]?
+    private var recipes: [ShortRecipe]?
     private lazy var buttons: [FilterButton] = [caloriesFilterButton, timeFilterButton]
 
-    private var state: State? {
+    private var state: State<[ShortRecipe]>? {
         didSet {
             tableView.reloadData()
         }
@@ -128,6 +128,7 @@ final class RecipeListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        presenter?.getRecipes()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -149,8 +150,6 @@ final class RecipeListViewController: UIViewController {
             UIBarButtonItem(customView: arrowButton),
             UIBarButtonItem(customView: titleLabel)
         ]
-
-        presenter?.changeState()
     }
 
     private func setupConstraints() {
@@ -200,7 +199,7 @@ final class RecipeListViewController: UIViewController {
         tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 4).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -4)
             .isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
 
     private func setupTableView() {
@@ -208,8 +207,6 @@ final class RecipeListViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
-
-        tableView.register(RecipeTableViewCell.self, forCellReuseIdentifier: Constants.recipeTableViewCellIdentifier)
     }
 
     private func addLogs() {
@@ -223,6 +220,11 @@ final class RecipeListViewController: UIViewController {
     @objc private func filterButtonTapped(sender: FilterButton) {
         presenter?.filterButtonPressed(sender: sender)
     }
+
+    @objc private func refreshControlPulled(_ sender: UIRefreshControl) {
+        presenter?.getRecipes()
+        sender.endRefreshing()
+    }
 }
 
 // MARK: - RecipeListViewController + RecipeListViewControllerProtocol
@@ -232,7 +234,7 @@ extension RecipeListViewController: RecipeListViewControllerProtocol {
         tableView.reloadData()
     }
 
-    func setRecipes(_ recipes: [RecipeDescription]) {
+    func setRecipes(_ recipes: [ShortRecipe]) {
         self.recipes = recipes
         tableView.reloadData()
     }
@@ -245,7 +247,7 @@ extension RecipeListViewController: RecipeListViewControllerProtocol {
         buttons.forEach { $0.isPressed = false }
     }
 
-    func setState(_ state: State) {
+    func updateState(_ state: State<[ShortRecipe]>) {
         self.state = state
     }
 
@@ -269,32 +271,53 @@ extension RecipeListViewController: RecipeListViewControllerProtocol {
 
 extension RecipeListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let recipes /* searchRecipes = presenter?.checkSearch() */ else { return 0 }
-        return recipes.count
+        switch presenter?.state {
+        case .loading:
+            return 6
+        case let .data(recipes):
+            return recipes.count
+        case .noData:
+            return 1
+        case .error:
+            return 1
+        case nil:
+            return 1
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let regularCell = tableView
-            .dequeueReusableCell(
-                withIdentifier: RecipeTableViewCell.description(),
-                for: indexPath
-            ) as? RecipeTableViewCell,
-            let recipes
-        else { return UITableViewCell() }
-        regularCell.configure(recipe: recipes[indexPath.row])
         guard let skeletonCell = tableView
             .dequeueReusableCell(
                 withIdentifier: SkeletonTableViewCell.description(),
                 for: indexPath
             ) as? SkeletonTableViewCell
         else { return UITableViewCell() }
-        switch state {
+        guard let regularCell = tableView
+            .dequeueReusableCell(
+                withIdentifier: RecipeTableViewCell.description(),
+                for: indexPath
+            ) as? RecipeTableViewCell
+        else { return UITableViewCell() }
+        switch presenter?.state {
         case .loading:
             return skeletonCell
-        case .success:
+        case let .data(recipes):
+            regularCell.configure(recipe: recipes[indexPath.row])
+            presenter?.loadImage(url: URL(string: recipes[indexPath.row].imageName ?? ""), completion: { data in
+                regularCell.setImage(data: data)
+            })
             return regularCell
-        default:
-            return skeletonCell
+        case .noData:
+            let cell = EmptyResultTableViewCell()
+            return cell
+        case .error:
+            let cell = ErrorTableViewCell()
+            cell.reloadButtonHandler = { [weak self] in
+                self?.presenter?.getRecipes()
+            }
+            return cell
+        case .none:
+            return ErrorTableViewCell()
         }
     }
 }
@@ -302,11 +325,27 @@ extension RecipeListViewController: UITableViewDataSource {
 // MARK: - RecipeListViewController: UITableViewDelegate
 
 extension RecipeListViewController: UITableViewDelegate {
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        switch presenter?.state {
+//        case .loading:
+//            return tableView.estimatedRowHeight
+//        case .data:
+//            return tableView.estimatedRowHeight
+//        default:
+//            return tableView.frame.height
+//        }
+//    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
         cell.isSelected = !cell.isSelected
-        guard let recipes = recipes else { return }
-        presenter?.pushToDetail(recipe: recipes[indexPath.row])
+        switch presenter?.state {
+        case let .data(recipes):
+            guard let uri = recipes[indexPath.row].uri else { return }
+            presenter?.pushToDetail(uri: uri)
+        default:
+            break
+        }
     }
 
     func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
@@ -321,8 +360,8 @@ extension RecipeListViewController: UITableViewDelegate {
 extension RecipeListViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.count >= 3 {
-            presenter?.changeState()
             presenter?.searchRecipes(withText: searchText)
+            presenter?.getRecipes()
         }
     }
 

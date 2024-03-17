@@ -16,7 +16,6 @@ final class UserSettings {
             let user = try JSONDecoder().decode(User.self, from: data)
             return user
         } catch {
-            print(error.localizedDescription)
             return User()
         }
     }
@@ -25,9 +24,7 @@ final class UserSettings {
         do {
             let data = try JSONEncoder().encode(user)
             UserSettings.userDefaults.set(data, forKey: key)
-        } catch {
-            print(error.localizedDescription)
-        }
+        } catch {}
     }
 
     func logOut() {

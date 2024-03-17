@@ -5,6 +5,8 @@ import Foundation
 
 /// Интерфейс презентера модуля "Рецепты выбранной категории"
 protocol RecipeListPresenterProtocol: AnyObject {
+    /// State
+    var state: State<[ShortRecipe]>? { get set }
     /// Метод установки категории на экран
     func setCategory(category: DishCategory)
     /// Метод-флаг возврата на прдыдущий экран
@@ -12,22 +14,25 @@ protocol RecipeListPresenterProtocol: AnyObject {
     /// метод-флаг нажатия на кнопку фильтра
     func filterButtonPressed(sender: FilterButton)
     /// Переход в экран с описанием рецепта
-    func pushToDetail(recipe: RecipeDescription)
-    /// смена состояния экрана рецептов
-    func changeState()
+    func pushToDetail(uri: String)
     /// Поиск рецептов по запросу
     func searchRecipes(withText text: String)
     /// Начать поиск
     func startSearch()
     /// Остановить поиск
     func stopSearch()
+    /// парсит рецепт
+    func getRecipes()
+    /// загрузка картинки в кэш
+    func loadImage(url: URL?, completion: @escaping (Data) -> ())
 
     /// Инициализатор с присвоением вью
     init(
         view: RecipeListViewControllerProtocol,
         coordinator: RecipesCoordinator,
         loggerManager: LoggerManagerProtocol,
-        networkService: NetworkServiceProtocol
+        networkService: NetworkServiceProtocol,
+        imageLoader: LoadImageServiceProtocol
     )
 
     /// Добавление логов
@@ -42,6 +47,14 @@ final class RecipeListPresenter {
         static let loadingRecipesDelay: DispatchTime = .now() + 3
     }
 
+    // MARK: - Public Properties
+
+    var state: State<[ShortRecipe]>? = .loading {
+        didSet {
+            view?.reloadTableView()
+        }
+    }
+
     // MARK: - Private Properties
 
     private weak var view: RecipeListViewControllerProtocol?
@@ -49,10 +62,14 @@ final class RecipeListPresenter {
     private var category: DishCategory?
     private var loggerManager: LoggerManagerProtocol?
     private var networkService: NetworkServiceProtocol?
+    private var imageLoader: LoadImageServiceProtocol?
 
-    private var sourceOfRecepies: [RecipeDescription] = []
+    private var sourceOfRecepies: [ShortRecipe] = []
     private var isSearching = false
-    private var searchedRecipes: [RecipeDescription] = []
+    private var searchedRecipes: [ShortRecipe] = []
+    private var query: String?
+    private var searchedText = ""
+    private var health: String?
 
     // MARK: - Initializers
 
@@ -60,17 +77,75 @@ final class RecipeListPresenter {
         view: RecipeListViewControllerProtocol,
         coordinator: RecipesCoordinator,
         loggerManager: LoggerManagerProtocol,
-        networkService: NetworkServiceProtocol
+        networkService: NetworkServiceProtocol,
+        imageLoader: LoadImageServiceProtocol
     ) {
         self.view = view
         self.coordinator = coordinator
         self.loggerManager = loggerManager
+        self.networkService = networkService
+        self.imageLoader = imageLoader
     }
 }
 
 // MARK: - RecipeListPresenter + RecipeListPresenterProtocol
 
 extension RecipeListPresenter: RecipeListPresenterProtocol {
+    func getRecipes() {
+        state = .loading
+        guard let category else { return }
+        networkService?.getRecipes(
+            dishType: category,
+            health: makeHealth(),
+            query: makeQuery(searchText: searchedText),
+            completion: { [weak self] result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case let .success(recipes):
+                        self?.state = !recipes.isEmpty ? .data(recipes) : .noData
+                    case let .failure(error):
+                        self?.state = .error(error)
+                    }
+                }
+            }
+        )
+        view?.reloadTableView()
+    }
+
+    func makeQuery(searchText: String) -> String? {
+        var query: String?
+        guard let category else { return nil }
+        query = category.type.urlComponent == "Main course" ? category.type.rawValue : nil
+        print(searchText)
+        switch query {
+        case .some:
+            query?.append(" ")
+            query?.append(searchText)
+        case .none:
+            if searchText.count != 0 {
+                query = searchText
+            }
+        }
+        return query
+    }
+
+    func makeHealth() -> String? {
+        var health: String?
+        guard let category else { return nil }
+        health = category.type.urlComponent == "Side Dish" ? "Vegetarian" : nil
+        return health
+    }
+
+    func loadImage(url: URL?, completion: @escaping (Data) -> ()) {
+        guard let url else { return }
+        imageLoader?.loadImage(url: url, completion: { data, _, _ in
+            guard let data else { return }
+            DispatchQueue.main.async {
+                completion(data)
+            }
+        })
+    }
+
     func sendLog(message: LogAction) {
         loggerManager?.log(message)
     }
@@ -83,7 +158,16 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
             return
         }
         isSearching = true
-        searchedRecipes = sourceOfRecepies.filter { $0.title.lowercased().contains(text.lowercased()) }
+        searchedText = " \(text)"
+        query = searchedText
+        getRecipes()
+        searchedRecipes = sourceOfRecepies.filter {
+            if let recipeLabel = $0.label {
+                recipeLabel.lowercased().contains(text.lowercased())
+            } else {
+                false
+            }
+        }
         view?.setRecipes(searchedRecipes)
     }
 
@@ -97,11 +181,10 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
     }
 
     func setCategory(category: DishCategory) {
-        sourceOfRecepies = RecipeDescription.getRecipes(category: category)
         let title = category.type.rawValue.capitalized
         view?.setTitle(title)
         self.category = category
-        var recipes: [RecipeDescription] = []
+        var recipes: [ShortRecipe] = []
         if isSearching {
             recipes = searchedRecipes
         } else {
@@ -112,13 +195,6 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
 
     func popToAllRecipes() {
         coordinator?.popToAllRecipes()
-    }
-
-    func changeState() {
-        view?.setState(.loading)
-        DispatchQueue.main.asyncAfter(deadline: Constants.loadingRecipesDelay) { [weak self] in
-            self?.view?.setState(.success)
-        }
     }
 
     func filterButtonPressed(sender: FilterButton) {
@@ -146,8 +222,8 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
         }
     }
 
-    func pushToDetail(recipe: RecipeDescription) {
-        coordinator?.pushToDetail(recipe: recipe)
+    func pushToDetail(uri: String) {
+        coordinator?.pushToDetail(recipeUri: uri)
     }
 
     // TODO: - нарушена логика сортировки - при проверке состояния второго фильтра приходится сортировать в порядке, обратном проверяемому свойству.
@@ -179,32 +255,37 @@ extension RecipeListPresenter {
         sender: FilterButton,
         anotherFilterState: (isPressed: Bool, increasing: Bool, decreasing: Bool)
     ) {
-        sender.isInIncreaseOrder = false
-        sender.isInDecreaseOrder = true
-        if anotherFilterState.isPressed {
-            switch anotherFilterState.increasing {
-            case true:
-                let recipes = sourceOfRecepies.sorted {
-                    if $0.value == $1.value {
-                        $0.time > $1.time
-                    } else {
-                        $0.value < $1.value
-                    }
+        switch state {
+        case let .data(recipes):
+            sender.isInIncreaseOrder = false
+            sender.isInDecreaseOrder = true
+            if anotherFilterState.isPressed {
+                switch anotherFilterState.increasing {
+                case true:
+                    let sortedRecipes = recipes.sorted(by: {
+                        if $0.calories == $1.calories {
+                            $0.totalTime > $1.totalTime
+                        } else {
+                            $0.calories < $1.calories
+                        }
+                    })
+                    state = .data(sortedRecipes)
+                case false:
+                    let sortedRecipes = recipes.sorted(by: {
+                        if $0.calories == $1.calories {
+                            $0.totalTime < $1.totalTime
+                        } else {
+                            $0.calories < $1.calories
+                        }
+                    })
+                    state = .data(sortedRecipes)
                 }
-                view?.setRecipes(recipes)
-            case false:
-                let recipes = sourceOfRecepies.sorted {
-                    if $0.value == $1.value {
-                        $0.time < $1.time
-                    } else {
-                        $0.value < $1.value
-                    }
-                }
-                view?.setRecipes(recipes)
+            } else {
+                let sortedRecipes = recipes.sorted(by: { $0.calories < $1.calories })
+                state = .data(sortedRecipes)
             }
-        } else {
-            let recipes = sourceOfRecepies.sorted { $0.value < $1.value }
-            view?.setRecipes(recipes)
+        default:
+            break
         }
     }
 
@@ -212,32 +293,37 @@ extension RecipeListPresenter {
         sender: FilterButton,
         anotherFilterState: (isPressed: Bool, increasing: Bool, decreasing: Bool)
     ) {
-        sender.isInIncreaseOrder = true
-        sender.isInDecreaseOrder = false
-        if anotherFilterState.isPressed {
-            switch anotherFilterState.increasing {
-            case true:
-                let recipes = sourceOfRecepies.sorted {
-                    if $0.value == $1.value {
-                        $0.time > $1.time
-                    } else {
-                        $0.value > $1.value
-                    }
+        switch state {
+        case let .data(recipes):
+            sender.isInIncreaseOrder = true
+            sender.isInDecreaseOrder = false
+            if anotherFilterState.isPressed {
+                switch anotherFilterState.increasing {
+                case true:
+                    let sortedRecipes = recipes.sorted(by: {
+                        if $0.calories == $1.calories {
+                            $0.totalTime > $1.totalTime
+                        } else {
+                            $0.calories > $1.calories
+                        }
+                    })
+                    state = .data(sortedRecipes)
+                case false:
+                    let sortedRecipes = recipes.sorted(by: {
+                        if $0.calories == $1.calories {
+                            $0.totalTime < $1.totalTime
+                        } else {
+                            $0.calories > $1.calories
+                        }
+                    })
+                    state = .data(sortedRecipes)
                 }
-                view?.setRecipes(recipes)
-            case false:
-                let recipes = sourceOfRecepies.sorted {
-                    if $0.value == $1.value {
-                        $0.time < $1.time
-                    } else {
-                        $0.value > $1.value
-                    }
-                }
-                view?.setRecipes(recipes)
+            } else {
+                let sortedRecipes = recipes.sorted(by: { $0.calories > $1.calories })
+                state = .data(sortedRecipes)
             }
-        } else {
-            let recipes = sourceOfRecepies.sorted { $0.value > $1.value }
-            view?.setRecipes(recipes)
+        default:
+            break
         }
     }
 
@@ -246,32 +332,37 @@ extension RecipeListPresenter {
         sender: FilterButton,
         anotherFilterState: (isPressed: Bool, increasing: Bool, decreasing: Bool)
     ) {
-        sender.isInIncreaseOrder = false
-        sender.isInDecreaseOrder = true
-        if anotherFilterState.isPressed {
-            switch anotherFilterState.increasing {
-            case true:
-                let recipes = RecipeDescription.getRecipes(category: category).sorted {
-                    if $0.time == $1.time {
-                        $0.value > $1.value
-                    } else {
-                        $0.time < $1.time
-                    }
+        switch state {
+        case let .data(recipes):
+            sender.isInIncreaseOrder = false
+            sender.isInDecreaseOrder = true
+            if anotherFilterState.isPressed {
+                switch anotherFilterState.increasing {
+                case true:
+                    let sortedRecipes = recipes.sorted(by: {
+                        if $0.totalTime == $1.totalTime {
+                            $0.calories > $1.calories
+                        } else {
+                            $0.totalTime < $1.totalTime
+                        }
+                    })
+                    state = .data(sortedRecipes)
+                case false:
+                    let sortedRecipes = recipes.sorted(by: {
+                        if $0.totalTime == $1.totalTime {
+                            $0.calories < $1.calories
+                        } else {
+                            $0.totalTime < $1.totalTime
+                        }
+                    })
+                    state = .data(sortedRecipes)
                 }
-                view?.setRecipes(recipes)
-            case false:
-                let recipes = RecipeDescription.getRecipes(category: category).sorted {
-                    if $0.time == $1.time {
-                        $0.value < $1.value
-                    } else {
-                        $0.time < $1.time
-                    }
-                }
-                view?.setRecipes(recipes)
+            } else {
+                let sortedRecipes = recipes.sorted(by: { $0.totalTime < $1.totalTime })
+                state = .data(sortedRecipes)
             }
-        } else {
-            let recipes = RecipeDescription.getRecipes(category: category).sorted { $0.time < $1.time }
-            view?.setRecipes(recipes)
+        default:
+            break
         }
     }
 
@@ -280,32 +371,37 @@ extension RecipeListPresenter {
         sender: FilterButton,
         anotherFilterState: (isPressed: Bool, increasing: Bool, decreasing: Bool)
     ) {
-        sender.isInIncreaseOrder = true
-        sender.isInDecreaseOrder = false
-        if anotherFilterState.isPressed {
-            switch anotherFilterState.increasing {
-            case true:
-                let recipes = RecipeDescription.getRecipes(category: category).sorted {
-                    if $0.time == $1.time {
-                        $0.value > $1.value
-                    } else {
-                        $0.time > $1.time
-                    }
+        switch state {
+        case let .data(recipes):
+            sender.isInIncreaseOrder = true
+            sender.isInDecreaseOrder = false
+            if anotherFilterState.isPressed {
+                switch anotherFilterState.increasing {
+                case true:
+                    let sortedRecipes = recipes.sorted(by: {
+                        if $0.totalTime == $1.totalTime {
+                            $0.calories > $1.calories
+                        } else {
+                            $0.calories > $1.calories
+                        }
+                    })
+                    state = .data(sortedRecipes)
+                case false:
+                    let sortedRecipes = recipes.sorted(by: {
+                        if $0.totalTime == $1.totalTime {
+                            $0.calories < $1.calories
+                        } else {
+                            $0.totalTime > $1.totalTime
+                        }
+                    })
+                    state = .data(sortedRecipes)
                 }
-                view?.setRecipes(recipes)
-            case false:
-                let recipes = RecipeDescription.getRecipes(category: category).sorted {
-                    if $0.time == $1.time {
-                        $0.value < $1.value
-                    } else {
-                        $0.time > $1.time
-                    }
-                }
-                view?.setRecipes(recipes)
+            } else {
+                let sortedRecipes = recipes.sorted(by: { $0.totalTime > $1.totalTime })
+                state = .data(sortedRecipes)
             }
-        } else {
-            let recipes = RecipeDescription.getRecipes(category: category).sorted { $0.time > $1.time }
-            view?.setRecipes(recipes)
+        default:
+            break
         }
     }
 }

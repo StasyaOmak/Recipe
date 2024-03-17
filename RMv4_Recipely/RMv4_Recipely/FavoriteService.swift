@@ -22,7 +22,6 @@ final class FavoriteService {
             let favorites = try JSONDecoder().decode([RecipeDescription].self, from: data)
             return favorites
         } catch {
-            print(error.localizedDescription)
             return []
         }
     }
@@ -31,9 +30,7 @@ final class FavoriteService {
         do {
             let data = try JSONEncoder().encode(recipe)
             FavoriteService.shared.userDefaults.set(data, forKey: key)
-        } catch {
-            print(error.localizedDescription)
-        }
+        } catch {}
     }
 
     func addFavorite(_ recipe: RecipeDescription) {

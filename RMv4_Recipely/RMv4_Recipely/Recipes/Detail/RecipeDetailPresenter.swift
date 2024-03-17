@@ -6,7 +6,9 @@ import Foundation
 /// Интерфейс презентера модуля "Детальный экран"
 protocol RecipeDetailPresenterProtocol: AnyObject {
     /// Рецепт, отображаемый в детальном экране
-    var recipe: RecipeDescription? { get set }
+    var recipe: String { get set }
+    /// Состояние загрузки данных модуля
+    var state: State<FullRecipe> { get set }
     /// Экшн кнопки назад
     func popToAllRecipes()
     /// метод добавления рецепта в избранное
@@ -17,38 +19,74 @@ protocol RecipeDetailPresenterProtocol: AnyObject {
     func shareRecipe(message: LogAction)
     /// Добавление логов
     func sendLog(message: LogAction)
+    ///
+    func getRecipeDescription()
+    /// Метод на загрузку/проверку изображения в кэше
+    func loadImage(url: URL?, completion: @escaping (Data) -> ())
     /// Инициализатор с присвоением вью
     init(
         coordinator: RecipesCoordinator,
         view: RecipeDetailViewProtocol,
-        recipe: RecipeDescription,
-        loggerManager: LoggerManagerProtocol
+        loggerManager: LoggerManagerProtocol,
+        networkService: NetworkServiceProtocol,
+        imageLoader: LoadImageServiceProtocol,
+        recipe: String
     )
 }
 
 final class RecipeDetailPresenter: RecipeDetailPresenterProtocol {
+    // MARK: - Public Properties
+
+    var recipe: String
+
+    var state: State<FullRecipe> = .loading {
+        didSet {
+            view?.updateState()
+        }
+    }
+
     // MARK: - Private Properties
 
     private weak var coordinator: RecipesCoordinator?
     private weak var view: RecipeDetailViewProtocol?
     private var loggerManager: LoggerManagerProtocol?
-    var recipe: RecipeDescription?
+    private var networkService: NetworkServiceProtocol?
+    private var imageLoader: LoadImageServiceProtocol?
 
     // MARK: - Initializers
 
     init(
         coordinator: RecipesCoordinator,
         view: RecipeDetailViewProtocol,
-        recipe: RecipeDescription,
-        loggerManager: LoggerManagerProtocol
+        loggerManager: LoggerManagerProtocol,
+        networkService: NetworkServiceProtocol,
+        imageLoader: LoadImageServiceProtocol, recipe: String
     ) {
         self.coordinator = coordinator
         self.view = view
-        self.recipe = recipe
         self.loggerManager = loggerManager
+        self.networkService = networkService
+        self.imageLoader = imageLoader
+        self.recipe = recipe
     }
 
     // MARK: - Public Methods
+
+    func getRecipeDescription() {
+        state = .loading
+        networkService?.getSingleRecipe(
+            recipeUri: recipe,
+            completion: { [weak self] result in
+                switch result {
+                case let .success(recipe):
+                    guard let recipe else { return }
+                    self?.state = self?.recipe != nil ? .data(recipe) : .noData
+                case let .failure(error):
+                    self?.state = .error(error)
+                }
+            }
+        )
+    }
 
     func shareRecipe(message: LogAction) {
         loggerManager?.log(message)
@@ -63,23 +101,20 @@ final class RecipeDetailPresenter: RecipeDetailPresenterProtocol {
     }
 
     func addToFavorites() {
-        guard let recipe else { return }
-        if FavoriteService.shared.getFavorites().filter({ $0 == recipe }).isEmpty {
-            FavoriteService.shared.addFavorite(recipe)
-            view?.setRedAddToFavoritesButtonColor()
-        } else {
-            for (index, element) in FavoriteService.shared.getFavorites().enumerated() where element == recipe {
-                FavoriteService.shared.removeFavorite(index)
-            }
-            view?.setBlackAddToFavoritesButtonColor()
-        }
+        // TODO: - переделать с данными из сети, когда будет поставлена задача
     }
 
     func checkIfFavorite() {
-        guard let recipe else { return }
-        if FavoriteService.shared.getFavorites().contains(recipe) { view?.setRedAddToFavoritesButtonColor()
-        } else {
-            view?.setBlackAddToFavoritesButtonColor()
-        }
+        // TODO: - переделать с данными из сети, когда будет поставлена задача
+    }
+
+    func loadImage(url: URL?, completion: @escaping (Data) -> ()) {
+        guard let url else { return }
+        imageLoader?.loadImage(url: url, completion: { data, _, _ in
+            guard let data else { return }
+            DispatchQueue.main.async {
+                completion(data)
+            }
+        })
     }
 }

@@ -9,17 +9,19 @@ final class AppBuilder {
 
     private let loggerManager: LoggerManagerProtocol
     private let networkService: NetworkServiceProtocol
+    private let imageLoader: LoadImageServiceProtocol
 
     // MARK: - Initializers
 
-    init(loggerManager: LoggerManagerProtocol, networkService: NetworkServiceProtocol) {
+    init(
+        loggerManager: LoggerManagerProtocol,
+        networkService: NetworkServiceProtocol,
+        imageLoader: LoadImageServiceProtocol
+    ) {
         self.loggerManager = loggerManager
         self.networkService = networkService
+        self.imageLoader = imageLoader
     }
-
-    // инит на логгер и приватное свойство
-
-    // TODO: - баг, при возврате из рецептов в таб бар тайтлы таббара игнорируют кастомный цвет (кроме "recipes")
 
     // MARK: - Public Methods
 
@@ -39,13 +41,14 @@ final class AppBuilder {
         return profileView
     }
 
-    func makeRecipeDetailModule(coordinator: RecipesCoordinator, recipe: RecipeDescription) -> RecipeDetailView {
+    func makeRecipeDetailModule(coordinator: RecipesCoordinator, recipeUri: String) -> RecipeDetailView {
         let view = RecipeDetailView()
         let presenter = RecipeDetailPresenter(
             coordinator: coordinator,
             view: view,
-            recipe: recipe,
-            loggerManager: loggerManager
+            loggerManager: loggerManager,
+            networkService: networkService,
+            imageLoader: imageLoader, recipe: recipeUri
         )
         view.presenter = presenter
         return view
@@ -109,7 +112,7 @@ final class AppBuilder {
             view: recipeListView,
             coordinator: coordinator,
             loggerManager: loggerManager,
-            networkService: networkService
+            networkService: networkService, imageLoader: imageLoader
         )
         recipeListView.presenter = recipeListPresenter
         return recipeListView
