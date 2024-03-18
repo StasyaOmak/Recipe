@@ -1,0 +1,6 @@
+framework module Pods_RMv4_Recipely {
+  umbrella header "Pods-RMv4_Recipely-umbrella.h"
+
+  export *
+  module * { export * }
+}
