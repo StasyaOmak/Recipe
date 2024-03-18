@@ -16,31 +16,31 @@ final class FavoriteService {
 
     // MARK: - Public Methods
 
-    func getFavorites() -> [RecipeDescription] {
+    func getFavorites() -> [ShortRecipe] {
         guard let data = FavoriteService.shared.userDefaults.data(forKey: key) else { return [] }
         do {
-            let favorites = try JSONDecoder().decode([RecipeDescription].self, from: data)
+            let favorites = try JSONDecoder().decode([ShortRecipe].self, from: data)
             return favorites
         } catch {
             return []
         }
     }
 
-    func save(_ recipe: [RecipeDescription]) {
+    func save(_ recipe: [ShortRecipe]) {
         do {
             let data = try JSONEncoder().encode(recipe)
             FavoriteService.shared.userDefaults.set(data, forKey: key)
         } catch {}
     }
 
-    func addFavorite(_ recipe: RecipeDescription) {
+    func addFavorite(_ recipe: ShortRecipe) {
         var favorites = getFavorites()
         favorites.append(recipe)
         save(favorites)
     }
 
     @discardableResult
-    func removeFavorite(_ index: Int) -> RecipeDescription {
+    func removeFavorite(_ index: Int) -> ShortRecipe {
         var favorites = getFavorites()
         let removeFavorite = favorites.remove(at: index)
         save(favorites)

@@ -94,21 +94,27 @@ extension RecipeListPresenter: RecipeListPresenterProtocol {
     func getRecipes() {
         state = .loading
         guard let category else { return }
-        networkService?.getRecipes(
-            dishType: category,
-            health: makeHealth(),
-            query: makeQuery(searchText: searchedText),
-            completion: { [weak self] result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case let .success(recipes):
-                        self?.state = !recipes.isEmpty ? .data(recipes) : .noData
-                    case let .failure(error):
-                        self?.state = .error(error)
+        let coreDataRecipe = CoreDataService.shared.fetchShortRecipes(dishType: category)
+        if coreDataRecipe.isEmpty {
+            networkService?.getRecipes(
+                dishType: category,
+                health: makeHealth(),
+                query: makeQuery(searchText: searchedText),
+                completion: { [weak self] result in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case let .success(recipes):
+                            self?.state = !recipes.isEmpty ? .data(recipes) : .noData
+                            CoreDataService.shared.createShortRecipe(recipes: recipes, category: category)
+                        case let .failure(error):
+                            self?.state = .error(error)
+                        }
                     }
                 }
-            }
-        )
+            )
+        } else {
+            state = .data(coreDataRecipe)
+        }
         view?.reloadTableView()
     }
 
