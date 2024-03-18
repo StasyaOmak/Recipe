@@ -19,7 +19,7 @@ protocol RecipeDetailPresenterProtocol: AnyObject {
     func shareRecipe(message: LogAction)
     /// Добавление логов
     func sendLog(message: LogAction)
-    ///
+    /// Загружает с сети детальное описание рецепта
     func getRecipeDescription()
     /// Метод на загрузку/проверку изображения в кэше
     func loadImage(url: URL?, completion: @escaping (Data) -> ())
@@ -74,18 +74,25 @@ final class RecipeDetailPresenter: RecipeDetailPresenterProtocol {
 
     func getRecipeDescription() {
         state = .loading
-        networkService?.getSingleRecipe(
-            recipeUri: recipe,
-            completion: { [weak self] result in
-                switch result {
-                case let .success(recipe):
-                    guard let recipe else { return }
-                    self?.state = self?.recipe != nil ? .data(recipe) : .noData
-                case let .failure(error):
-                    self?.state = .error(error)
+        let coreDataRecipe = CoreDataService.shared.fetchFullRecipe(uri: recipe)
+        if coreDataRecipe == nil {
+            networkService?.getSingleRecipe(
+                recipeUri: recipe,
+                completion: { [weak self] result in
+                    switch result {
+                    case let .success(recipe):
+                        guard let recipe else { return }
+                        self?.state = self?.recipe != nil ? .data(recipe) : .noData
+                        CoreDataService.shared.createFullRecipe(recipe: recipe)
+                    case let .failure(error):
+                        self?.state = .error(error)
+                    }
                 }
-            }
-        )
+            )
+        } else {
+            guard let coreDataRecipe else { return }
+            state = .data(coreDataRecipe)
+        }
     }
 
     func shareRecipe(message: LogAction) {

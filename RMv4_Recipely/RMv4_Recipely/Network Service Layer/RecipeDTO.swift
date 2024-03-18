@@ -21,4 +21,6 @@ struct RecipeDTO: Codable {
     let totalTime: Int?
     /// Общие пищевые компоненты
     let totalNutrients, totalDaily: [String: TotalDTO]?
+//    /// dishType
+//    let dishType: DishType
 }

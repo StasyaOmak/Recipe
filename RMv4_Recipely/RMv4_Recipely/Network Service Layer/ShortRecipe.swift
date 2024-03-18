@@ -23,4 +23,12 @@ struct ShortRecipe {
         calories = Int(dto.totalNutrients?[NutrientsDTO.enercKcal]?.quantity.rounded() ?? 0)
         uri = dto.uri
     }
+
+    init(coreDataObject: ShortRecipeEntity) {
+        imageName = coreDataObject.imageName
+        label = coreDataObject.label
+        totalTime = Int(coreDataObject.totalTime)
+        calories = Int(coreDataObject.calories)
+        uri = coreDataObject.uri
+    }
 }
