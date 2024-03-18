@@ -4,7 +4,7 @@
 import Foundation
 
 /// Модель краткого описания рецепта
-struct ShortRecipe {
+struct ShortRecipe: Codable {
     /// Имя изображения рецепта
     let imageName: String?
     /// название рецепта
@@ -30,5 +30,13 @@ struct ShortRecipe {
         totalTime = Int(coreDataObject.totalTime)
         calories = Int(coreDataObject.calories)
         uri = coreDataObject.uri
+    }
+
+    init(fullRecipe: FullRecipe) {
+        imageName = fullRecipe.imageName
+        label = fullRecipe.label
+        totalTime = fullRecipe.totalTime
+        calories = fullRecipe.totalCalories
+        uri = fullRecipe.recipeURI
     }
 }

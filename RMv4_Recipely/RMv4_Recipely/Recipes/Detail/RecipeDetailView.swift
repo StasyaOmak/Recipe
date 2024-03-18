@@ -88,7 +88,6 @@ final class RecipeDetailView: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        presenter?.checkIfFavorite()
         presenter?.getRecipeDescription()
         addLogs()
     }
@@ -144,7 +143,12 @@ final class RecipeDetailView: UIViewController {
     @objc private func shareBarButtonItemTapped() {}
 
     @objc private func addToFavouritesBarButtonItemTapped() {
-        presenter?.addToFavorites()
+        switch presenter?.state {
+        case let .data(recipe):
+            presenter?.addToFavorites(fullRecipe: recipe)
+        default:
+            break
+        }
     }
 
     @objc private func backButtonTapped() {

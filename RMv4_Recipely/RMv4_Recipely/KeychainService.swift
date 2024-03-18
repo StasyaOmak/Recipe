@@ -17,7 +17,7 @@ final class KeychainService {
     }
 
     func checkPassword(password: String) -> Bool? {
-        var savedPassword = Keychain.load(KeychainService.passwordKey)
+        let savedPassword = Keychain.load(KeychainService.passwordKey)
         guard let savedPassword else { return nil }
         return savedPassword == password
     }
@@ -31,7 +31,7 @@ final class KeychainService {
     }
 
     func checkLogin(login: String) -> Bool? {
-        var savedLogin = Keychain.load(KeychainService.loginKey)
+        let savedLogin = Keychain.load(KeychainService.loginKey)
         guard let savedLogin else { return nil }
         return savedLogin == login
     }

@@ -12,9 +12,9 @@ protocol RecipeDetailPresenterProtocol: AnyObject {
     /// Экшн кнопки назад
     func popToAllRecipes()
     /// метод добавления рецепта в избранное
-    func addToFavorites()
+    func addToFavorites(fullRecipe: FullRecipe)
     /// метод проверки, находится ли отображаемый рецепт в избранном
-    func checkIfFavorite()
+    func checkIfFavorite(fullRecipe: FullRecipe)
     /// поделиться рецептом
     func shareRecipe(message: LogAction)
     /// Добавление логов
@@ -84,6 +84,9 @@ final class RecipeDetailPresenter: RecipeDetailPresenterProtocol {
                         guard let recipe else { return }
                         self?.state = self?.recipe != nil ? .data(recipe) : .noData
                         CoreDataService.shared.createFullRecipe(recipe: recipe)
+                        DispatchQueue.main.async { [weak self] in
+                            self?.checkIfFavorite(fullRecipe: recipe)
+                        }
                     case let .failure(error):
                         self?.state = .error(error)
                     }
@@ -92,7 +95,11 @@ final class RecipeDetailPresenter: RecipeDetailPresenterProtocol {
         } else {
             guard let coreDataRecipe else { return }
             state = .data(coreDataRecipe)
+            DispatchQueue.main.async { [weak self] in
+                self?.checkIfFavorite(fullRecipe: coreDataRecipe)
+            }
         }
+        view?.updateState()
     }
 
     func shareRecipe(message: LogAction) {
@@ -107,12 +114,21 @@ final class RecipeDetailPresenter: RecipeDetailPresenterProtocol {
         coordinator?.popToAllRecipes()
     }
 
-    func addToFavorites() {
-        // TODO: - переделать с данными из сети, когда будет поставлена задача
+    func addToFavorites(fullRecipe: FullRecipe) {
+        var recipes = FavoriteService.shared.getFavorites()
+        if recipes.filter({ $0.uri == fullRecipe.recipeURI }).isEmpty {
+            recipes.append(ShortRecipe(fullRecipe: fullRecipe))
+            FavoriteService.shared.save(recipes)
+        }
     }
 
-    func checkIfFavorite() {
-        // TODO: - переделать с данными из сети, когда будет поставлена задача
+    func checkIfFavorite(fullRecipe: FullRecipe) {
+        var recipes = FavoriteService.shared.getFavorites()
+        if recipes.contains(where: { $0.uri == fullRecipe.recipeURI }) {
+            view?.setRedAddToFavoritesButtonColor()
+        } else {
+            view?.setBlackAddToFavoritesButtonColor()
+        }
     }
 
     func loadImage(url: URL?, completion: @escaping (Data) -> ()) {

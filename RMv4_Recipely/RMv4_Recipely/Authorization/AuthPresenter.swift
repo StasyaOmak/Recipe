@@ -50,7 +50,7 @@ final class AuthPresenter {
 extension AuthPresenter: AuthPresenterProtocol {
     func checkLogin(login: String?) {
         guard let login = login else { return }
-        var isLoginSaved = KeychainService.shared.checkLogin(login: login)
+        let isLoginSaved = KeychainService.shared.checkLogin(login: login)
         if isLoginSaved == nil {
             view?.setLoginColor(color: Constants.darkGrayColor, isValidate: true, borderColor: Constants.darkGrayColor)
             KeychainService.shared.saveLogin(login: login)
@@ -65,7 +65,7 @@ extension AuthPresenter: AuthPresenterProtocol {
 
     func checkPassword(password: String?) {
         guard let password = password else { return }
-        var isPasswordSaved = KeychainService.shared.checkPassword(password: password)
+        let isPasswordSaved = KeychainService.shared.checkPassword(password: password)
         if isPasswordSaved == nil {
             view?.setPasswordColor(
                 color: Constants.darkGrayColor,
