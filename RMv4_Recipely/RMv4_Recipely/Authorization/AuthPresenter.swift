@@ -2,6 +2,7 @@
 // Copyright © RoadMap. All rights reserved.
 
 import Foundation
+import Keychain
 
 /// Протокол презентера экрана авторизации
 protocol AuthPresenterProtocol {
@@ -49,13 +50,12 @@ final class AuthPresenter {
 extension AuthPresenter: AuthPresenterProtocol {
     func checkLogin(login: String?) {
         guard let login = login else { return }
-        var user = UserSettings.shared.getUserSettings()
-        if user.login == nil {
+        var isLoginSaved = KeychainService.shared.checkLogin(login: login)
+        if isLoginSaved == nil {
             view?.setLoginColor(color: Constants.darkGrayColor, isValidate: true, borderColor: Constants.darkGrayColor)
-            user.login = login
-            UserSettings.shared.save(user)
+            KeychainService.shared.saveLogin(login: login)
             isLoginValid = true
-        } else if let savedLogin = user.login, login == savedLogin {
+        } else if isLoginSaved == true {
             view?.setLoginColor(color: Constants.darkGrayColor, isValidate: true, borderColor: Constants.darkGrayColor)
             isLoginValid = true
         } else {
@@ -65,23 +65,21 @@ extension AuthPresenter: AuthPresenterProtocol {
 
     func checkPassword(password: String?) {
         guard let password = password else { return }
-        var user = UserSettings.shared.getUserSettings()
-        if user.password == nil {
+        var isPasswordSaved = KeychainService.shared.checkPassword(password: password)
+        if isPasswordSaved == nil {
             view?.setPasswordColor(
                 color: Constants.darkGrayColor,
                 isValidate: true,
                 borderColor: Constants.darkGrayColor
             )
-            user.password = password
-            UserSettings.shared.save(user)
+            KeychainService.shared.savePassword(password: password)
             isPasswordValid = true
-        } else if let savedPassword = user.password, password == savedPassword {
+        } else if isPasswordSaved == true {
             view?.setPasswordColor(
                 color: Constants.darkGrayColor,
                 isValidate: true,
                 borderColor: Constants.darkGrayColor
             )
-            UserSettings.shared.save(user)
             isPasswordValid = true
         } else {
             view?.setPasswordColor(color: Constants.redColor, isValidate: false, borderColor: Constants.redColor)
@@ -89,7 +87,7 @@ extension AuthPresenter: AuthPresenterProtocol {
     }
 
     func logOut() {
-        UserSettings.shared.logOut()
+        KeychainService.shared.cleanLoginInfo()
     }
 
     func moveToMain() {

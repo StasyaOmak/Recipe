@@ -19,7 +19,8 @@ final class AppCoordinator: BaseCoordinator {
     // MARK: - Public Methods
 
     override func start() {
-        toMain()
+//        toMain()
+        toAuth()
     }
 
     // MARK: - Private Methods
